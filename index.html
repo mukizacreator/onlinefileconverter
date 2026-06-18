@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free online file converter. Convert PDF, DOCX, JPG, PNG, MP3, WEBP, TXT, EPUB and more. Fast, secure, and free online tool.">
+  <title>Online File Converter | Fast, Free & Secure</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header><h1>Online File Converter</h1></header>
+  <main>
+    <div class="converter-box">
+      <div class="input-row">
+        <label for="fileInput" class="custom-file-label">Choose File</label>
+        <input type="file" id="fileInput">
+        <span id="fileName">No file chosen</span>
+        <select id="formatSelect" class="format-select">
+          <option value="pdf">PDF</option> <option value="docx">DOCX</option>
+          <option value="jpg">JPG</option> <option value="png">PNG</option>
+          <option value="mp3">MP3</option> <option value="webp">WEBP</option>
+          <option value="txt">TXT</option> <option value="epub">EPUB</option>
+        </select>
+        <button id="convertBtn" class="convert-btn">Convert</button>
+      </div>
+      <div id="result"></div>
+    </div>
+    <section style="margin-top: 40px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; color: #bbb; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
+      <h3>All Supported Conversions</h3>
+      <p>Our system supports: <strong>Documents:</strong> PDF, DOCX, DOC, ODT, TXT, EPUB, RTF, HTML. <strong>Images:</strong> JPG, PNG, WEBP, TIFF, BMP, GIF. <strong>Audio:</strong> MP3, WAV, OGG. Easily convert PDF to DOCX, JPG to PNG, MP4 to MP3, and more.</p>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
