@@ -1,0 +1,673 @@
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+/* Apply border-box to all elements for consistent sizing */
+* { box-sizing: border-box; }
+
+/* Full height html for proper flex layout */
+html { height: 100%; }
+
+/* Body styles: dark gradient background, white text, flex column layout */
+body {
+  margin: 0;
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+}
+
+/* Main content area grows to fill available space */
+main { flex: 1; width: 100%; }
+
+/* Inherit link colors from parent */
+a { color: inherit; }
+
+/* ============================================
+   NAVIGATION BAR - RESPONSIVE
+   ============================================ */
+/* Top navigation with glass-morphism effect */
+.top-nav {
+  width: 100%;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+}
+
+/* Left and right sections of navigation */
+.nav-left, .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Individual nav links: pill-shaped with hover/active states */
+.nav-link {
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link i {
+  font-size: 0.75rem;
+}
+
+.nav-link:hover, .nav-link.active {
+  background: #00bcd4;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+header {
+  margin-top: 12px;
+  text-align: center;
+  padding: 0 18px;
+}
+header h1 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+.subtitle {
+  color: #00bcd4;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* ============================================
+   DASHBOARD & CONVERTER BOX
+   ============================================ */
+/* Main container: centers content with flex */
+.dashboard {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+}
+
+/* Converter card: glass-morphism with hover lift effect */
+.converter-box {
+  width: min(94%, 950px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 10px auto;
+  padding: 28px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: 0.4s;
+}
+.converter-box:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-8px);
+}
+
+/* Input row: flexible layout for file input, select, and button */
+.input-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Hide default file input, use custom label instead */
+input[type="file"] { display: none; }
+
+/* Custom file upload button */
+.custom-file-label {
+  background: #ff9800;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.custom-file-label:hover {
+  background: #e68900;
+  transform: scale(1.05);
+}
+
+/* Display selected filename */
+#fileName {
+  text-align: center;
+  word-break: break-word;
+  max-width: 250px;
+}
+
+/* Format selection dropdown */
+.format-select {
+  background: #1e1e1e;
+  color: white;
+  border: 1px solid #00bcd4;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+/* Primary action button (teal/cyan) */
+.convert-btn {
+  border: none;
+  background: #00bcd4;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.convert-btn:hover {
+  background: #008ba3;
+  transform: scale(1.05);
+}
+
+/* Danger/destructive button (red) */
+.danger-btn {
+  border: none;
+  background: #e53935;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.danger-btn:hover { background: #c62828; }
+
+/* Secondary/outline button */
+.secondary-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  padding: 12px 25px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Result container */
+#result {
+  width: 100%;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+form { width: 100%; }
+form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+form input, form select, form textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+form input::placeholder, form textarea::placeholder { color: #cccccc; }
+.form-group {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+/* ============================================
+   INFO CARDS & SUPPORT LINKS
+   ============================================ */
+/* Card for displaying information sections */
+.info-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 18px;
+}
+.info-card h2 { margin-top: 0; }
+.info-card p, .info-card li {
+  color: #dddddd;
+  line-height: 1.7;
+}
+
+/* Support/contact links with hover effect */
+.support-link {
+  display: block;
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 16px;
+  border-radius: 15px;
+  margin-bottom: 12px;
+  transition: 0.3s;
+}
+.support-link:hover {
+  background: rgba(255, 255, 255, 0.13);
+  transform: translateY(-3px);
+}
+
+/* ============================================
+   DOWNLOAD BUTTON
+   ============================================ */
+/* Green download button with glow effect */
+.download-btn {
+  display: inline-block;
+  margin-top: 15px;
+  background: #28a745;
+  color: white;
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+  transition: 0.3s;
+}
+.download-btn:hover {
+  background: #218838;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+}
+
+/* ============================================
+   PROFILE PAGE
+   ============================================ */
+/* Profile container: flex layout with sidebar and content */
+.profile-container {
+  width: min(95%, 1100px);
+  margin: auto;
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+.profile-sidebar {
+  width: 260px;
+  padding: 30px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  text-align: center;
+}
+.profile-content {
+  flex: 1;
+  padding: 35px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+}
+
+/* Profile photo with upload button overlay */
+.profile-photo-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: auto;
+}
+.profile-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #00bcd4;
+}
+.photo-upload-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #00bcd4;
+  color: white;
+  cursor: pointer;
+}
+.photo-upload-btn:hover { background: #008ba3; }
+
+/* Profile user info */
+.profile-username {
+  margin-top: 18px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.profile-email {
+  color: #cccccc;
+  font-size: 0.92rem;
+}
+
+/* Profile tab navigation */
+.profile-menu {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.profile-tab {
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.3s;
+}
+.profile-tab:hover, .profile-tab.active { background: #00bcd4; }
+
+/* Profile sections (show/hide) */
+.profile-section { display: none; }
+.profile-section.active { display: block; }
+.profile-section h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+.profile-row { margin-bottom: 22px; }
+
+/* Account information cards */
+.account-box {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 18px;
+  border-radius: 16px;
+  margin-bottom: 18px;
+}
+.account-box-title {
+  font-size: 0.9rem;
+  color: #bbbbbb;
+  margin-bottom: 10px;
+}
+.account-box-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ============================================
+   MODAL OVERLAY
+   ============================================ */
+/* Full-screen overlay with blur effect */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+}
+.modal-box {
+  width: min(92%, 500px);
+  padding: 35px;
+  border-radius: 25px;
+  background: rgba(25, 35, 45, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+.modal-box h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.modal-box p {
+  color: #cccccc;
+  line-height: 1.8;
+  margin-bottom: 25px;
+}
+.modal-box input {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  margin-bottom: 20px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* ============================================
+   MESSAGE STYLES
+   ============================================ */
+.success-message {
+  background: rgba(40, 167, 69, 0.18);
+  color: #9fff9f;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+  line-height: 1.7;
+}
+.error-message {
+  background: rgba(229, 57, 53, 0.18);
+  color: #ffb4b4;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+  line-height: 1.7;
+}
+.warning-message {
+  background: rgba(255, 152, 0, 0.15);
+  color: #ffd28f;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+  line-height: 1.7;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  text-align: center;
+  padding: 14px;
+}
+.footer-support {
+  color: #bbbbbb;
+  max-width: 900px;
+  margin: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.copyright {
+  margin-top: 18px;
+  color: #888888;
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS - IMPROVED
+   ============================================ */
+/* Large screens: default styles apply */
+
+/* Medium screens: stack navigation, adjust container width */
+@media (max-width: 1100px) {
+  .top-nav { flex-wrap: wrap; justify-content: center; }
+  .nav-left, .nav-right { flex-wrap: wrap; justify-content: center; }
+  .converter-box { width: min(96%, 900px); }
+  .profile-container { flex-direction: column; align-items: center; }
+  .profile-sidebar, .profile-content { width: 100%; }
+}
+
+/* Tablet screens: reduce padding and font sizes */
+@media (max-width: 900px) {
+  .top-nav { padding: 6px 10px; gap: 4px; }
+  .nav-link { padding: 5px 10px; font-size: 0.72rem; }
+  .nav-link i { font-size: 0.68rem; }
+  .converter-box { padding: 20px; }
+  header { margin-top: 8px; }
+  header h1 { font-size: 1.6rem; }
+  .subtitle { font-size: 0.85rem; }
+}
+
+/* Small tablets / large phones */
+@media (max-width: 768px) {
+  .top-nav { 
+    flex-direction: column; 
+    align-items: stretch; 
+    padding: 6px 8px;
+    gap: 4px;
+  }
+  .nav-left, .nav-right { 
+    width: 100%; 
+    justify-content: center; 
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .nav-link { 
+    padding: 4px 8px; 
+    font-size: 0.68rem; 
+    white-space: nowrap;
+  }
+  .nav-link i { font-size: 0.6rem; }
+  .dashboard { padding: 10px; }
+  .converter-box { padding: 16px; border-radius: 16px; }
+  .input-row { flex-direction: column; }
+  .profile-sidebar { width: 100%; padding: 15px; }
+  .profile-content { padding: 15px; }
+  .modal-box { padding: 20px; }
+  header h1 { font-size: 1.4rem; }
+  .support-link { padding: 10px 14px; font-size: 0.85rem; }
+}
+
+/* Mobile phones: tighter spacing and smaller fonts */
+@media (max-width: 480px) {
+  .top-nav { padding: 4px 6px; }
+  .nav-link { 
+    padding: 3px 6px; 
+    font-size: 0.6rem; 
+    border-radius: 30px;
+  }
+  .nav-link i { font-size: 0.55rem; }
+  .nav-left, .nav-right { gap: 3px; }
+  .converter-box { padding: 14px; border-radius: 12px; }
+  .custom-file-label { padding: 8px 14px; font-size: 0.8rem; }
+  .format-select { padding: 8px 10px; font-size: 0.8rem; }
+  .convert-btn { padding: 8px 16px; font-size: 0.8rem; }
+  .support-link { padding: 8px 12px; font-size: 0.75rem; border-radius: 10px; }
+  header h1 { font-size: 1.2rem; }
+  .subtitle { font-size: 0.75rem; }
+  .copyright { font-size: 0.7rem; }
+  .profile-photo, .profile-photo-wrapper { width: 80px; height: 80px; }
+}
+
+/* Very small phones: minimal padding */
+@media (max-width: 360px) {
+  .nav-link { 
+    padding: 2px 5px; 
+    font-size: 0.55rem; 
+  }
+  .nav-link i { font-size: 0.5rem; }
+  .converter-box { padding: 10px; }
+  .profile-content, .profile-sidebar { padding: 10px; }
+  header h1 { font-size: 1rem; }
+}
+
+/* ============================================
+   TOAST NOTIFICATION STYLES
+   ============================================ */
+/* Modern toast notification system with slide-in animation */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  max-width: 420px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(20, 30, 40, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+  transform: translateX(120%);
+  animation: toastSlideIn 0.4s ease forwards;
+  pointer-events: auto;
+  border-left: 4px solid #00bcd4;
+  transition: all 0.3s ease;
+}
+
+.toast-success { border-left-color: #34ce57; }
+.toast-error { border-left-color: #ff6b6b; }
+.toast-warning { border-left-color: #ffb74d; }
+.toast-info { border-left-color: #4dd0e1; }
+
+.toast-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.toast-icon.success { color: #34ce57; }
+.toast-icon.error { color: #ff6b6b; }
+.toast-icon.warning { color: #ffb74d; }
+.toast-icon.info { color: #4dd0e1; }
+
+.toast-message {
+  flex: 1;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: 0.2s;
+  pointer-events: auto;
+}
+.toast-close:hover { color: white; }
+
+@keyframes toastSlideIn {
+  0% { transform: translateX(120%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toastSlideOut {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
