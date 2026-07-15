@@ -133,3 +133,50 @@ if (file.size > maxFreeSize && !loggedInUser) {
     convertBtn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> Convert`;
   });
 }
+
+/* ============================================
+   HAMBURGER MENU TOGGLE
+   ============================================ */
+document.addEventListener('DOMContentLoaded', function() {
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileDropdown = document.getElementById('mobileDropdown');
+  
+  if (hamburgerBtn && mobileDropdown) {
+    // Toggle dropdown on hamburger click
+    hamburgerBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      mobileDropdown.classList.toggle('open');
+      
+      // Change icon between bars and times
+      const icon = this.querySelector('i');
+      if (mobileDropdown.classList.contains('open')) {
+        icon.className = 'fa-solid fa-times';
+      } else {
+        icon.className = 'fa-solid fa-bars';
+      }
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!hamburgerBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
+        mobileDropdown.classList.remove('open');
+        const icon = hamburgerBtn.querySelector('i');
+        if (icon) {
+          icon.className = 'fa-solid fa-bars';
+        }
+      }
+    });
+    
+    // Close dropdown when a mobile link is clicked
+    const mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        mobileDropdown.classList.remove('open');
+        const icon = hamburgerBtn.querySelector('i');
+        if (icon) {
+          icon.className = 'fa-solid fa-bars';
+        }
+      });
+    });
+  }
+});
