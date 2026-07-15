@@ -104,6 +104,89 @@ a { color: inherit; }
 }
 
 /* ============================================
+   HAMBURGER MENU STYLES
+   ============================================ */
+
+/* Hamburger icon - hidden on desktop */
+.nav-hamburger {
+  display: none;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-hamburger:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-hamburger i {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.nav-hamburger.open i {
+  transform: rotate(90deg);
+}
+
+/* Mobile Dashboard link - hidden on desktop */
+.nav-mobile-dashboard {
+  display: none;
+}
+
+/* Mobile Dropdown Menu - hidden by default */
+.mobile-dropdown {
+  display: none;
+  flex-direction: column;
+  background: rgba(15, 32, 39, 0.98);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4px 0;
+  width: 100%;
+  position: relative;
+  z-index: 999;
+}
+
+.mobile-dropdown.open {
+  display: flex;
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: all 0.25s ease;
+  background: transparent;
+  border-left: 3px solid transparent;
+}
+
+.dropdown-link i {
+  font-size: 0.85rem;
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: #00bcd4;
+  padding-left: 24px;
+}
+
+.dropdown-link.active {
+  background: rgba(0, 188, 212, 0.15);
+  border-left-color: #00bcd4;
+}
+
+/* ============================================
    PAGE HEADER
    ============================================ */
 header {
@@ -506,252 +589,9 @@ footer {
   aside img { width: 75px !important; height: 75px !important; }
 }
 
-@media (max-width: 768px) {
-  .top-nav {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 6px 10px;
-  }
-  .nav-left, .nav-right {
-    width: 100%;
-    justify-content: center;
-    gap: 6px;
-  }
-  .nav-link {
-    padding: 5px 12px;
-    font-size: 0.8rem;
-  }
-  .converter-box {
-    padding: 14px 18px;
-    width: min(94%, 550px);
-    gap: 12px;
-  }
-  .input-row {
-    gap: 8px;
-    flex-direction: column;
-    width: 100%;
-  }
-  .input-row > * {
-    width: 100%;
-    max-width: 100%;
-  }
-  .custom-file-label {
-    font-size: 0.85rem;
-    padding: 10px 18px;
-    text-align: center;
-  }
-  .format-select {
-    font-size: 0.85rem;
-    padding: 10px 14px;
-  }
-  .convert-btn {
-    font-size: 0.85rem;
-    padding: 10px 20px;
-    width: 100%;
-  }
-  #fileName {
-    font-size: 0.8rem;
-    max-width: 100%;
-  }
-  .dashboard {
-    padding: 8px 12px;
-  }
-  header h1 {
-    font-size: 1.4rem;
-  }
-  .subtitle {
-    font-size: 0.8rem;
-  }
-  aside {
-    width: 100% !important;
-    padding: 14px !important;
-  }
-  aside img {
-    width: 65px !important;
-    height: 65px !important;
-  }
-  section {
-    padding: 14px !important;
-  }
-  .support-link {
-    padding: 10px 14px;
-    font-size: 0.8rem;
-  }
-  .copyright {
-    font-size: 0.7rem !important;
-  }
-  .footer-support {
-    font-size: 0.75rem !important;
-  }
-  .info-card h2 { font-size: 1rem; }
-  .info-card p, .info-card li { font-size: 0.85rem; }
-}
-
-@media (max-width: 480px) {
-  .top-nav { padding: 4px 8px; }
-  .nav-link {
-    padding: 4px 8px;
-    font-size: 0.7rem;
-  }
-  .nav-link i {
-    font-size: 0.6rem;
-  }
-  .converter-box {
-    padding: 10px 14px;
-    border-radius: 14px;
-    gap: 10px;
-  }
-  .custom-file-label {
-    font-size: 0.75rem;
-    padding: 8px 14px;
-  }
-  .format-select {
-    font-size: 0.75rem;
-    padding: 8px 12px;
-  }
-  .convert-btn {
-    font-size: 0.75rem;
-    padding: 8px 16px;
-  }
-  header h1 {
-    font-size: 1.2rem;
-  }
-  .subtitle {
-    font-size: 0.7rem;
-  }
-  .support-link {
-    padding: 8px 12px;
-    font-size: 0.7rem;
-  }
-  aside img {
-    width: 55px !important;
-    height: 55px !important;
-  }
-  section h2 {
-    font-size: 1.1rem;
-  }
-}
-
 /* ============================================
-   PROJECTS PAGE - COMPACT VIEW
+   MOBILE RESPONSIVE - UPDATED FOR BETTER CONVERTER BOX
    ============================================ */
-.projects-page .converter-box {
-  padding: 12px 16px !important;
-  gap: 10px !important;
-  max-width: 600px !important;
-}
-
-.projects-page .info-card {
-  padding: 12px 16px !important;
-  margin-bottom: 6px !important;
-}
-
-.projects-page .info-card h2 {
-  font-size: 1rem !important;
-  margin-bottom: 6px !important;
-}
-
-.projects-page .info-card p {
-  font-size: 0.82rem !important;
-  margin: 3px 0 !important;
-  line-height: 1.5 !important;
-}
-
-.projects-page .info-card ul {
-  margin: 3px 0 !important;
-  padding-left: 16px !important;
-  font-size: 0.82rem !important;
-  line-height: 1.5 !important;
-}
-
-
-/* ============================================
-   HAMBURGER MENU STYLES - ADD THESE AT THE END
-   ============================================ */
-
-/* Hamburger icon - hidden on desktop */
-.nav-hamburger {
-  display: none;
-  font-size: 1.5rem;
-  color: white;
-  cursor: pointer;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.nav-hamburger:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.nav-hamburger i {
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.nav-hamburger.open i {
-  transform: rotate(90deg);
-}
-
-/* Mobile Dashboard link - hidden on desktop */
-.nav-mobile-dashboard {
-  display: none;
-}
-
-/* Mobile Dropdown Menu - hidden by default */
-.mobile-dropdown {
-  display: none;
-  flex-direction: column;
-  background: rgba(15, 32, 39, 0.98);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 4px 0;
-  width: 100%;
-  position: relative;
-  z-index: 999;
-}
-
-.mobile-dropdown.open {
-  display: flex;
-}
-
-.dropdown-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 20px;
-  color: white;
-  text-decoration: none;
-  font-size: 0.92rem;
-  transition: all 0.25s ease;
-  background: transparent;
-  border-left: 3px solid transparent;
-}
-
-.dropdown-link i {
-  font-size: 0.85rem;
-  width: 20px;
-  text-align: center;
-}
-
-.dropdown-link:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-left-color: #00bcd4;
-  padding-left: 24px;
-}
-
-.dropdown-link.active {
-  background: rgba(0, 188, 212, 0.15);
-  border-left-color: #00bcd4;
-}
-
-/* ============================================
-   RESPONSIVE BREAKPOINTS - UPDATED
-   ============================================ */
-
 @media (max-width: 768px) {
   /* Hide desktop navigation links */
   .nav-left {
@@ -818,16 +658,20 @@ footer {
     }
   }
   
-  /* Converter box mobile improvements */
+  /* ============================================
+     CONVERTER BOX - FULL WIDTH ON MOBILE
+     ============================================ */
   .converter-box {
-    padding: 16px 18px;
-    width: min(94%, 550px);
-    gap: 14px;
-    border-radius: 18px;
+    padding: 16px 14px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px;
+    gap: 12px;
+    margin: 4px auto;
   }
   
   .input-row {
-    gap: 10px;
+    gap: 8px;
     flex-direction: column;
     width: 100%;
   }
@@ -835,31 +679,55 @@ footer {
   .input-row > * {
     width: 100%;
     max-width: 100%;
+    box-sizing: border-box;
   }
   
   .custom-file-label {
     font-size: 0.85rem;
-    padding: 10px 18px;
+    padding: 10px 16px;
     text-align: center;
     width: 100%;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   #fileName {
     font-size: 0.8rem;
     max-width: 100%;
     text-align: center;
+    padding: 4px 8px;
+    word-break: break-all;
   }
   
   .format-select {
     font-size: 0.85rem;
     padding: 10px 14px;
     width: 100%;
+    min-width: unset;
+    appearance: auto;
+    -webkit-appearance: auto;
   }
   
   .convert-btn {
     font-size: 0.85rem;
     padding: 10px 20px;
     width: 100%;
+    white-space: nowrap;
+  }
+  
+  /* Dashboard padding */
+  .dashboard {
+    padding: 6px 10px;
+  }
+  
+  /* Header on mobile */
+  header h1 {
+    font-size: 1.4rem;
+  }
+  .subtitle {
+    font-size: 0.8rem;
   }
   
   /* Profile navigation on mobile */
@@ -878,12 +746,35 @@ footer {
     padding: 10px 14px;
     font-size: 0.8rem;
   }
+  
+  /* Profile page on mobile */
+  aside {
+    width: 100% !important;
+    padding: 14px !important;
+  }
+  aside img {
+    width: 65px !important;
+    height: 65px !important;
+  }
+  section {
+    padding: 14px !important;
+  }
+  .info-card h2 { font-size: 1rem; }
+  .info-card p, .info-card li { font-size: 0.85rem; }
+  
+  /* Footer on mobile */
+  .footer-support {
+    font-size: 0.7rem !important;
+  }
+  .copyright {
+    font-size: 0.65rem !important;
+  }
 }
 
 @media (max-width: 480px) {
   /* Extra small screens */
   .top-nav {
-    padding: 5px 8px;
+    padding: 4px 8px;
     gap: 4px;
   }
   
@@ -894,12 +785,12 @@ footer {
   
   .nav-mobile-dashboard .nav-link {
     padding: 4px 10px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
   }
   
   .top-nav .nav-right .nav-link {
     padding: 4px 8px;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
   
   .top-nav .nav-right .nav-link i {
@@ -907,12 +798,12 @@ footer {
   }
   
   #profileNav #navProfilePhoto {
-    width: 20px !important;
-    height: 20px !important;
+    width: 18px !important;
+    height: 18px !important;
   }
   
   #profileNav #navUsername {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
   
   .dropdown-link {
@@ -920,15 +811,20 @@ footer {
     font-size: 0.8rem;
   }
   
+  /* Converter box - extra small */
   .converter-box {
-    padding: 12px 14px;
+    padding: 12px 10px;
     border-radius: 14px;
-    gap: 10px;
+    gap: 8px;
   }
   
   .custom-file-label {
     font-size: 0.75rem;
-    padding: 8px 14px;
+    padding: 8px 12px;
+  }
+  
+  #fileName {
+    font-size: 0.7rem;
   }
   
   .format-select {
@@ -938,7 +834,27 @@ footer {
   
   .convert-btn {
     font-size: 0.75rem;
-    padding: 8px 16px;
+    padding: 8px 14px;
+  }
+  
+  header h1 {
+    font-size: 1.2rem;
+  }
+  .subtitle {
+    font-size: 0.7rem;
+  }
+  
+  .support-link {
+    padding: 8px 12px;
+    font-size: 0.7rem;
+  }
+  
+  aside img {
+    width: 55px !important;
+    height: 55px !important;
+  }
+  section h2 {
+    font-size: 1.1rem;
   }
 }
 
@@ -961,4 +877,36 @@ footer {
   .nav-left {
     display: flex !important;
   }
+}
+
+/* ============================================
+   PROJECTS PAGE - COMPACT VIEW
+   ============================================ */
+.projects-page .converter-box {
+  padding: 12px 16px !important;
+  gap: 10px !important;
+  max-width: 600px !important;
+}
+
+.projects-page .info-card {
+  padding: 12px 16px !important;
+  margin-bottom: 6px !important;
+}
+
+.projects-page .info-card h2 {
+  font-size: 1rem !important;
+  margin-bottom: 6px !important;
+}
+
+.projects-page .info-card p {
+  font-size: 0.82rem !important;
+  margin: 3px 0 !important;
+  line-height: 1.5 !important;
+}
+
+.projects-page .info-card ul {
+  margin: 3px 0 !important;
+  padding-left: 16px !important;
+  font-size: 0.82rem !important;
+  line-height: 1.5 !important;
 }
