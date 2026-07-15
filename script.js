@@ -1,19 +1,16 @@
 /* ============================================
    DOM ELEMENT SELECTION
    ============================================ */
-// Get references to converter UI elements
 const fileInput = document.getElementById("fileInput");
 const result = document.getElementById("result");
 const fileName = document.getElementById("fileName");
 const convertBtn = document.getElementById("convertBtn");
 
-// Only initialize if elements exist to prevent errors on non-converter pages
 if (fileInput && result && fileName && convertBtn) {
 
   /* ============================================
      FILE SELECTION HANDLING
      ============================================ */
-  // Updates the display with the chosen filename and truncates long names for UI consistency
   fileInput.addEventListener("change", function () {
     const file = this.files[0];
     if (!file) {
@@ -22,7 +19,6 @@ if (fileInput && result && fileName && convertBtn) {
       return;
     }
 
-    // Truncate long filenames: keep first 15 chars + last 6 chars + extension
     let name = file.name;
     if (name.length > 30) {
       const ext = name.substring(name.lastIndexOf("."));
@@ -30,13 +26,12 @@ if (fileInput && result && fileName && convertBtn) {
       name = base.substring(0, 15) + "..." + base.substring(Math.max(base.length - 6, 15)) + ext;
     }
     fileName.textContent = name;
-    result.innerHTML = ""; // Clear previous results
+    result.innerHTML = "";
   });
 
   /* ============================================
      CONVERSION PROCESS
      ============================================ */
-  // Manages user authentication limits, visual progress tracking, and server interaction
   convertBtn.addEventListener("click", async () => {
     const file = fileInput.files[0];
     if (!file) {
@@ -44,38 +39,28 @@ if (fileInput && result && fileName && convertBtn) {
       return;
     }
 
-    // UI Feedback: Disable button and show spinner
     convertBtn.disabled = true;
     convertBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Converting...`;
 
-    /* ============================================
-   AUTHENTICATION & FILE SIZE VALIDATION
-   ============================================*/
-// Guests are limited to 2MB files, logged-in users have no restriction
-const loggedInUser = localStorage.getItem("loggedInUser");
-const maxFreeSize = 2 * 1024 * 1024; // 2MB
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const maxFreeSize = 2 * 1024 * 1024;
 
-if (file.size > maxFreeSize && !loggedInUser) {
-  toastWarning("The file size is over the limit. Please sign in or sign up to convert files of 2+ MB");
-  setTimeout(() => { 
-    result.innerHTML = `
-      <div style="background: rgba(255, 255, 255, 0.08); padding:20px; border-radius:15px;">
-        <p style="color:#ffcc80; line-height:1.8;">The file size is over the limit.<br><br>Please sign in or create an account to convert files of 2+ MB.</p>
-        <a href="signin.html" class="download-btn" style="margin-right:10px;">Sign In</a>
-        <a href="signup.html" class="download-btn">Sign Up</a>
-      </div>
-    `;
-  }, 2000);
-  // Reset button state
-  convertBtn.disabled = false;
-  convertBtn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> Convert`;
-  return;
-}
+    if (file.size > maxFreeSize && !loggedInUser) {
+      toastWarning("The file size is over the limit. Please sign in or sign up to convert files of 2+ MB");
+      setTimeout(() => { 
+        result.innerHTML = `
+          <div style="background: rgba(255, 255, 255, 0.08); padding:20px; border-radius:15px;">
+            <p style="color:#ffcc80; line-height:1.8;">The file size is over the limit.<br><br>Please sign in or create an account to convert files of 2+ MB.</p>
+            <a href="signin.html" class="download-btn" style="margin-right:10px;">Sign In</a>
+            <a href="signup.html" class="download-btn">Sign Up</a>
+          </div>
+        `;
+      }, 2000);
+      convertBtn.disabled = false;
+      convertBtn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> Convert`;
+      return;
+    }
 
-    /* ============================================
-       PROGRESS TRACKING UI
-       ============================================ */
-    // Renders progress bar and starts a mock timer for client-side feedback
     result.innerHTML = `
       <div style="width:100%; background:#333; border-radius:12px; overflow:hidden;">
         <div id="progressBar" style="width:0%; height:22px; background:#28a745; transition: width .3s;"></div>
@@ -86,7 +71,6 @@ if (file.size > maxFreeSize && !loggedInUser) {
     const bar = document.getElementById("progressBar");
     const text = document.getElementById("progressText");
     let progress = 0;
-    // Simulate progress up to 95% while waiting for server response
     const timer = setInterval(() => {
       if (progress < 95) {
         progress += 5;
@@ -95,26 +79,18 @@ if (file.size > maxFreeSize && !loggedInUser) {
       }
     }, 300);
 
-    /* ============================================
-       UPLOAD AND API INTERACTION
-       ============================================ */
-    // Prepare form data with file and selected output format
     const formData = new FormData();
     formData.append("file", file);
     formData.append("format", document.getElementById("formatSelect").value);
 
     try {
-      // Send conversion request to server
       const response = await fetch("/api/convert", { method: "POST", body: formData });
       const data = await response.json();
-      clearInterval(timer); // Stop the progress simulation
+      clearInterval(timer);
 
-      // Handle server-side failure
       if (!response.ok) {
         toastError(data.error || "Conversion failed."); 
-      } 
-      // Handle successful conversion - show download link
-      else {
+      } else {
         bar.style.width = "100%";
         text.textContent = "100%";
         result.innerHTML = `
@@ -123,12 +99,10 @@ if (file.size > maxFreeSize && !loggedInUser) {
         `;
       }
     } catch (error) {
-      // Handle network or server errors
       clearInterval(timer);
       toastError("Server error. Please try again.");
     }
 
-    // Reset button state after completion
     convertBtn.disabled = false;
     convertBtn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> Convert`;
   });
@@ -142,12 +116,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const mobileDropdown = document.getElementById('mobileDropdown');
   
   if (hamburgerBtn && mobileDropdown) {
-    // Toggle dropdown on hamburger click
     hamburgerBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       mobileDropdown.classList.toggle('open');
       
-      // Change icon between bars and times
       const icon = this.querySelector('i');
       if (mobileDropdown.classList.contains('open')) {
         icon.className = 'fa-solid fa-times';
@@ -156,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
       const isHamburger = hamburgerBtn.contains(e.target);
       const isDropdown = mobileDropdown.contains(e.target);
@@ -170,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Close dropdown when a mobile link is clicked
     const mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
     mobileLinks.forEach(link => {
       link.addEventListener('click', function() {
