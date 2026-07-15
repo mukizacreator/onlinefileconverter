@@ -69,21 +69,21 @@
   <script>
   (function() {
     try {
-      const loggedInEmail = localStorage.getItem("loggedInUser");
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const user = users.find((u) => u.email === loggedInEmail);
+      var loggedInEmail = localStorage.getItem("loggedInUser");
+      var users = JSON.parse(localStorage.getItem("users")) || [];
+      var user = users.find(function(u) { return u.email === loggedInEmail; });
       
-      let userData = null;
+      var userData = null;
       try {
         userData = JSON.parse(localStorage.getItem("userData"));
       } catch(e) {}
       
-      const guestNav = document.getElementById("guestNav");
-      const profileNav = document.getElementById("profileNav");
-      const navUsername = document.getElementById("navUsername");
-      const navProfilePhoto = document.getElementById("navProfilePhoto");
+      var guestNav = document.getElementById("guestNav");
+      var profileNav = document.getElementById("profileNav");
+      var navUsername = document.getElementById("navUsername");
+      var navProfilePhoto = document.getElementById("navProfilePhoto");
       
-      const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+      var DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
       if (loggedInEmail && userData) {
         if (guestNav) guestNav.style.display = "none";
@@ -101,8 +101,8 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: loggedInEmail })
         })
-        .then(res => res.json())
-        .then(data => {
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
           localStorage.setItem("userData", JSON.stringify(data));
           if (navUsername) navUsername.textContent = data.username || 'Profile';
           if (navProfilePhoto) navProfilePhoto.src = data.photo || DEFAULT_ICON;
@@ -112,7 +112,7 @@
             profileNav.style.alignItems = "center";
           }
         })
-        .catch(err => console.error("Failed to load user data:", err));
+        .catch(function(err) { console.error("Failed to load user data:", err); });
       } else {
         if (guestNav) {
           guestNav.style.display = "flex";
@@ -125,13 +125,13 @@
       }
     } catch (error) {
       console.error("Navigation error:", error);
-      const guestNav = document.getElementById("guestNav");
+      var guestNav = document.getElementById("guestNav");
       if (guestNav) {
         guestNav.style.display = "flex";
         guestNav.style.alignItems = "center";
         guestNav.style.gap = "8px";
       }
-      const profileNav = document.getElementById("profileNav");
+      var profileNav = document.getElementById("profileNav");
       if (profileNav) profileNav.style.display = "none";
     }
   })();
@@ -139,15 +139,15 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileDropdown = document.getElementById('mobileDropdown');
+    var hamburgerBtn = document.getElementById('hamburgerBtn');
+    var mobileDropdown = document.getElementById('mobileDropdown');
     
     if (hamburgerBtn && mobileDropdown) {
       hamburgerBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         mobileDropdown.classList.toggle('open');
         
-        const icon = this.querySelector('i');
+        var icon = this.querySelector('i');
         if (mobileDropdown.classList.contains('open')) {
           icon.className = 'fa-solid fa-times';
         } else {
@@ -158,23 +158,23 @@
       document.addEventListener('click', function(e) {
         if (!hamburgerBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
           mobileDropdown.classList.remove('open');
-          const icon = hamburgerBtn.querySelector('i');
+          var icon = hamburgerBtn.querySelector('i');
           if (icon) {
             icon.className = 'fa-solid fa-bars';
           }
         }
       });
       
-      const mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
-      mobileLinks.forEach(link => {
-        link.addEventListener('click', function() {
+      var mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
+      for (var i = 0; i < mobileLinks.length; i++) {
+        mobileLinks[i].addEventListener('click', function() {
           mobileDropdown.classList.remove('open');
-          const icon = hamburgerBtn.querySelector('i');
+          var icon = hamburgerBtn.querySelector('i');
           if (icon) {
             icon.className = 'fa-solid fa-bars';
           }
         });
-      });
+      }
     }
   });
   </script>
