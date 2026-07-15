@@ -95,12 +95,10 @@ a { color: inherit; }
 }
 
 /* ============================================
-   DESKTOP NAVIGATION
+   DESKTOP ONLY - HIDE ON MOBILE
    ============================================ */
-.desktop-nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.desktop-only {
+  display: inline-flex;
 }
 
 /* ============================================
@@ -639,19 +637,19 @@ footer {
 }
 
 @media (max-width: 768px) {
-  /* Show hamburger on mobile */
+  /* Show hamburger */
   .hamburger-btn {
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
-  /* Hide desktop nav links on mobile */
-  .desktop-nav {
+  /* Hide desktop links */
+  .desktop-only {
     display: none !important;
   }
   
-  /* Top nav adjustments */
+  /* Top nav */
   .top-nav {
     flex-direction: row;
     align-items: center;
@@ -677,7 +675,6 @@ footer {
     flex-shrink: 0;
   }
   
-  /* Dashboard link on mobile */
   .nav-left .nav-link {
     padding: 4px 8px;
     font-size: 0.7rem;
@@ -688,7 +685,6 @@ footer {
     font-size: 0.6rem;
   }
   
-  /* Sign In/Sign Up on mobile */
   .nav-right .nav-link {
     padding: 4px 8px;
     font-size: 0.65rem;
@@ -699,7 +695,6 @@ footer {
     font-size: 0.55rem;
   }
   
-  /* Mobile dropdown */
   .mobile-dropdown {
     padding: 10px 12px 12px 12px;
     position: absolute;
@@ -713,11 +708,6 @@ footer {
     font-size: 0.85rem;
   }
   
-  .mobile-nav-link i {
-    font-size: 1rem;
-  }
-  
-  /* Converter box */
   .converter-box {
     padding: 14px 16px;
     width: min(94%, 500px);
