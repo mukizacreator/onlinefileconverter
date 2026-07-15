@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="no-referrer-when-downgrade">
   <meta name="description" content="Convert PDF, DOCX, JPG, PNG, WEBP, MP3, EPUB and many other file formats online for free. Fast, secure and easy to use.">
-  <meta name="keywords" content="file converter, online file converter, convert pdf to docx, convert docx to pdf, convert jpg to png, convert png to jpg, convert webp to png, convert mp3 to wav, convert epub to pdf, universal converter, free online converter">
+  <meta name="keywords" content="file converter, online file converter">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Online File Converter">
   <meta property="og:description" content="Universal online file converter for documents, images and audio files.">
   <meta property="og:image" content="favicon.png">
-  <title>Online File Converter | Universal File Conversion</title>
+  <title>Online File Converter</title>
   
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
@@ -20,64 +18,41 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
-
 <body>
 
-  <!-- ============================================
-       TOP NAVIGATION BAR
-       ============================================ -->
+  <!-- ===== NAVIGATION ===== -->
   <nav class="top-nav">
     <div class="nav-left">
-      <!-- Hamburger Button -->
       <button class="hamburger-btn" id="hamburgerBtn">
         <i class="fa-solid fa-bars"></i>
       </button>
-      
-      <!-- Dashboard - Always visible -->
-      <a href="index.html" class="nav-link active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-      
-      <!-- Desktop Only Links (hidden on mobile) -->
-      <a href="projects.html" class="nav-link desktop-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-      <a href="about.html" class="nav-link desktop-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+      <a href="index.html" class="nav-link active">Dashboard</a>
+      <a href="projects.html" class="nav-link desktop-only">Other Projects</a>
+      <a href="about.html" class="nav-link desktop-only">About & Support</a>
     </div>
-    
-    <div class="nav-right" id="navRight">
-      <div id="guestNav">
-        <a href="signin.html" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
-        <a href="signup.html" class="nav-link"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
-      </div>
-      <div id="profileNav" style="display:none;">
-        <a href="profile.html" class="nav-link" id="profileButton">
-          <img id="navProfilePhoto" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile">
-          <span id="navUsername">Profile</span>
-        </a>
-      </div>
+    <div class="nav-right">
+      <a href="signin.html" class="nav-link">Sign In</a>
+      <a href="signup.html" class="nav-link">Sign Up</a>
     </div>
   </nav>
 
-  <!-- ============================================
-       MOBILE DROPDOWN - ONLY ON MOBILE
-       ============================================ -->
+  <!-- ===== MOBILE DROPDOWN ===== -->
   <div class="mobile-dropdown" id="mobileDropdown">
-    <a href="projects.html" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-    <a href="about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+    <a href="projects.html" class="mobile-nav-link">📊 Other Projects</a>
+    <a href="about.html" class="mobile-nav-link">ℹ️ About & Support</a>
   </div>
 
-  <!-- ============================================
-       PAGE HEADER
-       ============================================ -->
+  <!-- ===== HEADER ===== -->
   <header>
     <h1>Online File Converter</h1>
     <p class="subtitle">Convert your files easily and securely — built by Emmanuel MUKIZA</p>
   </header>
 
-  <!-- ============================================
-       MAIN CONTENT
-       ============================================ -->
+  <!-- ===== MAIN CONTENT ===== -->
   <main class="dashboard">
     <div class="converter-box">
       <div class="input-row">
-        <label for="fileInput" class="custom-file-label"><i class="fa-solid fa-folder-open"></i> Choose File</label>
+        <label for="fileInput" class="custom-file-label">📁 Choose File</label>
         <input type="file" id="fileInput">
         <span id="fileName">No file chosen</span>
         <select id="formatSelect" class="format-select">
@@ -89,90 +64,13 @@
           <option value="txt">TXT</option>
           <option value="epub">EPUB</option>
         </select>
-        <button id="convertBtn" class="convert-btn"><i class="fa-solid fa-arrows-rotate"></i> Convert</button>
+        <button id="convertBtn" class="convert-btn">🔄 Convert</button>
       </div>
       <div id="result"></div>
     </div>
   </main>
 
-  <!-- ============================================
-       SCRIPTS
-       ============================================ -->
-  <script src="script.js"></script>
-
-  <script>
-  (function() {
-    try {
-      const loggedInEmail = localStorage.getItem("loggedInUser");
-      let userData = null;
-      try {
-        userData = JSON.parse(localStorage.getItem("userData"));
-      } catch(e) {}
-      
-      const guestNav = document.getElementById("guestNav");
-      const profileNav = document.getElementById("profileNav");
-      const navUsername = document.getElementById("navUsername");
-      const navProfilePhoto = document.getElementById("navProfilePhoto");
-      const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-
-      if (loggedInEmail && userData) {
-        if (guestNav) guestNav.style.display = "none";
-        if (profileNav) {
-          profileNav.style.display = "flex";
-          profileNav.style.alignItems = "center";
-        }
-        if (navUsername) navUsername.textContent = userData.username || 'Profile';
-        if (navProfilePhoto) {
-          navProfilePhoto.src = userData.photo || DEFAULT_ICON;
-        }
-      } else if (loggedInEmail) {
-        fetch("/api/get-user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: loggedInEmail })
-        })
-        .then(res => res.json())
-        .then(data => {
-          localStorage.setItem("userData", JSON.stringify(data));
-          if (navUsername) navUsername.textContent = data.username || 'Profile';
-          if (navProfilePhoto) navProfilePhoto.src = data.photo || DEFAULT_ICON;
-          if (guestNav) guestNav.style.display = "none";
-          if (profileNav) {
-            profileNav.style.display = "flex";
-            profileNav.style.alignItems = "center";
-          }
-        })
-        .catch(err => console.error("Failed to load user data:", err));
-      } else {
-        if (guestNav) {
-          guestNav.style.display = "flex";
-          guestNav.style.alignItems = "center";
-          guestNav.style.gap = "8px";
-        }
-        if (profileNav) {
-          profileNav.style.display = "none";
-        }
-      }
-    } catch (error) {
-      console.error("Navigation error:", error);
-      const guestNav = document.getElementById("guestNav");
-      if (guestNav) {
-        guestNav.style.display = "flex";
-        guestNav.style.alignItems = "center";
-        guestNav.style.gap = "8px";
-      }
-      const profileNav = document.getElementById("profileNav");
-      if (profileNav) profileNav.style.display = "none";
-    }
-  })();
-</script>
-
-  <script src="notifications.js?v=4"></script>
-  <script src="modal.js?v=4"></script>
-
-  <!-- ============================================
-       FOOTER
-       ============================================ -->
+  <!-- ===== FOOTER ===== -->
   <footer>
     <section class="footer-support">
       My system supports: Documents: PDF, DOCX, DOC, ODT, TXT, EPUB, RTF, HTML | Images: JPG, PNG, WEBP, TIFF, BMP, GIF.<br>
@@ -180,6 +78,10 @@
     </section>
     <div class="copyright">© 2026 Emmanuel MUKIZA | Hosted on GitHub</div>
   </footer>
+
+  <script src="script.js"></script>
+  <script src="notifications.js?v=4"></script>
+  <script src="modal.js?v=4"></script>
 
 </body>
 </html>
