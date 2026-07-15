@@ -95,7 +95,7 @@ a { color: inherit; }
 }
 
 /* ============================================
-   DESKTOP LINKS - Hidden on mobile
+   DESKTOP LINKS - Visible on desktop only
    ============================================ */
 .desktop-link {
   display: inline-flex;
@@ -105,7 +105,7 @@ a { color: inherit; }
    MOBILE DROPDOWN MENU
    ============================================ */
 .mobile-dropdown {
-  display: none;
+  display: none !important;
   flex-direction: column;
   width: 100%;
   background: rgba(0, 0, 0, 0.92);
@@ -114,10 +114,15 @@ a { color: inherit; }
   padding: 12px 16px 16px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 999;
 }
 
 .mobile-dropdown.open {
-  display: flex;
+  display: flex !important;
   animation: slideDown 0.3s ease forwards;
 }
 
@@ -613,10 +618,10 @@ footer {
 }
 
 /* ============================================
-   RESPONSIVE BREAKPOINTS - COMPLETE REWRITE
+   RESPONSIVE BREAKPOINTS - THE FIX
    ============================================ */
 
-/* Desktop - all links visible */
+/* DESKTOP - Show all links */
 @media (min-width: 769px) {
   .hamburger-btn {
     display: none !important;
@@ -629,16 +634,16 @@ footer {
   }
 }
 
-/* Mobile - hide desktop links, show hamburger */
+/* MOBILE - Hide desktop links, show hamburger */
 @media (max-width: 768px) {
-  /* ===== SHOW HAMBURGER ===== */
+  /* Show hamburger */
   .hamburger-btn {
     display: flex !important;
     align-items: center;
     justify-content: center;
   }
   
-  /* ===== HIDE "Other Projects" and "About & Support" from main nav ===== */
+  /* ===== CRITICAL: HIDE "Other Projects" and "About & Support" ===== */
   .desktop-link {
     display: none !important;
   }
@@ -648,7 +653,7 @@ footer {
     display: none !important;
   }
   
-  /* ===== TOP NAV - HORIZONTAL ===== */
+  /* ===== NAVIGATION LAYOUT ===== */
   .top-nav {
     flex-direction: row !important;
     align-items: center !important;
@@ -676,7 +681,7 @@ footer {
     justify-content: flex-end !important;
   }
   
-  /* ===== DASHBOARD LINK ===== */
+  /* Dashboard link */
   .nav-left .nav-link {
     padding: 4px 10px !important;
     font-size: 0.75rem !important;
@@ -686,7 +691,7 @@ footer {
     font-size: 0.65rem !important;
   }
   
-  /* ===== SIGN IN / SIGN UP ===== */
+  /* Sign In / Sign Up */
   .nav-right .nav-link {
     padding: 4px 8px !important;
     font-size: 0.7rem !important;
@@ -703,6 +708,11 @@ footer {
     left: 0 !important;
     right: 0 !important;
     z-index: 999 !important;
+    display: none !important;
+  }
+  
+  .mobile-dropdown.open {
+    display: flex !important;
   }
   
   .mobile-nav-link {
