@@ -5,39 +5,20 @@
   <!-- ============================================
        METADATA & SEO CONFIGURATION
        ============================================ -->
-  <!-- Basic character encoding and responsive viewport settings -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  <!-- SEO meta tags for search engine optimization -->
   <meta name="description" content="Sign in to your Universal Online File Converter account.">
   <meta name="keywords" content="sign in, login, online file converter account">
   <meta name="robots" content="index, follow">
-  
-  <!-- Open Graph tags for social media sharing previews -->
   <meta property="og:title" content="Sign In | Online File Converter">
   <meta property="og:description" content="Access your Online File Converter account.">
   <meta property="og:image" content="favicon.png">
-  
-  <!-- Page title displayed in browser tab -->
   <title>Sign In | Online File Converter</title>
-  
-  <!-- ============================================
-       FAVICON & ICON LINKS
-       ============================================ -->
-  <!-- Multiple icon formats for cross-browser and device compatibility -->
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  
-  <!-- ============================================
-       STYLESHEETS
-       ============================================ -->
-  <!-- Custom site stylesheet -->
   <link rel="stylesheet" href="style.css">
-  <!-- Font Awesome 6 icon library for UI icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -46,14 +27,24 @@
   <!-- ============================================
        TOP NAVIGATION BAR
        ============================================ -->
-  <!-- Left side: primary navigation links to main pages -->
-  <!-- Right side: Sign In is active (highlighted) -->
   <nav class="top-nav">
-    <div class="nav-left">
+    <!-- Mobile: Hamburger icon (visible on small screens) -->
+    <div class="nav-hamburger" id="hamburgerBtn">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    
+    <!-- Desktop: Full navigation links (visible on large screens) -->
+    <div class="nav-left" id="navLeft">
       <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
       <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
       <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
     </div>
+    
+    <!-- Mobile: Dashboard link (visible on small screens) -->
+    <div class="nav-mobile-dashboard" id="mobileDashboard">
+      <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+    </div>
+    
     <div class="nav-right">
       <a href="signin.html" class="nav-link active"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
       <a href="signup.html" class="nav-link"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
@@ -61,9 +52,16 @@
   </nav>
 
   <!-- ============================================
+       MOBILE DROPDOWN MENU
+       ============================================ -->
+  <div class="mobile-dropdown" id="mobileDropdown">
+    <a href="projects.html" class="dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+    <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+  </div>
+
+  <!-- ============================================
        PAGE HEADER
        ============================================ -->
-  <!-- Main title and subtitle for the sign-in page -->
   <header>
     <h1>Sign In</h1>
     <p class="subtitle">Access your account securely.</p>
@@ -72,7 +70,6 @@
   <!-- ============================================
        MAIN CONTENT - SIGN IN FORM
        ============================================ -->
-  <!-- Login form with email, password (with show/hide toggle), and submit button -->
   <main class="dashboard">
     <div class="converter-box" style="max-width:520px;">
       <form id="signinForm" autocomplete="off" method="post" action="#">
@@ -88,19 +85,18 @@
           <label for="signinPassword">Password</label>
           <div style="display:flex; gap:10px; margin-top:8px;">
             <input type="password" id="signinPassword" name="password" placeholder="Enter your password" required style="flex:1;" autocomplete="current-password" aria-label="Password">
-            <!-- Show/Hide password toggle button -->  
             <button type="button" id="toggleSignin" class="convert-btn" style="padding:14px 18px; white-space:nowrap;">
                 <i class="fa-solid fa-eye"></i>
               </button>
             </div>
           </div>
 
-          <!-- ADD THIS: Forgot Password Link -->
-  <div style="text-align:left; margin-bottom:40px; margin-top:25px;">
-    <a href="#" id="forgotPasswordLink" style="color:#00bcd4; font-size:1rem; text-decoration:none; transition:0.3s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
-      Forgot password?
-    </a>
-  </div>
+          <!-- Forgot Password Link -->
+          <div style="text-align:left; margin-bottom:40px; margin-top:25px;">
+            <a href="#" id="forgotPasswordLink" style="color:#00bcd4; font-size:1rem; text-decoration:none; transition:0.3s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+              Forgot password?
+            </a>
+          </div>
 
         <!-- SUBMIT BUTTON -->
         <button type="submit" class="convert-btn" style="width:100%; padding:14px; font-size:1rem;">Sign In</button>
@@ -112,17 +108,15 @@
   </main>
 
   <!-- ============================================
-       JAVASCRIPT - AUTHENTICATION LOGIC
+       JAVASCRIPT
        ============================================ -->
-  <!-- Handles form submission, password toggle, and user authentication -->
   <script src="auth.js?v=5"></script>
-
   <script src="notifications.js?v=4"></script>
-
   <script src="modal.js?v=4"></script>
+  <script src="nav.js"></script>
 
   <!-- ============================================
-       FOOTER - COPYRIGHT NOTICE
+       FOOTER
        ============================================ -->
   <footer>
     <div class="copyright">© 2026 Emmanuel MUKIZA</div>
