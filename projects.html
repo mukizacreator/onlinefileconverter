@@ -21,13 +21,16 @@
 <body>
 
   <!-- ============================================
-       TOP NAVIGATION BAR
+       TOP NAVIGATION BAR - FIXED
        ============================================ -->
   <nav class="top-nav">
     <div class="nav-left">
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
       <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-      <a href="projects.html" class="nav-link active"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-      <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+      <a href="projects.html" class="nav-link active desktop-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+      <a href="about.html" class="nav-link desktop-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
     </div>
     <div class="nav-right" id="navRight">
       <div id="guestNav">
@@ -42,6 +45,14 @@
       </div>
     </div>
   </nav>
+
+  <!-- ============================================
+       MOBILE DROPDOWN - ADDED
+       ============================================ -->
+  <div class="mobile-dropdown" id="mobileDropdown">
+    <a href="projects.html" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+    <a href="about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+  </div>
 
   <!-- ============================================
        PAGE HEADER
@@ -83,16 +94,12 @@
   <script src="modal.js?v=4"></script>
 
   <script>
-  // ============================================
-  // NAVIGATION AUTH SCRIPT
-  // ============================================
   (function() {
     try {
       const loggedInEmail = localStorage.getItem("loggedInUser");
       const users = JSON.parse(localStorage.getItem("users")) || [];
       const user = users.find((u) => u.email === loggedInEmail);
       
-      // Try to get user data from localStorage first, then from database
       let userData = null;
       try {
         userData = JSON.parse(localStorage.getItem("userData"));
@@ -106,7 +113,6 @@
       const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
       if (loggedInEmail && userData) {
-        // Show profile nav with user data
         if (guestNav) guestNav.style.display = "none";
         if (profileNav) {
           profileNav.style.display = "flex";
@@ -117,7 +123,6 @@
           navProfilePhoto.src = userData.photo || DEFAULT_ICON;
         }
       } else if (loggedInEmail) {
-        // If userData not in localStorage, fetch it
         fetch("/api/get-user", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -136,7 +141,6 @@
         })
         .catch(err => console.error("Failed to load user data:", err));
       } else {
-        // Logged out: Show guest nav
         if (guestNav) {
           guestNav.style.display = "flex";
           guestNav.style.alignItems = "center";
@@ -159,6 +163,51 @@
     }
   })();
 </script>
+
+  <!-- ============================================
+       HAMBURGER TOGGLE JAVASCRIPT - ADDED
+       ============================================ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileDropdown = document.getElementById('mobileDropdown');
+    
+    if (hamburgerBtn && mobileDropdown) {
+      hamburgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        mobileDropdown.classList.toggle('open');
+        
+        const icon = this.querySelector('i');
+        if (mobileDropdown.classList.contains('open')) {
+          icon.className = 'fa-solid fa-times';
+        } else {
+          icon.className = 'fa-solid fa-bars';
+        }
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (!hamburgerBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
+          mobileDropdown.classList.remove('open');
+          const icon = hamburgerBtn.querySelector('i');
+          if (icon) {
+            icon.className = 'fa-solid fa-bars';
+          }
+        }
+      });
+      
+      const mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileDropdown.classList.remove('open');
+          const icon = hamburgerBtn.querySelector('i');
+          if (icon) {
+            icon.className = 'fa-solid fa-bars';
+          }
+        });
+      });
+    }
+  });
+  </script>
 
   <!-- ============================================
        FOOTER
