@@ -613,45 +613,42 @@ footer {
 }
 
 /* ============================================
-   RESPONSIVE BREAKPOINTS - COMPLETE FIX
+   RESPONSIVE BREAKPOINTS - COMPLETE REWRITE
    ============================================ */
 
-@media (max-width: 1100px) {
-  .top-nav { flex-wrap: wrap; justify-content: center; }
-  .nav-left, .nav-right { flex-wrap: wrap; justify-content: center; }
-  .converter-box { width: min(90%, 750px); }
+/* Desktop - all links visible */
+@media (min-width: 769px) {
+  .hamburger-btn {
+    display: none !important;
+  }
+  .mobile-dropdown {
+    display: none !important;
+  }
+  .desktop-link {
+    display: inline-flex !important;
+  }
 }
 
-@media (max-width: 900px) {
-  .top-nav { padding: 8px 12px; gap: 8px; }
-  .nav-link { padding: 6px 14px; font-size: 0.85rem; }
-  .converter-box { padding: 18px 22px; width: min(92%, 650px); }
-  header h1 { font-size: 1.6rem; }
-  .subtitle { font-size: 0.85rem; }
-  aside { width: 190px; padding: 16px !important; }
-  aside img { width: 75px !important; height: 75px !important; }
-}
-
-/* ===== MOBILE BREAKPOINT - CRITICAL FIX ===== */
+/* Mobile - hide desktop links, show hamburger */
 @media (max-width: 768px) {
-  /* Show hamburger */
+  /* ===== SHOW HAMBURGER ===== */
   .hamburger-btn {
     display: flex !important;
     align-items: center;
     justify-content: center;
   }
   
-  /* ===== CRITICAL: HIDE "Other Projects" and "About & Support" from main nav ===== */
+  /* ===== HIDE "Other Projects" and "About & Support" from main nav ===== */
   .desktop-link {
     display: none !important;
   }
   
-  /* Override any other styles that might show them */
+  /* Extra selector to ensure it works */
   .nav-left .desktop-link {
     display: none !important;
   }
   
-  /* Top nav - horizontal */
+  /* ===== TOP NAV - HORIZONTAL ===== */
   .top-nav {
     flex-direction: row !important;
     align-items: center !important;
@@ -679,7 +676,7 @@ footer {
     justify-content: flex-end !important;
   }
   
-  /* Dashboard link on mobile */
+  /* ===== DASHBOARD LINK ===== */
   .nav-left .nav-link {
     padding: 4px 10px !important;
     font-size: 0.75rem !important;
@@ -689,7 +686,7 @@ footer {
     font-size: 0.65rem !important;
   }
   
-  /* Sign In/Sign Up on mobile */
+  /* ===== SIGN IN / SIGN UP ===== */
   .nav-right .nav-link {
     padding: 4px 8px !important;
     font-size: 0.7rem !important;
@@ -699,7 +696,7 @@ footer {
     font-size: 0.6rem !important;
   }
   
-  /* Mobile dropdown */
+  /* ===== MOBILE DROPDOWN ===== */
   .mobile-dropdown {
     position: absolute !important;
     top: 100% !important;
