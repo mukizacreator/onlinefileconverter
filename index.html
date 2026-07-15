@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <!-- ============================================
        METADATA & SEO CONFIGURATION
@@ -39,22 +40,19 @@
   <!-- Font Awesome 6 icon library for navigation and UI icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
+
 <body>
+
   <!-- ============================================
        TOP NAVIGATION BAR
        ============================================ -->
-  <!-- Left side: hamburger (mobile only) + Dashboard + Other Projects + About & Support -->
+  <!-- Left side: primary navigation links (Dashboard is active) -->
   <!-- Right side: shows Sign In/Sign Up when logged out, or Profile icon when logged in -->
-  <!-- On mobile, "Other Projects" and "About & Support" move into the hamburger dropdown -->
   <nav class="top-nav">
     <div class="nav-left">
-      <!-- Hamburger button: hidden on desktop, shown on mobile via CSS -->
-      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
-        <i class="fa-solid fa-bars"></i>
-      </button>
       <a href="index.html" class="nav-link active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-      <a href="projects.html" class="nav-link nav-extra"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-      <a href="about.html" class="nav-link nav-extra"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+      <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+      <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
     </div>
     <div class="nav-right" id="navRight">
       <!-- Guest Navigation: visible when user is not logged in -->
@@ -70,12 +68,6 @@
         </a>
       </div>
     </div>
-
-    <!-- Mobile-only dropdown: holds "Other Projects" and "About & Support" as full-width rows -->
-    <div class="nav-dropdown" id="navDropdown">
-      <a href="projects.html" class="nav-dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-      <a href="about.html" class="nav-dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
-    </div>
   </nav>
 
   <!-- ============================================
@@ -86,6 +78,7 @@
     <h1>Online File Converter</h1>
     <p class="subtitle">Convert your files easily and securely — built by Emmanuel MUKIZA</p>
   </header>
+
   <!-- ============================================
        MAIN CONTENT - FILE CONVERTER TOOL
        ============================================ -->
@@ -119,11 +112,13 @@
       <div id="result"></div>
     </div>
   </main>
+
   <!-- ============================================
        SCRIPTS
        ============================================ -->
   <!-- Main application logic for file conversion -->
   <script src="script.js"></script>
+
   <!-- ============================================
        NAVIGATION AUTH SCRIPT
        ============================================ -->
@@ -140,7 +135,6 @@
       try {
         userData = JSON.parse(localStorage.getItem("userData"));
       } catch(e) {}
-
       
       // Navigation elements
       const guestNav = document.getElementById("guestNav");
@@ -150,6 +144,7 @@
       
       // Default profile icon (human shape) - used when no photo is uploaded
       const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
       if (loggedInEmail && userData) {
         // USER LOGGED IN: Show profile icon with username, hide Sign In/Sign Up
         if (guestNav) guestNav.style.display = "none";
@@ -205,44 +200,13 @@
     }
   })();
 </script>
-  <!-- ============================================
-       MOBILE HAMBURGER MENU SCRIPT
-       ============================================ -->
-  <!-- Toggles the mobile dropdown containing "Other Projects" and "About & Support" -->
-  <script>
-  (function() {
-    const btn = document.getElementById("hamburgerBtn");
-    const dropdown = document.getElementById("navDropdown");
-    if (!btn || !dropdown) return;
 
-    btn.addEventListener("click", function(e) {
-      e.stopPropagation();
-      const isOpen = dropdown.classList.toggle("active");
-      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    });
-
-    // Close dropdown when clicking outside of it
-    document.addEventListener("click", function(e) {
-      if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
-        dropdown.classList.remove("active");
-        btn.setAttribute("aria-expanded", "false");
-      }
-    });
-
-    // Close dropdown when a link inside it is tapped
-    dropdown.querySelectorAll(".nav-dropdown-link").forEach(function(link) {
-      link.addEventListener("click", function() {
-        dropdown.classList.remove("active");
-        btn.setAttribute("aria-expanded", "false");
-      });
-    });
-  })();
-  </script>
   <!-- Toast notification system for modern messages -->
   <script src="notifications.js?v=4"></script>
   
   <!-- Custom modal system for verification and confirmation popups -->
   <script src="modal.js?v=4"></script>
+
   <!-- ============================================
        FOOTER - SUPPORT INFO & COPYRIGHT
        ============================================ -->
@@ -254,5 +218,6 @@
     </section>
     <div class="copyright">© 2026 Emmanuel MUKIZA | Hosted on GitHub</div>
   </footer>
+
 </body>
 </html>
