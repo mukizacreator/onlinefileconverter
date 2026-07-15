@@ -34,6 +34,8 @@ a { color: inherit; }
   align-items: center;
   gap: 10px;
   background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  flex-wrap: wrap;
   position: relative;
   z-index: 1000;
 }
@@ -100,25 +102,28 @@ a { color: inherit; }
 }
 
 /* ============================================
-   MOBILE DROPDOWN MENU - SIMPLIFIED FOR OLDER BROWSERS
+   MOBILE DROPDOWN MENU
    ============================================ */
 .mobile-dropdown {
-  display: none !important;
+  display: none;
   flex-direction: column;
   width: 100%;
-  background: #1a1a2e;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 12px 16px 16px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   z-index: 999;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .mobile-dropdown.open {
-  display: flex !important;
+  display: flex;
+  animation: slideDown 0.3s ease forwards;
 }
 
 .mobile-nav-link {
@@ -148,6 +153,18 @@ a { color: inherit; }
 
 .mobile-nav-link:hover {
   background: rgba(0, 188, 212, 0.2);
+  transform: translateX(4px);
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ============================================
@@ -225,6 +242,7 @@ header h1 {
   padding: 24px 30px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   transition: 0.4s;
@@ -490,6 +508,8 @@ footer {
 
 .toast {
   background: rgba(20, 30, 40, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 12px;
   padding: 16px 20px;
   margin-bottom: 12px;
@@ -598,10 +618,10 @@ footer {
 }
 
 /* ============================================
-   RESPONSIVE BREAKPOINTS - COMPATIBLE WITH OLDER BROWSERS
+   RESPONSIVE BREAKPOINTS
    ============================================ */
 
-/* DESKTOP - Show all links */
+/* Desktop - Show all links */
 @media (min-width: 769px) {
   .hamburger-btn {
     display: none !important;
@@ -614,7 +634,7 @@ footer {
   }
 }
 
-/* MOBILE - Hide desktop links, show hamburger */
+/* Mobile - Hide desktop links, show hamburger */
 @media (max-width: 768px) {
   /* Show hamburger */
   .hamburger-btn {
@@ -687,11 +707,6 @@ footer {
     left: 0 !important;
     right: 0 !important;
     z-index: 999 !important;
-    display: none !important;
-  }
-  
-  .mobile-dropdown.open {
-    display: flex !important;
   }
   
   .mobile-nav-link {
