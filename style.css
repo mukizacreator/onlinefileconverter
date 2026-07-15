@@ -1,7 +1,6 @@
 /* ============================================
    RESET & BASE STYLES
    ============================================ */
-/* Box-sizing reset: all elements use border-box for predictable sizing */
 * { box-sizing: border-box; }
 html { height: 100%; }
 
@@ -13,11 +12,10 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  /* Gradient background: dark teal/blue radial gradient from top-left */
   background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
 }
 
-/* Main content area grows to fill available space (pushes footer down) */
+/* Main content area grows to fill available space */
 main { 
   flex: 1; 
   width: 100%; 
@@ -29,7 +27,6 @@ a { color: inherit; }
 /* ============================================
    NAVIGATION BAR
    ============================================ */
-/* Glass-morphism navigation bar with backdrop blur */
 .top-nav {
   width: 100%;
   padding: 10px 16px;
@@ -49,7 +46,6 @@ a { color: inherit; }
   flex-wrap: wrap;
 }
 
-/* Navigation link styling: pill-shaped buttons with hover/active states */
 .nav-link {
   text-decoration: none;
   color: white;
@@ -68,7 +64,6 @@ a { color: inherit; }
   font-size: 0.85rem;
 }
 
-/* Hover: cyan background with slight lift effect */
 .nav-link:hover, .nav-link.active {
   background: #00bcd4;
   transform: translateY(-2px);
@@ -77,16 +72,14 @@ a { color: inherit; }
 /* ============================================
    NAVIGATION PROFILE - CONTROLLED BY JAVASCRIPT
    ============================================ */
-/* Guest nav: Sign In/Sign Up links (always flex, shown/hidden by JS) */
 #guestNav {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* Profile nav: hidden by default, shown by JS when user is logged in */
 #profileNav {
-  display: none;
+  display: none; /* Hidden by default, shown by JS */
   align-items: center;
 }
 
@@ -96,7 +89,6 @@ a { color: inherit; }
   gap: 6px;
 }
 
-/* Profile photo in navigation: circular with cyan border */
 #navProfilePhoto {
   width: 30px;
   height: 30px;
@@ -112,6 +104,101 @@ a { color: inherit; }
 }
 
 /* ============================================
+   HAMBURGER MENU BUTTON
+   ============================================ */
+.hamburger-btn {
+  display: none; /* Hidden by default on desktop */
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.hamburger-btn i {
+  font-size: 1.3rem;
+}
+
+/* ============================================
+   DESKTOP NAVIGATION (hidden on mobile)
+   ============================================ */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ============================================
+   MOBILE DROPDOWN MENU
+   ============================================ */
+.mobile-dropdown {
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 16px 16px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  animation: slideDown 0.3s ease forwards;
+}
+
+.mobile-dropdown.open {
+  display: flex;
+}
+
+.mobile-nav-link {
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.mobile-nav-link:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-nav-link i {
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+}
+
+.mobile-nav-link:hover {
+  background: rgba(0, 188, 212, 0.2);
+  transform: translateX(4px);
+}
+
+/* Slide Down Animation */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
    PAGE HEADER
    ============================================ */
 header {
@@ -119,14 +206,13 @@ header {
   text-align: center;
   padding: 0 16px;
 }
-/* Clamp: responsive font-size between 1.6rem and 2.4rem */
 header h1 {
   margin-top: 0;
   margin-bottom: 6px;
   font-size: clamp(1.6rem, 3.5vw, 2.4rem);
 }
 .subtitle {
-  color: #00bcd4; /* Cyan accent color */
+  color: #00bcd4;
   font-size: 0.9rem;
   margin-bottom: 0;
 }
@@ -134,7 +220,6 @@ header h1 {
 /* ============================================
    DASHBOARD & CONVERTER BOX
    ============================================ */
-/* Centered container with flex layout */
 .dashboard {
   flex: 1;
   display: flex;
@@ -143,9 +228,8 @@ header h1 {
   padding: 8px 16px;
 }
 
-/* Glass-morphism card: main converter container */
 .converter-box {
-  width: min(92%, 850px); /* Responsive: 92% up to 850px max */
+  width: min(92%, 850px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,13 +244,11 @@ header h1 {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   transition: 0.4s;
 }
-/* Hover: slightly more opaque background with lift effect */
 .converter-box:hover {
   background: rgba(255, 255, 255, 0.12);
   transform: translateY(-4px);
 }
 
-/* Input row: flex wrap for responsive layout */
 .input-row {
   display: flex;
   flex-wrap: wrap;
@@ -176,10 +258,8 @@ header h1 {
   width: 100%;
 }
 
-/* Hide default file input, use custom label instead */
 input[type="file"] { display: none; }
 
-/* Custom file label: orange button styling */
 .custom-file-label {
   background: #ff9800;
   padding: 12px 24px;
@@ -194,7 +274,6 @@ input[type="file"] { display: none; }
   transform: scale(1.03);
 }
 
-/* Filename display: centered with word break for long names */
 #fileName {
   text-align: center;
   word-break: break-word;
@@ -202,7 +281,6 @@ input[type="file"] { display: none; }
   font-size: 0.9rem;
 }
 
-/* Format dropdown: dark with cyan border */
 .format-select {
   background: #1e1e1e;
   color: white;
@@ -217,7 +295,6 @@ input[type="file"] { display: none; }
 /* ============================================
    BUTTONS
    ============================================ */
-/* Primary action button: cyan themed */
 .convert-btn {
   border: none;
   background: #00bcd4;
@@ -235,7 +312,6 @@ input[type="file"] { display: none; }
   transform: scale(1.03);
 }
 
-/* Danger button: red themed (delete, remove) */
 .danger-btn {
   border: none;
   background: #e53935;
@@ -248,7 +324,6 @@ input[type="file"] { display: none; }
 }
 .danger-btn:hover { background: #c62828; }
 
-/* Secondary button: semi-transparent white */
 .secondary-btn {
   border: none;
   background: rgba(255, 255, 255, 0.12);
@@ -274,7 +349,6 @@ form label {
   font-weight: 600;
   font-size: 0.9rem;
 }
-/* Form inputs: transparent with white text */
 form input, form select, form textarea {
   width: 100%;
   border: none;
@@ -294,7 +368,6 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
 /* ============================================
    INFO CARDS & SUPPORT LINKS
    ============================================ */
-/* Information cards: semi-transparent with rounded corners */
 .info-card {
   width: 100%;
   background: rgba(255, 255, 255, 0.08);
@@ -308,7 +381,6 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
   font-size: 0.95rem;
 }
 
-/* Support links: block-level contact links with hover lift */
 .support-link {
   display: block;
   text-decoration: none;
@@ -331,7 +403,6 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
 /* ============================================
    DOWNLOAD BUTTON
    ============================================ */
-/* Green download button with glow shadow */
 .download-btn {
   display: inline-block;
   margin-top: 15px;
@@ -354,14 +425,12 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
 /* ============================================
    PROFILE PAGE
    ============================================ */
-/* Sidebar: fixed width with semi-transparent background */
 aside {
   width: 220px;
   background: rgba(255, 255, 255, 0.06);
   padding: 20px !important;
 }
 
-/* Profile image: circular with cyan border */
 aside img {
   width: 90px !important;
   height: 90px !important;
@@ -386,7 +455,6 @@ aside p {
   word-break: break-all;
 }
 
-/* Main content section: flexible padding */
 section {
   padding: 20px 24px !important;
 }
@@ -425,7 +493,6 @@ footer {
 /* ============================================
    TOAST NOTIFICATION STYLES
    ============================================ */
-/* Toast container: fixed position top-right */
 .toast-container {
   position: fixed;
   top: 20px;
@@ -436,7 +503,6 @@ footer {
   pointer-events: none;
 }
 
-/* Individual toast: glass-morphism with left border color */
 .toast {
   background: rgba(20, 30, 40, 0.95);
   backdrop-filter: blur(12px);
@@ -458,7 +524,6 @@ footer {
   transition: all 0.3s ease;
 }
 
-/* Toast type variations: colored left border */
 .toast-success { border-left-color: #34ce57; }
 .toast-error { border-left-color: #ff6b6b; }
 .toast-warning { border-left-color: #ffb74d; }
@@ -469,7 +534,6 @@ footer {
   flex-shrink: 0;
 }
 
-/* Icon colors matching border */
 .toast-icon.success { color: #34ce57; }
 .toast-icon.error { color: #ff6b6b; }
 .toast-icon.warning { color: #ffb74d; }
@@ -493,7 +557,6 @@ footer {
 }
 .toast-close:hover { color: white; }
 
-/* Toast animations: slide in from right */
 @keyframes toastSlideIn {
   0% { transform: translateX(120%); opacity: 0; }
   100% { transform: translateX(0); opacity: 1; }
@@ -507,7 +570,6 @@ footer {
 /* ============================================
    FIX MODAL Z-INDEX
    ============================================ */
-/* Ensure modals appear above everything else */
 #customModal {
   z-index: 99999 !important;
 }
@@ -521,16 +583,14 @@ footer {
 }
 
 /* ============================================
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE BREAKPOINTS - UPDATED
    ============================================ */
-/* Large screens: 1100px and below */
 @media (max-width: 1100px) {
   .top-nav { flex-wrap: wrap; justify-content: center; }
   .nav-left, .nav-right { flex-wrap: wrap; justify-content: center; }
   .converter-box { width: min(90%, 750px); }
 }
 
-/* Medium screens: 900px and below */
 @media (max-width: 900px) {
   .top-nav { padding: 8px 12px; gap: 8px; }
   .nav-link { padding: 6px 14px; font-size: 0.85rem; }
@@ -541,130 +601,221 @@ footer {
   aside img { width: 75px !important; height: 75px !important; }
 }
 
-/* Tablet screens: 768px and below */
 @media (max-width: 768px) {
-  .top-nav {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 6px 10px;
-  }
-  .nav-left, .nav-right {
-    width: 100%;
+  /* ===== HAMBURGER VISIBLE ON MOBILE ===== */
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
     justify-content: center;
+  }
+  
+  /* Hide desktop nav links */
+  .desktop-nav {
+    display: none;
+  }
+  
+  /* Top nav adjustments */
+  .top-nav {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+  
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
     gap: 6px;
+    flex-shrink: 0;
   }
-  .nav-link {
-    padding: 5px 12px;
+  
+  /* Dashboard link on mobile */
+  .nav-left .nav-link {
+    padding: 6px 12px;
     font-size: 0.8rem;
+    white-space: nowrap;
   }
+  
+  /* Sign In/Sign Up on mobile */
+  .nav-right .nav-link {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  
+  .nav-right .nav-link i {
+    font-size: 0.7rem;
+  }
+  
+  /* Converter box */
   .converter-box {
     padding: 14px 18px;
     width: min(94%, 550px);
     gap: 12px;
   }
+  
   .input-row {
-    gap: 8px;
+    gap: 10px;
     flex-direction: column;
     width: 100%;
   }
+  
   .input-row > * {
     width: 100%;
     max-width: 100%;
   }
+  
   .custom-file-label {
     font-size: 0.85rem;
     padding: 10px 18px;
     text-align: center;
   }
+  
   .format-select {
     font-size: 0.85rem;
     padding: 10px 14px;
+    width: 100%;
   }
+  
   .convert-btn {
     font-size: 0.85rem;
     padding: 10px 20px;
     width: 100%;
   }
+  
   #fileName {
     font-size: 0.8rem;
     max-width: 100%;
+    text-align: center;
   }
+  
   .dashboard {
     padding: 8px 12px;
   }
+  
   header h1 {
     font-size: 1.4rem;
   }
+  
   .subtitle {
     font-size: 0.8rem;
   }
-  /* Profile page: sidebar becomes full width on mobile */
+  
   aside {
     width: 100% !important;
     padding: 14px !important;
   }
+  
   aside img {
     width: 65px !important;
     height: 65px !important;
   }
+  
   section {
     padding: 14px !important;
   }
+  
   .support-link {
     padding: 10px 14px;
     font-size: 0.8rem;
   }
+  
   .copyright {
     font-size: 0.7rem !important;
   }
+  
   .footer-support {
     font-size: 0.75rem !important;
   }
+  
   .info-card h2 { font-size: 1rem; }
   .info-card p, .info-card li { font-size: 0.85rem; }
 }
 
-/* Small phones: 480px and below */
 @media (max-width: 480px) {
-  .top-nav { padding: 4px 8px; }
-  .nav-link {
+  /* Even smaller screens */
+  .top-nav { padding: 6px 8px; gap: 4px; }
+  
+  .hamburger-btn {
+    padding: 4px 10px;
+    font-size: 1.2rem;
+  }
+  
+  .hamburger-btn i {
+    font-size: 1.1rem;
+  }
+  
+  .nav-left .nav-link {
     padding: 4px 8px;
     font-size: 0.7rem;
   }
-  .nav-link i {
+  
+  .nav-left .nav-link i {
     font-size: 0.6rem;
   }
+  
+  .nav-right .nav-link {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+  }
+  
+  .nav-right .nav-link i {
+    font-size: 0.6rem;
+  }
+  
+  .mobile-nav-link {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+  
   .converter-box {
     padding: 10px 14px;
     border-radius: 14px;
     gap: 10px;
   }
+  
   .custom-file-label {
     font-size: 0.75rem;
     padding: 8px 14px;
   }
+  
   .format-select {
     font-size: 0.75rem;
     padding: 8px 12px;
   }
+  
   .convert-btn {
     font-size: 0.75rem;
     padding: 8px 16px;
   }
+  
   header h1 {
     font-size: 1.2rem;
   }
+  
   .subtitle {
     font-size: 0.7rem;
   }
+  
   .support-link {
     padding: 8px 12px;
     font-size: 0.7rem;
   }
+  
   aside img {
     width: 55px !important;
     height: 55px !important;
   }
+  
   section h2 {
     font-size: 1.1rem;
   }
@@ -673,7 +824,6 @@ footer {
 /* ============================================
    PROJECTS PAGE - COMPACT VIEW
    ============================================ */
-/* Specific styles for projects page to make it more compact */
 .projects-page .converter-box {
   padding: 12px 16px !important;
   gap: 10px !important;
@@ -701,210 +851,4 @@ footer {
   padding-left: 16px !important;
   font-size: 0.82rem !important;
   line-height: 1.5 !important;
-}
-
-/* ============================================
-   MOBILE FORM FIXES - PASSWORD FIELDS
-   ============================================ */
-/* Fix for password fields with toggle buttons on mobile */
-.password-wrapper {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    width: 100%;
-}
-
-.password-wrapper input[type="password"],
-.password-wrapper input[type="text"] {
-    flex: 1;
-    min-width: 0; /* Prevents overflow */
-    width: 100%;
-}
-
-.password-wrapper .toggle-btn {
-    flex-shrink: 0;
-    padding: 10px 14px;
-    min-width: 44px; /* Minimum touch target size */
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Fix for small screens - stack toggle below input */
-@media (max-width: 480px) {
-    .password-wrapper {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    
-    .password-wrapper input[type="password"],
-    .password-wrapper input[type="text"] {
-        width: 100%;
-        flex: 1 1 100%;
-        min-width: 100%;
-        padding: 12px 14px;
-        font-size: 1rem; /* Prevents zoom on iOS */
-    }
-    
-    .password-wrapper .toggle-btn {
-        width: 100%;
-        padding: 10px;
-        min-height: 44px;
-        font-size: 0.85rem;
-    }
-}
-
-/* ============================================
-   MOBILE FORM FIXES - GENERAL
-   ============================================ */
-/* Ensure all form inputs have proper sizing on mobile */
-@media (max-width: 768px) {
-    /* Fix for all form inputs */
-    form input,
-    form select,
-    form textarea {
-        font-size: 16px !important; /* Prevents iOS zoom on focus */
-        padding: 12px 14px !important;
-        min-height: 44px;
-    }
-    
-    /* Fix for labels */
-    form label {
-        font-size: 0.85rem;
-        margin-bottom: 4px;
-    }
-    
-    /* Fix for form groups */
-    .form-group {
-        margin-bottom: 12px;
-    }
-    
-    /* Fix for buttons in forms */
-    form .convert-btn,
-    form button[type="submit"] {
-        min-height: 48px;
-        font-size: 0.9rem;
-        padding: 12px 20px;
-    }
-}
-
-/* ============================================
-   SIGN UP PAGE - SPECIFIC FIXES
-   ============================================ */
-@media (max-width: 480px) {
-    /* Fix for signup form on very small screens */
-    .converter-box {
-        padding: 14px 12px !important;
-        border-radius: 14px;
-    }
-    
-    /* Password requirements text */
-    .converter-box div[style*="color:#bbb"] {
-        font-size: 0.7rem !important;
-        padding: 6px 10px !important;
-        line-height: 1.5 !important;
-    }
-    
-    /* All input fields on signup */
-    #signupForm input {
-        font-size: 16px !important; /* Prevents iOS zoom */
-        padding: 10px 12px !important;
-        min-height: 44px;
-    }
-    
-    /* Toggle buttons on signup */
-    #toggleSignup,
-    #toggleSignin {
-        min-height: 44px;
-        min-width: 44px;
-        padding: 8px 12px !important;
-        font-size: 0.8rem !important;
-    }
-}
-
-/* ============================================
-   SIGN IN PAGE - SPECIFIC FIXES
-   ============================================ */
-@media (max-width: 480px) {
-    /* Sign in form fixes */
-    #signinForm input {
-        font-size: 16px !important;
-        padding: 10px 12px !important;
-        min-height: 44px;
-    }
-    
-    #signinForm .convert-btn {
-        min-height: 48px;
-        font-size: 0.9rem;
-    }
-}
-
-/* ============================================
-   PROFILE PAGE - MOBILE FIXES
-   ============================================ */
-@media (max-width: 768px) {
-    /* Profile page layout */
-    .converter-box[style*="display:flex"] {
-        flex-direction: column !important;
-    }
-    
-    /* Sidebar becomes full width */
-    aside {
-        width: 100% !important;
-        padding: 16px !important;
-        text-align: center;
-    }
-    
-    /* Profile photo */
-    aside img {
-        width: 70px !important;
-        height: 70px !important;
-    }
-    
-    /* Profile tabs (Account/Security links) */
-    aside .support-link {
-        display: inline-block !important;
-        margin: 4px 6px !important;
-        padding: 8px 16px !important;
-        font-size: 0.8rem !important;
-    }
-    
-    /* Profile section */
-    section {
-        padding: 14px !important;
-    }
-    
-    /* Profile form inputs */
-    section input[type="password"],
-    section input[type="text"],
-    section input[type="email"] {
-        font-size: 16px !important;
-        padding: 10px 12px !important;
-        min-height: 44px;
-    }
-    
-    /* Profile buttons */
-    section .convert-btn {
-        min-height: 44px;
-        font-size: 0.85rem !important;
-        padding: 10px !important;
-    }
-    
-    /* Profile password wrappers */
-    section .password-wrapper {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    
-    section .password-wrapper input {
-        flex: 1 1 100% !important;
-        width: 100% !important;
-        min-width: 100% !important;
-    }
-    
-    section .password-wrapper .toggle-btn {
-        width: 100%;
-        min-height: 44px;
-    }
 }
