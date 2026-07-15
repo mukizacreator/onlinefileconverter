@@ -16,13 +16,16 @@
 <body>
 
   <!-- ============================================
-       TOP NAVIGATION BAR
+       TOP NAVIGATION BAR - FIXED
        ============================================ -->
   <nav class="top-nav">
     <div class="nav-left">
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
       <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-      <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-      <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+      <a href="projects.html" class="nav-link desktop-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+      <a href="about.html" class="nav-link desktop-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
     </div>
     <div class="nav-right">
       <div id="guestNav">
@@ -37,6 +40,14 @@
       </div>
     </div>
   </nav>
+
+  <!-- ============================================
+       MOBILE DROPDOWN - ADDED
+       ============================================ -->
+  <div class="mobile-dropdown" id="mobileDropdown">
+    <a href="projects.html" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+    <a href="about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+  </div>
 
   <!-- ============================================
        PAGE HEADER
@@ -57,7 +68,6 @@
              LEFT SIDEBAR
              ============================================ -->
         <aside style="width:220px; background:rgba(255,255,255,0.06); padding:20px;">
-          <!-- Profile Photo Section -->
           <div style="text-align:center; margin-bottom:20px;">
             <div id="profileImageWrapper" style="cursor:pointer; position:relative; display:inline-block;">
               <img id="profileImage" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" style="width:90px; height:90px; border-radius:50%; object-fit:cover; display:block; margin:auto; border:3px solid #00bcd4; transition: transform 0.3s;">
@@ -66,7 +76,6 @@
               </div>
             </div>
             
-            <!-- Upload and Remove Photo buttons -->
             <div style="display:flex; justify-content:center; gap:8px; margin-top:8px; flex-wrap:wrap;">
               <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
               <button id="uploadPhotoBtn" class="convert-btn" style="padding:5px 15px; font-size:0.75rem;">
@@ -79,7 +88,6 @@
             <p id="profileEmailDisplay" style="color:#aaa; font-size:0.8rem; margin:0; word-break:break-all;">user@email.com</p>
           </div>
 
-          <!-- Tab Navigation -->
           <a href="#" class="support-link" id="accountTab"><i class="fa-solid fa-user"></i> Account</a>
           <a href="#" class="support-link" id="securityTab"><i class="fa-solid fa-shield-halved"></i> Security</a>
         </aside>
@@ -89,7 +97,6 @@
              ============================================ -->
         <section style="flex:1; min-width:250px; padding:14px 20px;">
 
-          <!-- PROFILE VIEW -->
           <div id="profileView">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Profile Information</h2>
             <div style="background:rgba(255,255,255,0.06); padding:16px 20px; border-radius:10px;">
@@ -107,7 +114,6 @@
             </p>
           </div>
 
-          <!-- ACCOUNT PANEL -->
           <div id="accountPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
@@ -148,7 +154,6 @@
             </button>
           </div>
 
-          <!-- SECURITY PANEL -->
           <div id="securityPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
@@ -209,22 +214,62 @@
   <script src="modal.js?v=4"></script>
 
   <script>
-    // ============================================
-    // HIDE NAVIGATION ON PROFILE PAGE
-    // ============================================
     (function() {
       const loggedInEmail = localStorage.getItem("loggedInUser");
-      
       const profileNav = document.getElementById("profileNav");
       if (profileNav) {
         profileNav.style.display = "none";
       }
-      
       const guestNav = document.getElementById("guestNav");
       if (loggedInEmail && guestNav) {
         guestNav.style.display = "none";
       }
     })();
+  </script>
+
+  <!-- ============================================
+       HAMBURGER TOGGLE JAVASCRIPT - ADDED
+       ============================================ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileDropdown = document.getElementById('mobileDropdown');
+    
+    if (hamburgerBtn && mobileDropdown) {
+      hamburgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        mobileDropdown.classList.toggle('open');
+        
+        const icon = this.querySelector('i');
+        if (mobileDropdown.classList.contains('open')) {
+          icon.className = 'fa-solid fa-times';
+        } else {
+          icon.className = 'fa-solid fa-bars';
+        }
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (!hamburgerBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
+          mobileDropdown.classList.remove('open');
+          const icon = hamburgerBtn.querySelector('i');
+          if (icon) {
+            icon.className = 'fa-solid fa-bars';
+          }
+        }
+      });
+      
+      const mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileDropdown.classList.remove('open');
+          const icon = hamburgerBtn.querySelector('i');
+          if (icon) {
+            icon.className = 'fa-solid fa-bars';
+          }
+        });
+      });
+    }
+  });
   </script>
 
   <!-- ============================================
