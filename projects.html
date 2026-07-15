@@ -24,11 +24,23 @@
        TOP NAVIGATION BAR
        ============================================ -->
   <nav class="top-nav">
-    <div class="nav-left">
+    <!-- Mobile: Hamburger icon (visible on small screens) -->
+    <div class="nav-hamburger" id="hamburgerBtn">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    
+    <!-- Desktop: Full navigation links (visible on large screens) -->
+    <div class="nav-left" id="navLeft">
       <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
       <a href="projects.html" class="nav-link active"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
       <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
     </div>
+    
+    <!-- Mobile: Dashboard link (visible on small screens) -->
+    <div class="nav-mobile-dashboard" id="mobileDashboard">
+      <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+    </div>
+    
     <div class="nav-right" id="navRight">
       <div id="guestNav">
         <a href="signin.html" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
@@ -42,6 +54,14 @@
       </div>
     </div>
   </nav>
+
+  <!-- ============================================
+       MOBILE DROPDOWN MENU
+       ============================================ -->
+  <div class="mobile-dropdown" id="mobileDropdown">
+    <a href="projects.html" class="dropdown-link active"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+    <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+  </div>
 
   <!-- ============================================
        PAGE HEADER
