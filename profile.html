@@ -19,11 +19,23 @@
        TOP NAVIGATION BAR
        ============================================ -->
   <nav class="top-nav">
-    <div class="nav-left">
+    <!-- Mobile: Hamburger icon (visible on small screens) -->
+    <div class="nav-hamburger" id="hamburgerBtn">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    
+    <!-- Desktop: Full navigation links (visible on large screens) -->
+    <div class="nav-left" id="navLeft">
       <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
       <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
       <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
     </div>
+    
+    <!-- Mobile: Dashboard link (visible on small screens) -->
+    <div class="nav-mobile-dashboard" id="mobileDashboard">
+      <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+    </div>
+    
     <div class="nav-right">
       <div id="guestNav">
         <a href="signin.html" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
@@ -37,6 +49,14 @@
       </div>
     </div>
   </nav>
+
+  <!-- ============================================
+       MOBILE DROPDOWN MENU
+       ============================================ -->
+  <div class="mobile-dropdown" id="mobileDropdown">
+    <a href="projects.html" class="dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+    <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+  </div>
 
   <!-- ============================================
        PAGE HEADER
@@ -53,9 +73,7 @@
     <div class="converter-box" style="width:min(96%,1000px); padding:0; overflow:hidden;">
       <div style="display:flex; flex-wrap:wrap;">
 
-        <!-- ============================================
-             LEFT SIDEBAR
-             ============================================ -->
+        <!-- LEFT SIDEBAR -->
         <aside style="width:220px; background:rgba(255,255,255,0.06); padding:20px;">
           <!-- Profile Photo Section -->
           <div style="text-align:center; margin-bottom:20px;">
@@ -84,9 +102,7 @@
           <a href="#" class="support-link" id="securityTab"><i class="fa-solid fa-shield-halved"></i> Security</a>
         </aside>
 
-        <!-- ============================================
-             RIGHT CONTENT
-             ============================================ -->
+        <!-- RIGHT CONTENT -->
         <section style="flex:1; min-width:250px; padding:14px 20px;">
 
           <!-- PROFILE VIEW -->
@@ -207,6 +223,7 @@
   <script src="profile.js?v=10"></script>
   <script src="notifications.js?v=4"></script>
   <script src="modal.js?v=4"></script>
+  <script src="nav.js"></script>
 
   <script>
     // ============================================
