@@ -6,8 +6,10 @@ const fileInput = document.getElementById("fileInput");
 const result = document.getElementById("result");
 const fileName = document.getElementById("fileName");
 const convertBtn = document.getElementById("convertBtn");
+
 // Only initialize if elements exist to prevent errors on non-converter pages
 if (fileInput && result && fileName && convertBtn) {
+
   /* ============================================
      FILE SELECTION HANDLING
      ============================================ */
@@ -19,6 +21,7 @@ if (fileInput && result && fileName && convertBtn) {
       result.innerHTML = "";
       return;
     }
+
     // Truncate long filenames: keep first 15 chars + last 6 chars + extension
     let name = file.name;
     if (name.length > 30) {
@@ -29,6 +32,7 @@ if (fileInput && result && fileName && convertBtn) {
     fileName.textContent = name;
     result.innerHTML = ""; // Clear previous results
   });
+
   /* ============================================
      CONVERSION PROCESS
      ============================================ */
@@ -39,15 +43,18 @@ if (fileInput && result && fileName && convertBtn) {
       alert("Please select a file first.");
       return;
     }
+
     // UI Feedback: Disable button and show spinner
     convertBtn.disabled = true;
     convertBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Converting...`;
+
     /* ============================================
    AUTHENTICATION & FILE SIZE VALIDATION
    ============================================*/
 // Guests are limited to 2MB files, logged-in users have no restriction
 const loggedInUser = localStorage.getItem("loggedInUser");
 const maxFreeSize = 2 * 1024 * 1024; // 2MB
+
 if (file.size > maxFreeSize && !loggedInUser) {
   toastWarning("The file size is over the limit. Please sign in or sign up to convert files of 2+ MB");
   setTimeout(() => { 
@@ -75,6 +82,7 @@ if (file.size > maxFreeSize && !loggedInUser) {
       </div>
       <p id="progressText">Preparing...</p>
     `;
+
     const bar = document.getElementById("progressBar");
     const text = document.getElementById("progressText");
     let progress = 0;
@@ -86,6 +94,7 @@ if (file.size > maxFreeSize && !loggedInUser) {
         text.textContent = progress + "%";
       }
     }, 300);
+
     /* ============================================
        UPLOAD AND API INTERACTION
        ============================================ */
@@ -93,11 +102,13 @@ if (file.size > maxFreeSize && !loggedInUser) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("format", document.getElementById("formatSelect").value);
+
     try {
       // Send conversion request to server
       const response = await fetch("/api/convert", { method: "POST", body: formData });
       const data = await response.json();
       clearInterval(timer); // Stop the progress simulation
+
       // Handle server-side failure
       if (!response.ok) {
         toastError(data.error || "Conversion failed."); 
@@ -116,6 +127,7 @@ if (file.size > maxFreeSize && !loggedInUser) {
       clearInterval(timer);
       toastError("Server error. Please try again.");
     }
+
     // Reset button state after completion
     convertBtn.disabled = false;
     convertBtn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> Convert`;
