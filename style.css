@@ -37,8 +37,6 @@ a { color: inherit; }
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
   flex-wrap: wrap;
-  position: relative;
-  z-index: 1000;
 }
 
 .nav-left, .nav-right {
@@ -69,98 +67,6 @@ a { color: inherit; }
 .nav-link:hover, .nav-link.active {
   background: #00bcd4;
   transform: translateY(-2px);
-}
-
-/* ============================================
-   HAMBURGER MENU BUTTON
-   ============================================ */
-.hamburger-btn {
-  display: none;
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: white;
-  font-size: 1.4rem;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  line-height: 1;
-}
-
-.hamburger-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.hamburger-btn i {
-  font-size: 1.3rem;
-}
-
-/* ============================================
-   DESKTOP LINKS - Hidden on mobile
-   ============================================ */
-.desktop-link {
-  display: inline-flex;
-}
-
-/* ============================================
-   MOBILE DROPDOWN MENU
-   ============================================ */
-.mobile-dropdown {
-  display: none;
-  flex-direction: column;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 12px 16px 16px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.mobile-dropdown.open {
-  display: flex;
-  animation: slideDown 0.3s ease forwards;
-}
-
-.mobile-nav-link {
-  text-decoration: none;
-  color: white;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 14px 18px;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.mobile-nav-link:last-child {
-  margin-bottom: 0;
-}
-
-.mobile-nav-link i {
-  font-size: 1.2rem;
-  width: 28px;
-  text-align: center;
-}
-
-.mobile-nav-link:hover {
-  background: rgba(0, 188, 212, 0.2);
-  transform: translateX(4px);
-}
-
-@keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ============================================
@@ -601,230 +507,126 @@ footer {
 }
 
 @media (max-width: 768px) {
-  /* Show hamburger on mobile */
-  .hamburger-btn {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Hide desktop links on mobile */
-  .desktop-link {
-    display: none !important;
-  }
-  
   .top-nav {
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     padding: 6px 10px;
-    flex-wrap: nowrap;
-    position: relative;
   }
-  
-  .nav-left {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex: 1;
-    min-width: 0;
-    justify-content: flex-start;
+  .nav-left, .nav-right {
+    width: 100%;
+    justify-content: center;
+    gap: 6px;
   }
-  
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
-  }
-  
   .nav-link {
-    padding: 4px 10px;
-    font-size: 0.75rem;
+    padding: 5px 12px;
+    font-size: 0.8rem;
   }
-  
-  .nav-link i {
-    font-size: 0.65rem;
-  }
-  
-  .nav-right .nav-link {
-    padding: 4px 8px;
-    font-size: 0.7rem;
-  }
-  
-  .nav-right .nav-link i {
-    font-size: 0.6rem;
-  }
-  
-  /* Mobile dropdown position */
-  .mobile-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 999;
-  }
-  
   .converter-box {
     padding: 14px 18px;
     width: min(94%, 550px);
     gap: 12px;
   }
-  
   .input-row {
     gap: 8px;
     flex-direction: column;
     width: 100%;
   }
-  
   .input-row > * {
     width: 100%;
     max-width: 100%;
   }
-  
   .custom-file-label {
     font-size: 0.85rem;
     padding: 10px 18px;
     text-align: center;
   }
-  
   .format-select {
     font-size: 0.85rem;
     padding: 10px 14px;
   }
-  
   .convert-btn {
     font-size: 0.85rem;
     padding: 10px 20px;
     width: 100%;
   }
-  
   #fileName {
     font-size: 0.8rem;
     max-width: 100%;
   }
-  
   .dashboard {
     padding: 8px 12px;
   }
-  
   header h1 {
     font-size: 1.4rem;
   }
-  
   .subtitle {
     font-size: 0.8rem;
   }
-  
   aside {
     width: 100% !important;
     padding: 14px !important;
   }
-  
   aside img {
     width: 65px !important;
     height: 65px !important;
   }
-  
   section {
     padding: 14px !important;
   }
-  
   .support-link {
     padding: 10px 14px;
     font-size: 0.8rem;
   }
-  
   .copyright {
     font-size: 0.7rem !important;
   }
-  
   .footer-support {
     font-size: 0.75rem !important;
   }
-  
   .info-card h2 { font-size: 1rem; }
   .info-card p, .info-card li { font-size: 0.85rem; }
 }
 
 @media (max-width: 480px) {
   .top-nav { padding: 4px 8px; }
-  
-  .hamburger-btn {
-    padding: 4px 8px;
-    font-size: 1.1rem;
-  }
-  
-  .hamburger-btn i {
-    font-size: 1rem;
-  }
-  
   .nav-link {
-    padding: 3px 6px;
-    font-size: 0.65rem;
+    padding: 4px 8px;
+    font-size: 0.7rem;
   }
-  
   .nav-link i {
-    font-size: 0.55rem;
-  }
-  
-  .nav-right .nav-link {
-    padding: 3px 6px;
     font-size: 0.6rem;
   }
-  
-  .nav-right .nav-link i {
-    font-size: 0.5rem;
-  }
-  
-  .mobile-nav-link {
-    padding: 10px 14px;
-    font-size: 0.85rem;
-  }
-  
-  .mobile-nav-link i {
-    font-size: 1rem;
-    width: 24px;
-  }
-  
   .converter-box {
     padding: 10px 14px;
     border-radius: 14px;
     gap: 10px;
   }
-  
   .custom-file-label {
     font-size: 0.75rem;
     padding: 8px 14px;
   }
-  
   .format-select {
     font-size: 0.75rem;
     padding: 8px 12px;
   }
-  
   .convert-btn {
     font-size: 0.75rem;
     padding: 8px 16px;
   }
-  
   header h1 {
     font-size: 1.2rem;
   }
-  
   .subtitle {
     font-size: 0.7rem;
   }
-  
   .support-link {
     padding: 8px 12px;
     font-size: 0.7rem;
   }
-  
   aside img {
     width: 55px !important;
     height: 55px !important;
   }
-  
   section h2 {
     font-size: 1.1rem;
   }
@@ -861,3 +663,4 @@ footer {
   font-size: 0.82rem !important;
   line-height: 1.5 !important;
 }
+
