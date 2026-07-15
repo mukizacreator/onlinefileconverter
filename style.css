@@ -37,6 +37,8 @@ a { color: inherit; }
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1000;
 }
 
 .nav-left, .nav-right {
@@ -70,6 +72,106 @@ a { color: inherit; }
 }
 
 /* ============================================
+   HAMBURGER MENU BUTTON
+   ============================================ */
+.hamburger-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: white;
+  font-size: 1.3rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1;
+  order: -1;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hamburger-btn i {
+  font-size: 1.2rem;
+}
+
+/* ============================================
+   DESKTOP NAVIGATION (hidden on mobile)
+   ============================================ */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ============================================
+   MOBILE DROPDOWN MENU
+   ============================================ */
+.mobile-dropdown {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 16px 16px 16px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-dropdown.open {
+  display: flex;
+  animation: slideDown 0.3s ease forwards;
+}
+
+.mobile-nav-link {
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.mobile-nav-link:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-nav-link i {
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+}
+
+.mobile-nav-link:hover {
+  background: rgba(0, 188, 212, 0.2);
+  transform: translateX(4px);
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
    NAVIGATION PROFILE - CONTROLLED BY JAVASCRIPT
    ============================================ */
 #guestNav {
@@ -79,7 +181,7 @@ a { color: inherit; }
 }
 
 #profileNav {
-  display: none; /* Hidden by default, shown by JS */
+  display: none;
   align-items: center;
 }
 
@@ -101,101 +203,6 @@ a { color: inherit; }
   font-size: 0.85rem;
   font-weight: 600;
   color: white;
-}
-
-/* ============================================
-   HAMBURGER MENU BUTTON
-   ============================================ */
-.hamburger-btn {
-  display: none; /* Hidden by default on desktop */
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  line-height: 1;
-}
-
-.hamburger-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: scale(1.05);
-}
-
-.hamburger-btn i {
-  font-size: 1.3rem;
-}
-
-/* ============================================
-   DESKTOP NAVIGATION (hidden on mobile)
-   ============================================ */
-.desktop-nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* ============================================
-   MOBILE DROPDOWN MENU
-   ============================================ */
-.mobile-dropdown {
-  display: none; /* Hidden by default */
-  flex-direction: column;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 8px 16px 16px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  animation: slideDown 0.3s ease forwards;
-}
-
-.mobile-dropdown.open {
-  display: flex;
-}
-
-.mobile-nav-link {
-  text-decoration: none;
-  color: white;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 12px 18px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  margin-bottom: 6px;
-}
-
-.mobile-nav-link:last-child {
-  margin-bottom: 0;
-}
-
-.mobile-nav-link i {
-  font-size: 1.1rem;
-  width: 24px;
-  text-align: center;
-}
-
-.mobile-nav-link:hover {
-  background: rgba(0, 188, 212, 0.2);
-  transform: translateX(4px);
-}
-
-/* Slide Down Animation */
-@keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ============================================
@@ -583,7 +590,39 @@ footer {
 }
 
 /* ============================================
-   RESPONSIVE BREAKPOINTS - UPDATED
+   PROJECTS PAGE - COMPACT VIEW
+   ============================================ */
+.projects-page .converter-box {
+  padding: 12px 16px !important;
+  gap: 10px !important;
+  max-width: 600px !important;
+}
+
+.projects-page .info-card {
+  padding: 12px 16px !important;
+  margin-bottom: 6px !important;
+}
+
+.projects-page .info-card h2 {
+  font-size: 1rem !important;
+  margin-bottom: 6px !important;
+}
+
+.projects-page .info-card p {
+  font-size: 0.82rem !important;
+  margin: 3px 0 !important;
+  line-height: 1.5 !important;
+}
+
+.projects-page .info-card ul {
+  margin: 3px 0 !important;
+  padding-left: 16px !important;
+  font-size: 0.82rem !important;
+  line-height: 1.5 !important;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
    ============================================ */
 @media (max-width: 1100px) {
   .top-nav { flex-wrap: wrap; justify-content: center; }
@@ -602,7 +641,7 @@ footer {
 }
 
 @media (max-width: 768px) {
-  /* ===== HAMBURGER VISIBLE ON MOBILE ===== */
+  /* Show hamburger on mobile */
   .hamburger-btn {
     display: flex;
     align-items: center;
@@ -619,47 +658,67 @@ footer {
     flex-direction: row;
     align-items: center;
     padding: 8px 12px;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: nowrap;
+    position: relative;
   }
   
   .nav-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex: 1;
     min-width: 0;
+    justify-content: flex-start;
   }
   
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     flex-shrink: 0;
   }
   
   /* Dashboard link on mobile */
   .nav-left .nav-link {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-  }
-  
-  /* Sign In/Sign Up on mobile */
-  .nav-right .nav-link {
     padding: 5px 10px;
     font-size: 0.75rem;
     white-space: nowrap;
   }
   
-  .nav-right .nav-link i {
+  .nav-left .nav-link i {
+    font-size: 0.65rem;
+  }
+  
+  /* Sign In/Sign Up on mobile */
+  .nav-right .nav-link {
+    padding: 4px 8px;
     font-size: 0.7rem;
+    white-space: nowrap;
+  }
+  
+  .nav-right .nav-link i {
+    font-size: 0.6rem;
+  }
+  
+  /* Mobile dropdown positioned below nav */
+  .mobile-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 10px 12px 12px 12px;
+  }
+  
+  .mobile-nav-link {
+    padding: 10px 14px;
+    font-size: 0.85rem;
   }
   
   /* Converter box */
   .converter-box {
-    padding: 14px 18px;
-    width: min(94%, 550px);
+    padding: 14px 16px;
+    width: min(94%, 500px);
     gap: 12px;
   }
   
@@ -699,15 +758,15 @@ footer {
   }
   
   .dashboard {
-    padding: 8px 12px;
+    padding: 6px 10px;
   }
   
   header h1 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
   
   .subtitle {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   
   aside {
@@ -730,11 +789,11 @@ footer {
   }
   
   .copyright {
-    font-size: 0.7rem !important;
+    font-size: 0.65rem !important;
   }
   
   .footer-support {
-    font-size: 0.75rem !important;
+    font-size: 0.7rem !important;
   }
   
   .info-card h2 { font-size: 1rem; }
@@ -742,43 +801,42 @@ footer {
 }
 
 @media (max-width: 480px) {
-  /* Even smaller screens */
-  .top-nav { padding: 6px 8px; gap: 4px; }
+  .top-nav { padding: 4px 6px; gap: 4px; }
   
   .hamburger-btn {
-    padding: 4px 10px;
-    font-size: 1.2rem;
-  }
-  
-  .hamburger-btn i {
+    padding: 4px 8px;
     font-size: 1.1rem;
   }
   
+  .hamburger-btn i {
+    font-size: 1rem;
+  }
+  
   .nav-left .nav-link {
-    padding: 4px 8px;
-    font-size: 0.7rem;
-  }
-  
-  .nav-left .nav-link i {
-    font-size: 0.6rem;
-  }
-  
-  .nav-right .nav-link {
-    padding: 4px 8px;
+    padding: 4px 6px;
     font-size: 0.65rem;
   }
   
-  .nav-right .nav-link i {
+  .nav-left .nav-link i {
+    font-size: 0.55rem;
+  }
+  
+  .nav-right .nav-link {
+    padding: 3px 6px;
     font-size: 0.6rem;
   }
   
+  .nav-right .nav-link i {
+    font-size: 0.5rem;
+  }
+  
   .mobile-nav-link {
-    padding: 10px 14px;
-    font-size: 0.85rem;
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
   
   .converter-box {
-    padding: 10px 14px;
+    padding: 10px 12px;
     border-radius: 14px;
     gap: 10px;
   }
@@ -799,11 +857,11 @@ footer {
   }
   
   header h1 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   
   .subtitle {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
   
   .support-link {
@@ -819,36 +877,4 @@ footer {
   section h2 {
     font-size: 1.1rem;
   }
-}
-
-/* ============================================
-   PROJECTS PAGE - COMPACT VIEW
-   ============================================ */
-.projects-page .converter-box {
-  padding: 12px 16px !important;
-  gap: 10px !important;
-  max-width: 600px !important;
-}
-
-.projects-page .info-card {
-  padding: 12px 16px !important;
-  margin-bottom: 6px !important;
-}
-
-.projects-page .info-card h2 {
-  font-size: 1rem !important;
-  margin-bottom: 6px !important;
-}
-
-.projects-page .info-card p {
-  font-size: 0.82rem !important;
-  margin: 3px 0 !important;
-  line-height: 1.5 !important;
-}
-
-.projects-page .info-card ul {
-  margin: 3px 0 !important;
-  padding-left: 16px !important;
-  font-size: 0.82rem !important;
-  line-height: 1.5 !important;
 }
