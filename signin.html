@@ -22,9 +22,6 @@
 
 <body>
 
-  <!-- ============================================
-       TOP NAVIGATION BAR - FIXED
-       ============================================ -->
   <nav class="top-nav">
     <div class="nav-left">
       <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
@@ -40,29 +37,19 @@
     </div>
   </nav>
 
-  <!-- ============================================
-       MOBILE DROPDOWN - ADDED
-       ============================================ -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
-  <!-- ============================================
-       PAGE HEADER
-       ============================================ -->
   <header>
     <h1>Sign In</h1>
     <p class="subtitle">Access your account securely.</p>
   </header>
 
-  <!-- ============================================
-       MAIN CONTENT - SIGN IN FORM
-       ============================================ -->
   <main class="dashboard">
     <div class="converter-box" style="max-width:520px;">
       <form id="signinForm" autocomplete="off" method="post" action="#">
-        
         <div style="margin-bottom:18px;">
           <label for="signinEmail">Email</label>
           <input type="email" id="signinEmail" name="email" placeholder="Enter your email" required autocomplete="email">
@@ -90,16 +77,10 @@
     </div>
   </main>
 
-  <!-- ============================================
-       SCRIPTS
-       ============================================ -->
   <script src="auth.js?v=5"></script>
   <script src="notifications.js?v=4"></script>
   <script src="modal.js?v=4"></script>
 
-  <!-- ============================================
-       HAMBURGER TOGGLE JAVASCRIPT - ADDED
-       ============================================ -->
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -142,9 +123,6 @@
   });
   </script>
 
-  <!-- ============================================
-       FOOTER
-       ============================================ -->
   <footer>
     <div class="copyright">© 2026 Emmanuel MUKIZA</div>
   </footer>
