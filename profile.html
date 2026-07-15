@@ -15,9 +15,6 @@
 
 <body>
 
-  <!-- ============================================
-       TOP NAVIGATION BAR - FIXED
-       ============================================ -->
   <nav class="top-nav">
     <div class="nav-left">
       <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
@@ -41,32 +38,20 @@
     </div>
   </nav>
 
-  <!-- ============================================
-       MOBILE DROPDOWN - ADDED
-       ============================================ -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
-  <!-- ============================================
-       PAGE HEADER
-       ============================================ -->
   <header>
     <h1>My Profile</h1>
     <p class="subtitle">Manage your account and security settings.</p>
   </header>
 
-  <!-- ============================================
-       MAIN CONTENT
-       ============================================ -->
   <main class="dashboard">
     <div class="converter-box" style="width:min(96%,1000px); padding:0; overflow:hidden;">
       <div style="display:flex; flex-wrap:wrap;">
 
-        <!-- ============================================
-             LEFT SIDEBAR
-             ============================================ -->
         <aside style="width:220px; background:rgba(255,255,255,0.06); padding:20px;">
           <div style="text-align:center; margin-bottom:20px;">
             <div id="profileImageWrapper" style="cursor:pointer; position:relative; display:inline-block;">
@@ -92,9 +77,6 @@
           <a href="#" class="support-link" id="securityTab"><i class="fa-solid fa-shield-halved"></i> Security</a>
         </aside>
 
-        <!-- ============================================
-             RIGHT CONTENT
-             ============================================ -->
         <section style="flex:1; min-width:250px; padding:14px 20px;">
 
           <div id="profileView">
@@ -206,9 +188,6 @@
     </div>
   </main>
 
-  <!-- ============================================
-       SCRIPTS
-       ============================================ -->
   <script src="profile.js?v=10"></script>
   <script src="notifications.js?v=4"></script>
   <script src="modal.js?v=4"></script>
@@ -227,9 +206,6 @@
     })();
   </script>
 
-  <!-- ============================================
-       HAMBURGER TOGGLE JAVASCRIPT - ADDED
-       ============================================ -->
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -272,9 +248,6 @@
   });
   </script>
 
-  <!-- ============================================
-       FOOTER
-       ============================================ -->
   <footer>
     <div class="copyright">© 2026 Emmanuel MUKIZA</div>
   </footer>
