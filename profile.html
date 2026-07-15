@@ -194,12 +194,12 @@
 
   <script>
     (function() {
-      const loggedInEmail = localStorage.getItem("loggedInUser");
-      const profileNav = document.getElementById("profileNav");
+      var loggedInEmail = localStorage.getItem("loggedInUser");
+      var profileNav = document.getElementById("profileNav");
       if (profileNav) {
         profileNav.style.display = "none";
       }
-      const guestNav = document.getElementById("guestNav");
+      var guestNav = document.getElementById("guestNav");
       if (loggedInEmail && guestNav) {
         guestNav.style.display = "none";
       }
@@ -208,15 +208,15 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileDropdown = document.getElementById('mobileDropdown');
+    var hamburgerBtn = document.getElementById('hamburgerBtn');
+    var mobileDropdown = document.getElementById('mobileDropdown');
     
     if (hamburgerBtn && mobileDropdown) {
       hamburgerBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         mobileDropdown.classList.toggle('open');
         
-        const icon = this.querySelector('i');
+        var icon = this.querySelector('i');
         if (mobileDropdown.classList.contains('open')) {
           icon.className = 'fa-solid fa-times';
         } else {
@@ -227,23 +227,23 @@
       document.addEventListener('click', function(e) {
         if (!hamburgerBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
           mobileDropdown.classList.remove('open');
-          const icon = hamburgerBtn.querySelector('i');
+          var icon = hamburgerBtn.querySelector('i');
           if (icon) {
             icon.className = 'fa-solid fa-bars';
           }
         }
       });
       
-      const mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
-      mobileLinks.forEach(link => {
-        link.addEventListener('click', function() {
+      var mobileLinks = mobileDropdown.querySelectorAll('.mobile-nav-link');
+      for (var i = 0; i < mobileLinks.length; i++) {
+        mobileLinks[i].addEventListener('click', function() {
           mobileDropdown.classList.remove('open');
-          const icon = hamburgerBtn.querySelector('i');
+          var icon = hamburgerBtn.querySelector('i');
           if (icon) {
             icon.className = 'fa-solid fa-bars';
           }
         });
-      });
+      }
     }
   });
   </script>
