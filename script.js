@@ -158,7 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
-      if (!hamburgerBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
+      const isHamburger = hamburgerBtn.contains(e.target);
+      const isDropdown = mobileDropdown.contains(e.target);
+      
+      if (!isHamburger && !isDropdown) {
         mobileDropdown.classList.remove('open');
         const icon = hamburgerBtn.querySelector('i');
         if (icon) {
