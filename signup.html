@@ -22,9 +22,6 @@
 
 <body>
 
-  <!-- ============================================
-       TOP NAVIGATION BAR - FIXED
-       ============================================ -->
   <nav class="top-nav">
     <div class="nav-left">
       <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation">
@@ -40,29 +37,19 @@
     </div>
   </nav>
 
-  <!-- ============================================
-       MOBILE DROPDOWN - ADDED
-       ============================================ -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="mobile-nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
-  <!-- ============================================
-       PAGE HEADER
-       ============================================ -->
   <header>
     <h1>Create Account</h1>
     <p class="subtitle">Register securely to unlock larger file conversions.</p>
   </header>
 
-  <!-- ============================================
-       MAIN CONTENT - SIGN UP FORM
-       ============================================ -->
   <main class="dashboard">
     <div class="converter-box" style="max-width:520px; padding:20px 28px; gap:12px;">
       <form id="signupForm" autocomplete="off" style="width:100%;">
-        
         <div style="margin-bottom:14px;">
           <label for="signupUsername" style="display:block; margin-bottom:4px; font-weight:600; font-size:0.9rem;">Username</label>
           <input type="text" id="signupUsername" placeholder="Choose a username" minlength="3" required style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:10px; background:rgba(255,255,255,0.12); color:white; font-size:0.95rem;">
@@ -99,16 +86,10 @@
     </div>
   </main>
 
-  <!-- ============================================
-       SCRIPTS
-       ============================================ -->
   <script src="auth.js?v=5"></script>
   <script src="notifications.js?v=4"></script>
   <script src="modal.js?v=4"></script>
 
-  <!-- ============================================
-       HAMBURGER TOGGLE JAVASCRIPT - ADDED
-       ============================================ -->
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -151,9 +132,6 @@
   });
   </script>
 
-  <!-- ============================================
-       FOOTER
-       ============================================ -->
   <footer>
     <div class="copyright">© 2026 Emmanuel MUKIZA</div>
   </footer>
