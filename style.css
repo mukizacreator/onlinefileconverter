@@ -3,6 +3,7 @@
    ============================================ */
 * { box-sizing: border-box; }
 html { height: 100%; }
+
 body {
   margin: 0;
   color: white;
@@ -13,6 +14,7 @@ body {
   flex-direction: column;
   background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
 }
+
 /* Main content area grows to fill available space */
 main { 
   flex: 1; 
@@ -21,6 +23,7 @@ main {
   flex-direction: column;
 }
 a { color: inherit; }
+
 /* ============================================
    NAVIGATION BAR
    ============================================ */
@@ -35,12 +38,14 @@ a { color: inherit; }
   backdrop-filter: blur(12px);
   flex-wrap: wrap;
 }
+
 .nav-left, .nav-right {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
+
 .nav-link {
   text-decoration: none;
   color: white;
@@ -54,13 +59,16 @@ a { color: inherit; }
   align-items: center;
   gap: 6px;
 }
+
 .nav-link i {
   font-size: 0.85rem;
 }
+
 .nav-link:hover, .nav-link.active {
   background: #00bcd4;
   transform: translateY(-2px);
 }
+
 /* ============================================
    NAVIGATION PROFILE - CONTROLLED BY JAVASCRIPT
    ============================================ */
@@ -69,15 +77,18 @@ a { color: inherit; }
   align-items: center;
   gap: 8px;
 }
+
 #profileNav {
   display: none; /* Hidden by default, shown by JS */
   align-items: center;
 }
+
 #profileNav a {
   display: flex !important;
   align-items: center;
   gap: 6px;
 }
+
 #navProfilePhoto {
   width: 30px;
   height: 30px;
@@ -85,64 +96,13 @@ a { color: inherit; }
   object-fit: cover;
   border: 2px solid #00bcd4;
 }
+
 #navUsername {
   font-size: 0.85rem;
   font-weight: 600;
   color: white;
 }
-/* ============================================
-   MOBILE HAMBURGER MENU & DROPDOWN
-   (hidden on desktop by default; enabled inside
-   the 768px breakpoint below)
-   ============================================ */
-.hamburger-btn {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: white;
-  font-size: 1.1rem;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-  flex-shrink: 0;
-}
-.hamburger-btn:hover {
-  background: #00bcd4;
-}
 
-.nav-dropdown {
-  display: none;
-  flex-direction: column;
-  width: 100%;
-  gap: 6px;
-  padding: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-}
-.nav-dropdown.active {
-  max-height: 300px;
-  padding-top: 8px;
-}
-.nav-dropdown-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  text-decoration: none;
-  color: white;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  transition: 0.3s;
-}
-.nav-dropdown-link:hover {
-  background: #00bcd4;
-}
 /* ============================================
    PAGE HEADER
    ============================================ */
@@ -161,6 +121,7 @@ header h1 {
   font-size: 0.9rem;
   margin-bottom: 0;
 }
+
 /* ============================================
    DASHBOARD & CONVERTER BOX
    ============================================ */
@@ -171,6 +132,7 @@ header h1 {
   align-items: center;
   padding: 8px 16px;
 }
+
 .converter-box {
   width: min(92%, 850px);
   display: flex;
@@ -187,11 +149,11 @@ header h1 {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   transition: 0.4s;
 }
-
 .converter-box:hover {
   background: rgba(255, 255, 255, 0.12);
   transform: translateY(-4px);
 }
+
 .input-row {
   display: flex;
   flex-wrap: wrap;
@@ -200,7 +162,9 @@ header h1 {
   gap: 14px;
   width: 100%;
 }
+
 input[type="file"] { display: none; }
+
 .custom-file-label {
   background: #ff9800;
   padding: 12px 24px;
@@ -214,12 +178,14 @@ input[type="file"] { display: none; }
   background: #e68900;
   transform: scale(1.03);
 }
+
 #fileName {
   text-align: center;
   word-break: break-word;
   max-width: 220px;
   font-size: 0.9rem;
 }
+
 .format-select {
   background: #1e1e1e;
   color: white;
@@ -230,6 +196,7 @@ input[type="file"] { display: none; }
   font-size: 0.95rem;
   min-width: 90px;
 }
+
 /* ============================================
    BUTTONS
    ============================================ */
@@ -249,6 +216,7 @@ input[type="file"] { display: none; }
   background: #008ba3;
   transform: scale(1.03);
 }
+
 .danger-btn {
   border: none;
   background: #e53935;
@@ -260,6 +228,7 @@ input[type="file"] { display: none; }
   transition: 0.3s;
 }
 .danger-btn:hover { background: #c62828; }
+
 .secondary-btn {
   border: none;
   background: rgba(255, 255, 255, 0.12);
@@ -268,11 +237,13 @@ input[type="file"] { display: none; }
   border-radius: 10px;
   cursor: pointer;
 }
+
 #result {
   width: 100%;
   margin-top: 8px;
   text-align: center;
 }
+
 /* ============================================
    FORMS
    ============================================ */
@@ -298,6 +269,7 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
   width: 100%;
   margin-bottom: 16px;
 }
+
 /* ============================================
    INFO CARDS & SUPPORT LINKS
    ============================================ */
@@ -313,6 +285,7 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
   line-height: 1.7;
   font-size: 0.95rem;
 }
+
 .support-link {
   display: block;
   text-decoration: none;
@@ -324,7 +297,6 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
   transition: 0.3s;
   font-size: 0.9rem;
 }
-
 .support-link:hover {
   background: rgba(255, 255, 255, 0.13);
   transform: translateY(-2px);
@@ -332,6 +304,7 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
 .support-link.active {
   background: #00bcd4;
 }
+
 /* ============================================
    DOWNLOAD BUTTON
    ============================================ */
@@ -353,6 +326,7 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
 }
+
 /* ============================================
    PROFILE PAGE
    ============================================ */
@@ -361,6 +335,7 @@ aside {
   background: rgba(255, 255, 255, 0.06);
   padding: 20px !important;
 }
+
 aside img {
   width: 90px !important;
   height: 90px !important;
@@ -371,25 +346,30 @@ aside img {
   margin-bottom: 12px;
   border: 3px solid #00bcd4;
 }
+
 aside h3 {
   margin-top: 12px;
   margin-bottom: 4px;
   font-size: 1rem;
 }
+
 aside p {
   color: #aaa;
   font-size: 0.8rem;
   margin: 0;
   word-break: break-all;
 }
+
 section {
   padding: 20px 24px !important;
 }
+
 section h2 {
   font-size: 1.3rem;
   margin-top: 0;
   margin-bottom: 12px;
 }
+
 /* ============================================
    FOOTER
    ============================================ */
@@ -400,6 +380,7 @@ footer {
   flex-shrink: 0;
   width: 100%;
 }
+
 .footer-support {
   color: #bbbbbb;
   max-width: 900px;
@@ -407,11 +388,13 @@ footer {
   font-size: 0.75rem;
   line-height: 1.5;
 }
+
 .copyright {
   margin-top: 6px;
   color: #888888;
   font-size: 0.7rem;
 }
+
 /* ============================================
    TOAST NOTIFICATION STYLES
    ============================================ */
@@ -445,23 +428,28 @@ footer {
   border-left: 4px solid #00bcd4;
   transition: all 0.3s ease;
 }
+
 .toast-success { border-left-color: #34ce57; }
 .toast-error { border-left-color: #ff6b6b; }
 .toast-warning { border-left-color: #ffb74d; }
 .toast-info { border-left-color: #4dd0e1; }
+
 .toast-icon {
   font-size: 1.4rem;
   flex-shrink: 0;
 }
+
 .toast-icon.success { color: #34ce57; }
 .toast-icon.error { color: #ff6b6b; }
 .toast-icon.warning { color: #ffb74d; }
 .toast-icon.info { color: #4dd0e1; }
+
 .toast-message {
   flex: 1;
   line-height: 1.4;
   word-break: break-word;
 }
+
 .toast-close {
   background: none;
   border: none;
@@ -473,26 +461,32 @@ footer {
   pointer-events: auto;
 }
 .toast-close:hover { color: white; }
+
 @keyframes toastSlideIn {
   0% { transform: translateX(120%); opacity: 0; }
   100% { transform: translateX(0); opacity: 1; }
 }
+
 @keyframes toastSlideOut {
   0% { transform: translateX(0); opacity: 1; }
   100% { transform: translateX(120%); opacity: 0; }
 }
+
 /* ============================================
    FIX MODAL Z-INDEX
    ============================================ */
 #customModal {
   z-index: 99999 !important;
 }
+
 #customModal .modal-box {
   z-index: 100000 !important;
 }
+
 #toastContainer {
   z-index: 100001 !important;
 }
+
 /* ============================================
    RESPONSIVE BREAKPOINTS
    ============================================ */
@@ -501,6 +495,7 @@ footer {
   .nav-left, .nav-right { flex-wrap: wrap; justify-content: center; }
   .converter-box { width: min(90%, 750px); }
 }
+
 @media (max-width: 900px) {
   .top-nav { padding: 8px 12px; gap: 8px; }
   .nav-link { padding: 6px 14px; font-size: 0.85rem; }
@@ -510,54 +505,26 @@ footer {
   aside { width: 190px; padding: 16px !important; }
   aside img { width: 75px !important; height: 75px !important; }
 }
+
 @media (max-width: 768px) {
   .top-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 6px 10px;
   }
-  .nav-left {
-    width: auto;
-    justify-content: flex-start;
-    gap: 8px;
-    flex-wrap: nowrap;
+  .nav-left, .nav-right {
+    width: 100%;
+    justify-content: center;
+    gap: 6px;
   }
-  .nav-right {
-    width: auto;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
-  }
-
-  /* Show the hamburger button on mobile */
-  .hamburger-btn {
-    display: inline-flex;
-  }
-
-  /* "Other Projects" and "About & Support" move into the hamburger dropdown */
-  .nav-extra {
-    display: none;
-  }
-
-  /* Dropdown becomes visible (still collapsed via max-height until .active) */
-  .nav-dropdown {
-    display: flex;
-    order: 3;
-  }
-
   .nav-link {
-    padding: 6px 12px;
+    padding: 5px 12px;
     font-size: 0.8rem;
   }
-
   .converter-box {
     padding: 14px 18px;
-    width: 100%;
-    max-width: 100%;
+    width: min(94%, 550px);
     gap: 12px;
-    margin: 8px 0;
-    border-radius: 16px;
   }
   .input-row {
     gap: 8px;
@@ -619,6 +586,7 @@ footer {
   .info-card h2 { font-size: 1rem; }
   .info-card p, .info-card li { font-size: 0.85rem; }
 }
+
 @media (max-width: 480px) {
   .top-nav { padding: 4px 8px; }
   .nav-link {
@@ -627,10 +595,6 @@ footer {
   }
   .nav-link i {
     font-size: 0.6rem;
-  }
-  .hamburger-btn {
-    padding: 6px 10px;
-    font-size: 1rem;
   }
   .converter-box {
     padding: 10px 14px;
@@ -676,22 +640,27 @@ footer {
   gap: 10px !important;
   max-width: 600px !important;
 }
+
 .projects-page .info-card {
   padding: 12px 16px !important;
   margin-bottom: 6px !important;
 }
+
 .projects-page .info-card h2 {
   font-size: 1rem !important;
   margin-bottom: 6px !important;
 }
+
 .projects-page .info-card p {
   font-size: 0.82rem !important;
   margin: 3px 0 !important;
   line-height: 1.5 !important;
 }
+
 .projects-page .info-card ul {
   margin: 3px 0 !important;
   padding-left: 16px !important;
   font-size: 0.82rem !important;
   line-height: 1.5 !important;
 }
+
