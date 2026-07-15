@@ -892,11 +892,11 @@ footer {
 }
 
 /* ============================================
-   FORCE FIX - HIDE DESKTOP LINKS ON MOBILE
+   ULTIMATE FIX - HIDE DESKTOP LINKS ON MOBILE
    ============================================ */
 @media (max-width: 768px) {
-  /* Force hide "Other Projects" and "About & Support" */
-  .nav-left a.nav-link.desktop-link {
+  /* Hide by class */
+  .desktop-link {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -906,5 +906,18 @@ footer {
     padding: 0 !important;
     margin: 0 !important;
     border: 0 !important;
+    pointer-events: none !important;
+  }
+  
+  /* Hide by data attribute */
+  a[class*="desktop-link"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Hide by parent */
+  .nav-left .desktop-link {
+    display: none !important;
+    visibility: hidden !important;
   }
 }
