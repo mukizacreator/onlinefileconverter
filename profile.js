@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 80 (COMPLETE)
+// PROFILE.JS - VERSION 85 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v80 LOADED!");
+console.log("🚀 profile.js v85 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -11,7 +11,11 @@ if (!loggedInEmail) {
 let currentUser = null;
 const userData = localStorage.getItem("userData");
 if (userData) {
-  currentUser = JSON.parse(userData);
+  try {
+    currentUser = JSON.parse(userData);
+  } catch(e) {
+    console.error("Error parsing userData:", e);
+  }
 }
 
 if (!currentUser) {
@@ -19,7 +23,7 @@ if (!currentUser) {
   window.location.href = "signin.html";
 }
 
-console.log("Current user:", currentUser);
+console.log("Current user from localStorage:", currentUser);
 
 /* DOM ELEMENTS */
 const profileImage = document.getElementById("profileImage");
@@ -71,45 +75,76 @@ console.log("  securityTab:", !!securityTab);
 console.log("  mobileModal:", !!mobileModal);
 
 /* ============================================
-   UPDATE UI WITH USER DATA
+   UPDATE UI WITH USER DATA - FIXED
    ============================================ */
 function updateUIWithUserData(data) {
   console.log("📝 Updating UI with user data:", data);
   
-  // Update sidebar
-  if (profileUsername) profileUsername.textContent = data.username || 'User';
-  if (profileEmailDisplay) profileEmailDisplay.textContent = data.email || 'user@email.com';
+  // Update sidebar - using textContent to ensure it works
+  if (profileUsername) {
+    profileUsername.textContent = data.username || 'User';
+    console.log("  profileUsername updated to:", profileUsername.textContent);
+  }
+  if (profileEmailDisplay) {
+    profileEmailDisplay.textContent = data.email || 'user@email.com';
+    console.log("  profileEmailDisplay updated to:", profileEmailDisplay.textContent);
+  }
   
   // Update profile view
-  if (profileViewUsername) profileViewUsername.textContent = data.username || 'User';
-  if (profileViewEmail) profileViewEmail.textContent = data.email || 'user@email.com';
+  if (profileViewUsername) {
+    profileViewUsername.textContent = data.username || 'User';
+    console.log("  profileViewUsername updated to:", profileViewUsername.textContent);
+  }
+  if (profileViewEmail) {
+    profileViewEmail.textContent = data.email || 'user@email.com';
+    console.log("  profileViewEmail updated to:", profileViewEmail.textContent);
+  }
   
   // Update account panel
-  if (accountUsernameDisplay) accountUsernameDisplay.textContent = data.username || 'User';
-  if (accountEmailDisplay) accountEmailDisplay.textContent = data.email || 'user@email.com';
+  if (accountUsernameDisplay) {
+    accountUsernameDisplay.textContent = data.username || 'User';
+    console.log("  accountUsernameDisplay updated to:", accountUsernameDisplay.textContent);
+  }
+  if (accountEmailDisplay) {
+    accountEmailDisplay.textContent = data.email || 'user@email.com';
+    console.log("  accountEmailDisplay updated to:", accountEmailDisplay.textContent);
+  }
   
   // Update form fields
-  if (profileEmail) profileEmail.value = data.email || '';
-  if (profileUsernameInput) profileUsernameInput.value = data.username || '';
+  if (profileEmail) {
+    profileEmail.value = data.email || '';
+    console.log("  profileEmail value set to:", profileEmail.value);
+  }
+  if (profileUsernameInput) {
+    profileUsernameInput.value = data.username || '';
+    console.log("  profileUsernameInput value set to:", profileUsernameInput.value);
+  }
   
   // Update profile photo
   if (profileImage) {
-    profileImage.src = data.photo || DEFAULT_ICON;
+    const photoSrc = data.photo || DEFAULT_ICON;
+    profileImage.src = photoSrc;
+    console.log("  profileImage src set to:", photoSrc);
   }
   
   // Update navigation profile photo
   const navProfilePhoto = document.getElementById("navProfilePhoto");
   if (navProfilePhoto) {
-    navProfilePhoto.src = data.photo || DEFAULT_ICON;
+    const photoSrc = data.photo || DEFAULT_ICON;
+    navProfilePhoto.src = photoSrc;
+    console.log("  navProfilePhoto src set to:", photoSrc);
   }
   
   const navUsername = document.getElementById("navUsername");
   if (navUsername) {
     navUsername.textContent = data.username || 'Profile';
+    console.log("  navUsername updated to:", navUsername.textContent);
   }
   
   // Update delete photo button
   updateDeletePhotoButton();
+  
+  console.log("✅ UI update complete!");
 }
 
 /* ============================================
@@ -131,7 +166,7 @@ async function loadUserData() {
     currentUser = data;
     localStorage.setItem("userData", JSON.stringify(data));
 
-    console.log("✅ User data loaded:", currentUser);
+    console.log("✅ User data loaded from server:", currentUser);
     
     // Update all UI elements
     updateUIWithUserData(data);
@@ -141,7 +176,13 @@ async function loadUserData() {
     
   } catch (error) {
     console.error("❌ Load user error:", error);
-    toastError("Failed to load user data.");
+    // Try to use cached data if available
+    if (currentUser) {
+      console.log("⚠️ Using cached user data:", currentUser);
+      updateUIWithUserData(currentUser);
+    } else {
+      toastError("Failed to load user data.");
+    }
   }
 }
 
@@ -149,8 +190,12 @@ async function loadUserData() {
    MOBILE MODAL FUNCTIONS
    ============================================ */
 function openMobileModal(contentHTML) {
-  if (!mobileModal || !mobileModalContent) return;
+  if (!mobileModal || !mobileModalContent) {
+    console.error("❌ Mobile modal elements not found!");
+    return;
+  }
   
+  console.log("📱 Opening mobile modal");
   mobileModalContent.innerHTML = contentHTML;
   mobileModal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -158,11 +203,12 @@ function openMobileModal(contentHTML) {
   // Re-bind any buttons inside the modal content
   setTimeout(function() {
     bindModalButtons();
-  }, 100);
+  }, 150);
 }
 
 function closeMobileModal() {
   if (!mobileModal) return;
+  console.log("📱 Closing mobile modal");
   mobileModal.classList.remove('open');
   document.body.style.overflow = '';
 }
@@ -199,6 +245,7 @@ function bindModalButtons() {
   // Find and bind save account button in modal
   const modalSaveBtn = document.getElementById('modalSaveAccountBtn');
   if (modalSaveBtn) {
+    console.log("  Found modalSaveAccountBtn");
     modalSaveBtn.addEventListener('click', async function(e) {
       e.preventDefault();
       await saveAccountHandler();
@@ -208,6 +255,7 @@ function bindModalButtons() {
   // Find and bind change password button in modal
   const modalChangePwdBtn = document.getElementById('modalChangePasswordBtn');
   if (modalChangePwdBtn) {
+    console.log("  Found modalChangePasswordBtn");
     modalChangePwdBtn.addEventListener('click', async function(e) {
       e.preventDefault();
       await changePasswordHandler();
@@ -230,6 +278,42 @@ function bindModalButtons() {
       }
     });
   });
+  
+  // Bind logout button in modal
+  const modalLogoutBtn = document.getElementById('modalLogoutBtn');
+  if (modalLogoutBtn) {
+    console.log("  Found modalLogoutBtn");
+    modalLogoutBtn.addEventListener('click', async function(e) {
+      e.preventDefault();
+      // Trigger logout
+      const confirm = await showConfirmModal(
+        '🚪 Log Out',
+        'Are you sure you want to log out?',
+        'Yes, Log Out',
+        'Cancel'
+      );
+      if (confirm) {
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("userData");
+        toastSuccess("Logged out successfully!");
+        closeMobileModal();
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+      }
+    });
+  }
+  
+  // Bind delete account button in modal
+  const modalDeleteBtn = document.getElementById('modalDeleteAccountBtn');
+  if (modalDeleteBtn) {
+    console.log("  Found modalDeleteAccountBtn");
+    modalDeleteBtn.addEventListener('click', async function(e) {
+      e.preventDefault();
+      // Trigger delete account
+      await deleteAccountHandler();
+    });
+  }
 }
 
 /* ============================================
@@ -264,8 +348,9 @@ function showAccountPanel() {
       return;
     }
     
-    // Get the HTML content and replace button IDs for modal
+    // Get the HTML content
     let accountHTML = accountPanelEl.innerHTML;
+    console.log("📋 Account HTML length:", accountHTML.length);
     
     // Replace IDs for modal compatibility
     accountHTML = accountHTML
@@ -277,6 +362,12 @@ function showAccountPanel() {
     
     // Add modal-specific class for password toggle
     accountHTML = accountHTML.replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"');
+    
+    // Also update labels to point to modal IDs
+    accountHTML = accountHTML
+      .replace(/for="accountCurrentPassword"/g, 'for="modalAccountCurrentPassword"')
+      .replace(/for="profileEmail"/g, 'for="modalProfileEmail"')
+      .replace(/for="profileUsernameInput"/g, 'for="modalProfileUsernameInput"');
     
     openMobileModal(`
       <h2><i class="fa-solid fa-user"></i> Account Information</h2>
@@ -312,8 +403,9 @@ function showSecurityPanel() {
       return;
     }
     
-    // Get the HTML content and replace button IDs for modal
+    // Get the HTML content
     let securityHTML = securityPanelEl.innerHTML;
+    console.log("🔒 Security HTML length:", securityHTML.length);
     
     // Replace IDs for modal compatibility
     securityHTML = securityHTML
@@ -329,6 +421,12 @@ function showSecurityPanel() {
     
     // Add modal-specific class for password toggle
     securityHTML = securityHTML.replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"');
+    
+    // Also update labels to point to modal IDs
+    securityHTML = securityHTML
+      .replace(/for="currentPassword"/g, 'for="modalCurrentPassword"')
+      .replace(/for="newPassword"/g, 'for="modalNewPassword"')
+      .replace(/for="confirmPassword"/g, 'for="modalConfirmPassword"');
     
     openMobileModal(`
       <h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>
@@ -824,9 +922,12 @@ async function changePasswordHandler() {
     closeMobileModal();
 
     // Clear password fields
-    document.getElementById("currentPassword").value = "";
-    document.getElementById("newPassword").value = "";
-    document.getElementById("confirmPassword").value = "";
+    const curPassInput = document.getElementById("currentPassword");
+    const newPassInput = document.getElementById("newPassword");
+    const confPassInput = document.getElementById("confirmPassword");
+    if (curPassInput) curPassInput.value = "";
+    if (newPassInput) newPassInput.value = "";
+    if (confPassInput) confPassInput.value = "";
 
   } catch (error) {
     if (changeBtn) {
@@ -847,7 +948,139 @@ if (changePasswordBtn) {
 }
 
 /* ============================================
-   LOGOUT - WITH REFRESH ON CANCEL
+   DELETE ACCOUNT HANDLER
+   ============================================ */
+async function deleteAccountHandler() {
+  console.log("🗑️ deleteAccountHandler called");
+  
+  const confirm1 = await showConfirmModal(
+    '⚠️ Delete Account',
+    'Are you sure you want to permanently delete your account? This cannot be undone.',
+    'Yes, Delete',
+    'Cancel'
+  );
+  
+  if (!confirm1) {
+    window.location.reload();
+    return;
+  }
+
+  const confirm2 = await showConfirmModal(
+    '⚠️ Final Warning',
+    'Are you absolutely sure? This will delete all your data permanently.',
+    'Yes, Delete Permanently',
+    'Cancel'
+  );
+  
+  if (!confirm2) {
+    window.location.reload();
+    return;
+  }
+
+  const deleteBtn = document.getElementById("deleteAccountBtn") || document.getElementById("modalDeleteAccountBtn");
+  if (deleteBtn) {
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = "Sending code...";
+  }
+
+  try {
+    const res = await fetch("/api/send-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: currentUser.email })
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || "Failed to send code.");
+    }
+
+    toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
+
+    let code = null;
+    let verified = false;
+
+    while (!verified) {
+      code = await showVerificationModal(currentUser.email);
+
+      if (!code) {
+        toastWarning("Deletion cancelled. Refreshing page...");
+        if (deleteBtn) {
+          deleteBtn.disabled = false;
+          deleteBtn.textContent = "Delete Account";
+        }
+        setTimeout(() => { window.location.reload(); }, 500);
+        return;
+      }
+
+      const verifyCodeRes = await fetch("/api/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+      });
+
+      const verifyData = await verifyCodeRes.json();
+      if (verifyData.success) {
+        verified = true;
+      } else {
+        toastError("Incorrect verification code. Please try again.");
+      }
+    }
+
+    const finalConfirm = await showConfirmModal(
+      '⚠️ Final Confirmation',
+      'Delete your account permanently?',
+      'Yes, Delete',
+      'Cancel'
+    );
+    
+    if (!finalConfirm) {
+      if (deleteBtn) {
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = "Delete Account";
+      }
+      toastWarning("Deletion cancelled.");
+      window.location.reload();
+      return;
+    }
+
+    const deleteRes = await fetch("/api/delete-user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: currentUser.email })
+    });
+
+    if (!deleteRes.ok) {
+      const data = await deleteRes.json();
+      throw new Error(data.error || "Failed to delete account.");
+    }
+
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("userData");
+
+    toastSuccess("Account deleted successfully!");
+    if (deleteBtn) {
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = "Delete Account";
+    }
+    closeMobileModal();
+    
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 2000);
+
+  } catch (error) {
+    if (deleteBtn) {
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = "Delete Account";
+    }
+    toastError(error.message || "Failed to delete account.");
+    console.error("Delete account error:", error);
+  }
+}
+
+/* ============================================
+   LOGOUT
    ============================================ */
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async function(e) {
@@ -878,126 +1111,10 @@ if (logoutBtn) {
 }
 
 /* ============================================
-   DELETE ACCOUNT - WITH VERIFICATION LOOP
+   DELETE ACCOUNT BUTTON
    ============================================ */
 if (deleteAccountBtn) {
-  deleteAccountBtn.addEventListener("click", async function(e) {
-    e.preventDefault();
-    
-    const confirm1 = await showConfirmModal(
-      '⚠️ Delete Account',
-      'Are you sure you want to permanently delete your account? This cannot be undone.',
-      'Yes, Delete',
-      'Cancel'
-    );
-    
-    if (!confirm1) {
-      window.location.reload();
-      return;
-    }
-
-    const confirm2 = await showConfirmModal(
-      '⚠️ Final Warning',
-      'Are you absolutely sure? This will delete all your data permanently.',
-      'Yes, Delete Permanently',
-      'Cancel'
-    );
-    
-    if (!confirm2) {
-      window.location.reload();
-      return;
-    }
-
-    try {
-      this.disabled = true;
-      this.textContent = "Sending code...";
-
-      const res = await fetch("/api/send-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: currentUser.email })
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to send code.");
-      }
-
-      toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
-
-      let code = null;
-      let verified = false;
-
-      while (!verified) {
-        code = await showVerificationModal(currentUser.email);
-
-        if (!code) {
-          toastWarning("Deletion cancelled. Refreshing page...");
-          this.disabled = false;
-          this.textContent = "Delete Account";
-          setTimeout(() => { window.location.reload(); }, 500);
-          return;
-        }
-
-        const verifyCodeRes = await fetch("/api/verify-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-        });
-
-        const verifyData = await verifyCodeRes.json();
-        if (verifyData.success) {
-          verified = true;
-        } else {
-          toastError("Incorrect verification code. Please try again.");
-        }
-      }
-
-      const finalConfirm = await showConfirmModal(
-        '⚠️ Final Confirmation',
-        'Delete your account permanently?',
-        'Yes, Delete',
-        'Cancel'
-      );
-      
-      if (!finalConfirm) {
-        this.disabled = false;
-        this.textContent = "Delete Account";
-        toastWarning("Deletion cancelled.");
-        window.location.reload();
-        return;
-      }
-
-      const deleteRes = await fetch("/api/delete-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: currentUser.email })
-      });
-
-      if (!deleteRes.ok) {
-        const data = await deleteRes.json();
-        throw new Error(data.error || "Failed to delete account.");
-      }
-
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("userData");
-
-      toastSuccess("Account deleted successfully!");
-      this.disabled = false;
-      this.textContent = "Delete Account";
-      closeMobileModal();
-      
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 2000);
-
-    } catch (error) {
-      toastError(error.message || "Failed to delete account.");
-      this.disabled = false;
-      this.textContent = "Delete Account";
-      console.error("Delete account error:", error);
-    }
-  });
+  deleteAccountBtn.addEventListener("click", deleteAccountHandler);
 }
 
 /* ============================================
@@ -1052,6 +1169,16 @@ window.addEventListener('resize', function() {
   }
 });
 
-// Load user data on page load
+// Load user data on page load - IMMEDIATELY
+console.log("🔄 Starting immediate data load...");
+
+// First, try to use cached data immediately
+if (currentUser) {
+  console.log("📦 Using cached user data immediately:", currentUser);
+  updateUIWithUserData(currentUser);
+}
+
+// Then load from server to get latest data
 loadUserData();
-console.log("✅ Profile.js v80 loaded successfully");
+
+console.log("✅ Profile.js v85 loaded successfully");
