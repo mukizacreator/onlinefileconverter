@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 60 (COMPLETE)
+// PROFILE.JS - VERSION 65 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v60 LOADED!");
+console.log("🚀 profile.js v65 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -52,9 +52,10 @@ const deleteAccountBtn = document.getElementById("deleteAccountBtn");
 
 const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-console.log("🔍 Buttons found:");
-console.log("  uploadPhotoBtn:", !!uploadPhotoBtn);
-console.log("  saveAccountBtn:", !!saveAccountBtn);
+console.log("🔍 Elements found:");
+console.log("  profileView:", !!profileView);
+console.log("  accountPanel:", !!accountPanel);
+console.log("  securityPanel:", !!securityPanel);
 console.log("  accountTab:", !!accountTab);
 console.log("  securityTab:", !!securityTab);
 
@@ -95,10 +96,71 @@ async function loadUserData() {
     if (navUsername) navUsername.textContent = data.username || 'Profile';
 
     updateDeletePhotoButton();
+    
+    // Ensure profile view is visible, panels are hidden
+    showProfileView();
+    
   } catch (error) {
     console.error("Load user error:", error);
     toastError("Failed to load user data.");
   }
+}
+
+/* ============================================
+   TAB SWITCHING FUNCTIONS - FIXED
+   ============================================ */
+function showProfileView() {
+  if (profileView) {
+    profileView.style.display = "block";
+    profileView.classList.remove('hidden-panel');
+  }
+  if (accountPanel) {
+    accountPanel.style.display = "none";
+    accountPanel.classList.remove('active-panel');
+  }
+  if (securityPanel) {
+    securityPanel.style.display = "none";
+    securityPanel.classList.remove('active-panel');
+  }
+  if (accountTab) accountTab.classList.remove('active');
+  if (securityTab) securityTab.classList.remove('active');
+  console.log("📋 Showing Profile View");
+}
+
+function showAccountPanel() {
+  if (profileView) {
+    profileView.style.display = "none";
+    profileView.classList.add('hidden-panel');
+  }
+  if (accountPanel) {
+    accountPanel.style.display = "block";
+    accountPanel.classList.add('active-panel');
+  }
+  if (securityPanel) {
+    securityPanel.style.display = "none";
+    securityPanel.classList.remove('active-panel');
+  }
+  if (accountTab) accountTab.classList.add('active');
+  if (securityTab) securityTab.classList.remove('active');
+  console.log("📋 Showing Account Panel");
+}
+
+function showSecurityPanel() {
+  if (profileView) {
+    profileView.style.display = "none";
+    profileView.classList.add('hidden-panel');
+  }
+  if (securityPanel) {
+    securityPanel.style.display = "block";
+    securityPanel.classList.add('active-panel');
+  }
+  if (accountPanel) {
+    accountPanel.style.display = "none";
+    accountPanel.classList.remove('active-panel');
+  }
+  if (securityTab) securityTab.classList.add('active');
+  if (accountTab) accountTab.classList.remove('active');
+  console.log("📋 Showing Security Panel");
 }
 
 /* ============================================
@@ -155,48 +217,30 @@ function updateDeletePhotoButton() {
 }
 
 /* ============================================
-   ACCOUNT & SECURITY TABS - FIXED
+   ACCOUNT & SECURITY TABS - FIXED FOR MOBILE
    ============================================ */
 console.log("Setting up tabs...");
 
-// ENSURE ONLY PROFILE VIEW IS VISIBLE INITIALLY
-if (profileView) {
-  profileView.style.display = "block";
-}
-if (accountPanel) {
-  accountPanel.style.display = "none";
-}
-if (securityPanel) {
-  securityPanel.style.display = "none";
-}
-
-// Remove active class from tabs
-if (accountTab) {
-  accountTab.classList.remove('active');
-}
-if (securityTab) {
-  securityTab.classList.remove('active');
-}
+// Ensure default state: Profile View visible, panels hidden
+showProfileView();
 
 // ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
-  accountTab.addEventListener("click", function(e) {
+  
+  // Remove any existing listeners by cloning
+  const newAccountTab = accountTab.cloneNode(true);
+  accountTab.parentNode.replaceChild(newAccountTab, accountTab);
+  
+  newAccountTab.addEventListener("click", function(e) {
     e.preventDefault();
-    console.log("📋 Account tab CLICKED");
-    
-    // HIDE ALL
-    if (profileView) profileView.style.display = "none";
-    if (securityPanel) securityPanel.style.display = "none";
-    // SHOW ACCOUNT
-    if (accountPanel) accountPanel.style.display = "block";
-    
-    // Update active styles
-    this.classList.add('active');
-    if (securityTab) securityTab.classList.remove('active');
-    
-    console.log("Account panel display:", accountPanel.style.display);
+    e.stopPropagation();
+    console.log("📋 Account tab CLICKED - showing account panel");
+    showAccountPanel();
   });
+  
+  // Update reference
+  window.accountTabRef = newAccountTab;
 } else {
   console.error("❌ accountTab element not found!");
 }
@@ -204,28 +248,23 @@ if (accountTab) {
 // ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
-  securityTab.addEventListener("click", function(e) {
+  
+  // Remove any existing listeners by cloning
+  const newSecurityTab = securityTab.cloneNode(true);
+  securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
+  
+  newSecurityTab.addEventListener("click", function(e) {
     e.preventDefault();
-    console.log("🔒 Security tab CLICKED");
-    
-    // HIDE ALL
-    if (profileView) profileView.style.display = "none";
-    if (accountPanel) accountPanel.style.display = "none";
-    // SHOW SECURITY
-    if (securityPanel) securityPanel.style.display = "block";
-    
-    // Update active styles
-    this.classList.add('active');
-    if (accountTab) accountTab.classList.remove('active');
-    
-    console.log("Security panel display:", securityPanel.style.display);
+    e.stopPropagation();
+    console.log("🔒 Security tab CLICKED - showing security panel");
+    showSecurityPanel();
   });
+  
+  // Update reference
+  window.securityTabRef = newSecurityTab;
 } else {
   console.error("❌ securityTab element not found!");
 }
-
-// ===== CLICK ON ACCOUNT TAB PROGRAMMATICALLY TO SHOW ACCOUNT =====
-// This ensures that if user clicks on Account tab, it works properly
 
 /* ============================================
    PASSWORD TOGGLES
@@ -784,4 +823,4 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v60 loaded successfully");
+console.log("✅ Profile.js v65 loaded successfully");
