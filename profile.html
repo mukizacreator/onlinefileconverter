@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=101">
+  <link rel="stylesheet" href="style.css?v=102">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -101,8 +101,8 @@
             </p>
           </div>
 
+          <!-- ACCOUNT PANEL - WITHOUT duplicate title -->
           <div id="accountPanel">
-            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
             
             <div style="background:rgba(255,255,255,0.06); padding:12px 16px; border-radius:8px; margin-bottom:12px;">
@@ -141,8 +141,8 @@
             </button>
           </div>
 
+          <!-- SECURITY PANEL - WITHOUT duplicate title -->
           <div id="securityPanel">
-            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
             
             <div style="margin-bottom:10px;">
@@ -201,24 +201,21 @@
     </div>
   </div>
 
-  <script src="notifications.js?v=101"></script>
-  <script src="modal.js?v=101"></script>
-  <script src="nav.js?v=101"></script>
+  <script src="notifications.js?v=102"></script>
+  <script src="modal.js?v=102"></script>
+  <script src="nav.js?v=102"></script>
 
   <!-- ============================================
-       SELF-CONTAINED PROFILE SCRIPT
+       COMPLETE PROFILE SCRIPT - WITH FIXES
        ============================================ -->
   <script>
   // ============================================
-  // PROFILE - COMPLETE SELF-CONTAINED SCRIPT
+  // PROFILE - COMPLETE SCRIPT v102
   // ============================================
   (function() {
     'use strict';
     
-    // Log everything
-    console.log("🚀 PROFILE SCRIPT STARTED");
-    console.log("📱 Window width:", window.innerWidth);
-    console.log("📱 User Agent:", navigator.userAgent);
+    console.log("🚀 PROFILE v102 STARTED");
     
     // Get user from localStorage
     var loggedInEmail = localStorage.getItem("loggedInUser");
@@ -231,10 +228,8 @@
     }
     
     // Get user data
-    var userDataString = localStorage.getItem("userData");
-    console.log("📦 userData from localStorage:", userDataString);
-    
     var currentUser = null;
+    var userDataString = localStorage.getItem("userData");
     if (userDataString) {
       try {
         currentUser = JSON.parse(userDataString);
@@ -244,7 +239,6 @@
       }
     }
     
-    // If no user data, redirect
     if (!currentUser) {
       console.log("❌ No currentUser, redirecting...");
       localStorage.removeItem("loggedInUser");
@@ -258,44 +252,33 @@
     function updateAllUI(data) {
       console.log("📝 Updating UI with:", data);
       
-      // Helper function to update element
       function setText(id, value, fallback) {
         var el = document.getElementById(id);
         if (el) {
           el.textContent = value || fallback || 'User';
-          console.log("  ✅ Updated #" + id + " to:", el.textContent);
           return true;
-        } else {
-          console.log("  ❌ Element #" + id + " not found");
-          return false;
         }
+        return false;
       }
       
       function setValue(id, value) {
         var el = document.getElementById(id);
         if (el) {
           el.value = value || '';
-          console.log("  ✅ Set #" + id + " value to:", el.value);
           return true;
-        } else {
-          console.log("  ❌ Element #" + id + " not found");
-          return false;
         }
+        return false;
       }
       
       function setImage(id, src) {
         var el = document.getElementById(id);
         if (el) {
           el.src = src || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-          console.log("  ✅ Set #" + id + " image");
           return true;
-        } else {
-          console.log("  ❌ Element #" + id + " not found");
-          return false;
         }
+        return false;
       }
       
-      // Update all elements
       setText('profileUsername', data.username);
       setText('profileEmailDisplay', data.email);
       setText('profileViewUsername', data.username);
@@ -307,11 +290,9 @@
       setImage('profileImage', data.photo);
       setImage('navProfilePhoto', data.photo);
       
-      // Update nav username
       var navUserEl = document.getElementById('navUsername');
       if (navUserEl) {
         navUserEl.textContent = data.username || 'Profile';
-        console.log("  ✅ navUsername updated to:", navUserEl.textContent);
       }
       
       console.log("✅ UI update complete!");
@@ -321,36 +302,24 @@
     // LOAD DATA FROM SERVER
     // ============================================
     function loadFromServer() {
-      console.log("🔄 Loading data from server...");
+      console.log("🔄 Loading from server...");
       
       fetch("/api/get-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: loggedInEmail })
       })
-      .then(function(response) {
-        console.log("📡 Server response status:", response.status);
-        return response.json();
-      })
+      .then(function(response) { return response.json(); })
       .then(function(data) {
-        console.log("📡 Server data:", data);
-        if (data.error) {
-          throw new Error(data.error);
-        }
+        if (data.error) throw new Error(data.error);
         currentUser = data;
         localStorage.setItem("userData", JSON.stringify(data));
         updateAllUI(data);
-        console.log("✅ Data loaded from server successfully!");
+        console.log("✅ Server data loaded!");
       })
       .catch(function(error) {
         console.error("❌ Server error:", error);
-        // Use cached data
-        if (currentUser) {
-          console.log("⚠️ Using cached data");
-          updateAllUI(currentUser);
-        } else {
-          console.error("❌ No data available!");
-        }
+        if (currentUser) updateAllUI(currentUser);
       });
     }
     
@@ -373,20 +342,21 @@
       if (sp) { sp.style.display = "none"; sp.classList.remove('active-panel'); }
       if (at) { at.classList.remove('active'); }
       if (st) { st.classList.remove('active'); }
-      console.log("📋 Showing Profile View");
     }
     
     function openModal(content) {
       var modal = document.getElementById('mobileProfileModal');
       var modalContent = document.getElementById('mobileModalContent');
-      if (!modal || !modalContent) {
-        console.error("❌ Modal elements not found");
-        return;
-      }
-      console.log("📱 Opening modal");
+      if (!modal || !modalContent) return;
+      
       modalContent.innerHTML = content;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
+      
+      // Re-bind buttons after modal opens
+      setTimeout(function() {
+        bindModalButtons();
+      }, 100);
     }
     
     function closeModal() {
@@ -394,15 +364,13 @@
       if (!modal) return;
       modal.classList.remove('open');
       document.body.style.overflow = '';
-      console.log("📱 Modal closed");
     }
     
     function showAccountPanel() {
-      console.log("📋 Account tab clicked, isMobile:", isMobile());
-      
       if (isMobile()) {
         var panel = document.getElementById('accountPanel');
         if (!panel) return;
+        // Use innerHTML without the h2 title (already added in modal)
         var html = panel.innerHTML;
         openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
       } else {
@@ -420,8 +388,6 @@
     }
     
     function showSecurityPanel() {
-      console.log("🔒 Security tab clicked, isMobile:", isMobile());
-      
       if (isMobile()) {
         var panel = document.getElementById('securityPanel');
         if (!panel) return;
@@ -442,20 +408,354 @@
     }
     
     // ============================================
+    // BIND MODAL BUTTONS - FIXED
+    // ============================================
+    function bindModalButtons() {
+      console.log("🔗 Binding modal buttons...");
+      
+      // SAVE ACCOUNT BUTTON
+      var saveBtn = document.getElementById('saveAccountBtn');
+      if (saveBtn) {
+        saveBtn.onclick = function(e) {
+          e.preventDefault();
+          console.log("💾 Save Changes clicked");
+          handleSaveAccount();
+        };
+        console.log("  ✅ Save Account bound");
+      }
+      
+      // CHANGE PASSWORD BUTTON
+      var changeBtn = document.getElementById('changePasswordBtn');
+      if (changeBtn) {
+        changeBtn.onclick = function(e) {
+          e.preventDefault();
+          console.log("🔑 Change Password clicked");
+          handleChangePassword();
+        };
+        console.log("  ✅ Change Password bound");
+      }
+      
+      // LOGOUT BUTTON
+      var logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.onclick = function(e) {
+          e.preventDefault();
+          console.log("🚪 Logout clicked");
+          handleLogout();
+        };
+        console.log("  ✅ Logout bound");
+      }
+      
+      // DELETE ACCOUNT BUTTON
+      var deleteBtn = document.getElementById('deleteAccountBtn');
+      if (deleteBtn) {
+        deleteBtn.onclick = function(e) {
+          e.preventDefault();
+          console.log("🗑️ Delete Account clicked");
+          handleDeleteAccount();
+        };
+        console.log("  ✅ Delete Account bound");
+      }
+      
+      // PASSWORD TOGGLES IN MODAL
+      var toggles = document.querySelectorAll('.password-toggle-btn');
+      toggles.forEach(function(btn) {
+        btn.onclick = function(e) {
+          e.preventDefault();
+          var input = this.parentElement.querySelector('input');
+          if (!input) {
+            // Try finding by ID
+            var inputId = this.id.replace('toggle', '');
+            input = document.getElementById(inputId);
+          }
+          if (!input) return;
+          var icon = this.querySelector('i');
+          if (input.type === 'password') {
+            input.type = 'text';
+            if (icon) { icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
+          } else {
+            input.type = 'password';
+            if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
+          }
+        };
+      });
+      console.log("  ✅ Password toggles bound");
+    }
+    
+    // ============================================
+    // HANDLE SAVE ACCOUNT
+    // ============================================
+    function handleSaveAccount() {
+      var currentPassword = document.getElementById('accountCurrentPassword');
+      var newEmail = document.getElementById('profileEmail');
+      var newUsername = document.getElementById('profileUsernameInput');
+      
+      if (!currentPassword || !currentPassword.value) {
+        toastError('Please enter your current password.');
+        return;
+      }
+      
+      var emailChanged = newEmail && newEmail.value && newEmail.value !== currentUser.email;
+      var usernameChanged = newUsername && newUsername.value && newUsername.value !== currentUser.username;
+      
+      if (!emailChanged && !usernameChanged) {
+        toastError('Please change your email or username.');
+        return;
+      }
+      
+      toastInfo('Sending verification code...');
+      
+      // Send verification code
+      fetch('/api/send-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: currentUser.email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) throw new Error(data.error);
+        toastInfo('Verification code sent to your email.');
+        return showVerificationModal();
+      })
+      .then(function(code) {
+        if (!code) {
+          toastWarning('Update cancelled.');
+          return;
+        }
+        return fetch('/api/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+        });
+      })
+      .then(function(res) {
+        if (!res) return;
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        if (!data.success) {
+          toastError('Incorrect verification code.');
+          return;
+        }
+        // Update account
+        var updateData = { email: currentUser.email };
+        if (newEmail && newEmail.value) updateData.newEmail = newEmail.value;
+        if (newUsername && newUsername.value) updateData.newUsername = newUsername.value;
+        
+        return fetch('/api/update-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updateData)
+        });
+      })
+      .then(function(res) {
+        if (!res) return;
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        if (data.error) throw new Error(data.error);
+        
+        // Update local data
+        if (newEmail && newEmail.value) {
+          currentUser.email = newEmail.value;
+          localStorage.setItem('loggedInUser', newEmail.value);
+        }
+        if (newUsername && newUsername.value) currentUser.username = newUsername.value;
+        localStorage.setItem('userData', JSON.stringify(currentUser));
+        
+        toastSuccess('Account updated! Refreshing...');
+        closeModal();
+        setTimeout(function() { window.location.reload(); }, 1500);
+      })
+      .catch(function(error) {
+        toastError(error.message || 'Failed to update account.');
+        console.error('Save account error:', error);
+      });
+    }
+    
+    // ============================================
+    // HANDLE CHANGE PASSWORD
+    // ============================================
+    function handleChangePassword() {
+      var curPass = document.getElementById('currentPassword');
+      var newPass = document.getElementById('newPassword');
+      var confPass = document.getElementById('confirmPassword');
+      
+      if (!curPass || !curPass.value) {
+        toastError('Please enter your current password.');
+        return;
+      }
+      if (!newPass || !newPass.value) {
+        toastError('Please enter a new password.');
+        return;
+      }
+      if (newPass.value !== confPass.value) {
+        toastError('Passwords do not match.');
+        return;
+      }
+      
+      var strongPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{5,}$/;
+      if (!strongPassword.test(newPass.value)) {
+        toastError('Password: 5+ chars, one capital, one number, one symbol.');
+        return;
+      }
+      
+      if (newPass.value === curPass.value) {
+        toastError('New password must be different.');
+        return;
+      }
+      
+      toastInfo('Sending verification code...');
+      
+      fetch('/api/send-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: currentUser.email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) throw new Error(data.error);
+        toastInfo('Verification code sent to your email.');
+        return showVerificationModal();
+      })
+      .then(function(code) {
+        if (!code) {
+          toastWarning('Password change cancelled.');
+          return;
+        }
+        return fetch('/api/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+        });
+      })
+      .then(function(res) {
+        if (!res) return;
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        if (!data.success) {
+          toastError('Incorrect verification code.');
+          return;
+        }
+        return fetch('/api/update-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentUser.email, newPassword: newPass.value })
+        });
+      })
+      .then(function(res) {
+        if (!res) return;
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        if (data.error) throw new Error(data.error);
+        toastSuccess('Password changed successfully!');
+        closeModal();
+        if (curPass) curPass.value = '';
+        if (newPass) newPass.value = '';
+        if (confPass) confPass.value = '';
+      })
+      .catch(function(error) {
+        toastError(error.message || 'Failed to change password.');
+        console.error('Change password error:', error);
+      });
+    }
+    
+    // ============================================
+    // HANDLE LOGOUT
+    // ============================================
+    function handleLogout() {
+      if (confirm('Are you sure you want to log out?')) {
+        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('userData');
+        toastSuccess('Logged out successfully!');
+        closeModal();
+        setTimeout(function() { window.location.href = 'index.html'; }, 1000);
+      }
+    }
+    
+    // ============================================
+    // HANDLE DELETE ACCOUNT
+    // ============================================
+    function handleDeleteAccount() {
+      if (!confirm('Are you sure you want to delete your account? This cannot be undone!')) return;
+      if (!confirm('Are you absolutely sure?')) return;
+      
+      toastInfo('Sending verification code...');
+      
+      fetch('/api/send-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: currentUser.email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) throw new Error(data.error);
+        toastInfo('Verification code sent to your email.');
+        return showVerificationModal();
+      })
+      .then(function(code) {
+        if (!code) {
+          toastWarning('Deletion cancelled.');
+          return;
+        }
+        return fetch('/api/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+        });
+      })
+      .then(function(res) {
+        if (!res) return;
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        if (!data.success) {
+          toastError('Incorrect verification code.');
+          return;
+        }
+        return fetch('/api/delete-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentUser.email })
+        });
+      })
+      .then(function(res) {
+        if (!res) return;
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        if (data.error) throw new Error(data.error);
+        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('userData');
+        toastSuccess('Account deleted successfully!');
+        closeModal();
+        setTimeout(function() { window.location.href = 'index.html'; }, 2000);
+      })
+      .catch(function(error) {
+        toastError(error.message || 'Failed to delete account.');
+        console.error('Delete account error:', error);
+      });
+    }
+    
+    // ============================================
     // SETUP EVENTS
     // ============================================
     console.log("🔧 Setting up events...");
     
-    // Update UI immediately with cached data
-    console.log("📦 Using cached data for initial UI");
+    // Update UI immediately
     updateAllUI(currentUser);
     showProfileView();
     
-    // Load from server after a small delay
-    setTimeout(function() {
-      console.log("⏰ Loading from server after delay...");
-      loadFromServer();
-    }, 100);
+    // Load from server
+    setTimeout(function() { loadFromServer(); }, 100);
     
     // Account tab
     var accountTab = document.getElementById('accountTab');
@@ -465,9 +765,6 @@
         console.log("📋 Account tab clicked!");
         showAccountPanel();
       });
-      console.log("✅ Account tab listener added");
-    } else {
-      console.error("❌ Account tab not found");
     }
     
     // Security tab
@@ -478,67 +775,18 @@
         console.log("🔒 Security tab clicked!");
         showSecurityPanel();
       });
-      console.log("✅ Security tab listener added");
-    } else {
-      console.error("❌ Security tab not found");
     }
     
     // Modal close
     var modalClose = document.getElementById('mobileModalClose');
     if (modalClose) {
-      modalClose.addEventListener('click', function() {
-        closeModal();
-      });
+      modalClose.addEventListener('click', function() { closeModal(); });
     }
     
-    // Modal backdrop
     var modal = document.getElementById('mobileProfileModal');
     if (modal) {
       modal.addEventListener('click', function(e) {
-        if (e.target === this) {
-          closeModal();
-        }
-      });
-    }
-    
-    // Password toggles
-    function setupToggle(inputId, btnId) {
-      var input = document.getElementById(inputId);
-      var btn = document.getElementById(btnId);
-      if (!input || !btn) return;
-      btn.addEventListener('click', function() {
-        var icon = btn.querySelector('i');
-        if (input.type === 'password') {
-          input.type = 'text';
-          if (icon) {
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-          }
-        } else {
-          input.type = 'password';
-          if (icon) {
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-          }
-        }
-      });
-    }
-    
-    setupToggle('accountCurrentPassword', 'toggleAccountPassword');
-    setupToggle('currentPassword', 'toggleCurrentPassword');
-    setupToggle('newPassword', 'toggleNewPassword');
-    setupToggle('confirmPassword', 'toggleConfirmPassword');
-    
-    // Logout
-    var logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (confirm('Are you sure you want to log out?')) {
-          localStorage.removeItem('loggedInUser');
-          localStorage.removeItem('userData');
-          window.location.href = 'index.html';
-        }
+        if (e.target === this) closeModal();
       });
     }
     
@@ -555,7 +803,7 @@
         var file = this.files[0];
         if (!file) return;
         if (!file.type.startsWith('image/')) {
-          alert('Please select an image file.');
+          toastError('Please select an image file.');
           this.value = '';
           return;
         }
@@ -578,43 +826,14 @@
             localStorage.setItem('userData', JSON.stringify(currentUser));
             document.getElementById('profileImage').src = photoData;
             document.getElementById('navProfilePhoto').src = photoData;
-            alert('Profile photo updated!');
+            toastSuccess('Profile photo updated!');
           })
           .catch(function(error) {
-            alert('Failed to upload photo: ' + error.message);
+            toastError('Failed to upload photo: ' + error.message);
           });
         };
         reader.readAsDataURL(file);
         this.value = '';
-      });
-    }
-    
-    // Save account (placeholder)
-    var saveBtn = document.getElementById('saveAccountBtn');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('Account update functionality coming soon.');
-      });
-    }
-    
-    // Change password (placeholder)
-    var changeBtn = document.getElementById('changePasswordBtn');
-    if (changeBtn) {
-      changeBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('Change password functionality coming soon.');
-      });
-    }
-    
-    // Delete account (placeholder)
-    var deleteBtn = document.getElementById('deleteAccountBtn');
-    if (deleteBtn) {
-      deleteBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (confirm('Are you sure you want to delete your account? This cannot be undone!')) {
-          alert('Delete account functionality coming soon.');
-        }
       });
     }
     
@@ -638,12 +857,10 @@
     
     // Close modal on resize to desktop
     window.addEventListener('resize', function() {
-      if (window.innerWidth > 768) {
-        closeModal();
-      }
+      if (window.innerWidth > 768) closeModal();
     });
     
-    console.log("✅ Profile script v101 completed!");
+    console.log("✅ Profile v102 completed!");
   })();
   </script>
 
