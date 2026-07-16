@@ -29,7 +29,7 @@ togglePassword("signupPassword", "toggleSignup");
 togglePassword("signinPassword", "toggleSignin");
 
 /* ============================================
-   SIGN UP - MONGODB WITH AUTO-LOGIN
+   SIGN UP - WITH AUTO-LOGIN
    ============================================ */
 const signupForm = document.getElementById("signupForm");
 if (signupForm) {
@@ -74,7 +74,7 @@ if (signupForm) {
 
       const code = await showVerificationModal();
       
-      // If user cancelled/closes the modal, refresh the page
+      // If user cancels/closes modal, refresh page
       if (!code) {
         toastWarning("Sign up cancelled. Refreshing page...");
         setTimeout(() => { window.location.reload(); }, 500);
@@ -93,6 +93,7 @@ if (signupForm) {
         return;
       }
 
+      // Create account
       const signupRes = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -120,7 +121,7 @@ if (signupForm) {
 }
 
 /* ============================================
-   SIGN IN - MONGODB WITH REDIRECT
+   SIGN IN - WITH VERIFICATION
    ============================================ */
 const signinForm = document.getElementById("signinForm");
 if (signinForm) {
@@ -130,7 +131,13 @@ if (signinForm) {
     const email = document.getElementById("signinEmail").value.trim().toLowerCase();
     const password = document.getElementById("signinPassword").value;
 
+    if (!email || !password) {
+      toastError("Please enter email and password.");
+      return;
+    }
+
     try {
+      // Step 1: Verify credentials
       const res = await fetch("/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -149,6 +156,45 @@ if (signinForm) {
         return;
       }
 
+      // Step 2: Send verification code
+      toastInfo("Sending verification code to your email...");
+      const codeRes = await fetch("/api/send-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+
+      if (!codeRes.ok) {
+        const codeData = await codeRes.json();
+        throw new Error(codeData.error || "Failed to send verification code.");
+      }
+
+      toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
+
+      // Step 3: Show verification modal
+      const code = await showVerificationModal();
+      
+      // If user cancels/closes modal, refresh page
+      if (!code) {
+        toastWarning("Sign in cancelled. Refreshing page...");
+        setTimeout(() => { window.location.reload(); }, 500);
+        return;
+      }
+
+      // Step 4: Verify code
+      const verifyRes = await fetch("/api/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code: code.trim() })
+      });
+
+      const verifyData = await verifyRes.json();
+      if (!verifyData.success) {
+        toastError("Incorrect verification code. Please try again.");
+        return;
+      }
+
+      // Step 5: Login successful
       localStorage.setItem("loggedInUser", email);
       localStorage.setItem("userData", JSON.stringify(data.user));
 
@@ -163,7 +209,7 @@ if (signinForm) {
 }
 
 /* ============================================
-   FORGOT PASSWORD - MONGODB
+   FORGOT PASSWORD - WITH REFRESH ON CANCEL
    ============================================ */
 const forgotPasswordLink = document.getElementById("forgotPasswordLink");
 
