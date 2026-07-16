@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 72 (ORIGINAL + MOBILE)
+// PROFILE.JS - VERSION 73 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v72 LOADED!");
+console.log("🚀 profile.js v73 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -97,7 +97,6 @@ async function loadUserData() {
 
     updateDeletePhotoButton();
     
-    // Ensure profile view is visible, panels are hidden
     showProfileView();
     
   } catch (error) {
@@ -107,7 +106,7 @@ async function loadUserData() {
 }
 
 /* ============================================
-   TAB SWITCHING FUNCTIONS - ORIGINAL
+   TAB SWITCHING FUNCTIONS - FIXED v73
    ============================================ */
 function showProfileView() {
   if (profileView) {
@@ -136,7 +135,7 @@ function showAccountPanel() {
       profileView.classList.add('hidden-panel');
     }
     if (accountPanel) {
-      let html = accountPanel.innerHTML;
+      var html = accountPanel.innerHTML;
       html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
       openMobileModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
     }
@@ -144,6 +143,7 @@ function showAccountPanel() {
   }
   
   // ===== DESKTOP: Show inline =====
+  console.log("💻 Desktop: Showing Account panel inline");
   if (profileView) {
     profileView.style.display = "none";
     profileView.classList.add('hidden-panel');
@@ -158,7 +158,6 @@ function showAccountPanel() {
   }
   if (accountTab) accountTab.classList.add('active');
   if (securityTab) securityTab.classList.remove('active');
-  console.log("📋 Showing Account Panel");
 }
 
 function showSecurityPanel() {
@@ -170,7 +169,7 @@ function showSecurityPanel() {
       profileView.classList.add('hidden-panel');
     }
     if (securityPanel) {
-      let html = securityPanel.innerHTML;
+      var html = securityPanel.innerHTML;
       html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
       openMobileModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
     }
@@ -178,6 +177,7 @@ function showSecurityPanel() {
   }
   
   // ===== DESKTOP: Show inline =====
+  console.log("💻 Desktop: Showing Security panel inline");
   if (profileView) {
     profileView.style.display = "none";
     profileView.classList.add('hidden-panel');
@@ -192,7 +192,6 @@ function showSecurityPanel() {
   }
   if (securityTab) securityTab.classList.add('active');
   if (accountTab) accountTab.classList.remove('active');
-  console.log("📋 Showing Security Panel");
 }
 
 /* ============================================
@@ -249,53 +248,38 @@ function updateDeletePhotoButton() {
 }
 
 /* ============================================
-   ACCOUNT & SECURITY TABS - ORIGINAL
+   ACCOUNT & SECURITY TABS
    ============================================ */
 console.log("Setting up tabs...");
 
-// Ensure default state: Profile View visible, panels hidden
 showProfileView();
 
 // ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
-  
-  // Remove any existing listeners by cloning
   const newAccountTab = accountTab.cloneNode(true);
   accountTab.parentNode.replaceChild(newAccountTab, accountTab);
   
   newAccountTab.addEventListener("click", function(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log("📋 Account tab CLICKED - showing account panel");
+    console.log("📋 Account tab CLICKED");
     showAccountPanel();
   });
-  
-  // Update reference
-  window.accountTabRef = newAccountTab;
-} else {
-  console.error("❌ accountTab element not found!");
 }
 
 // ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
-  
-  // Remove any existing listeners by cloning
   const newSecurityTab = securityTab.cloneNode(true);
   securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
   
   newSecurityTab.addEventListener("click", function(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log("🔒 Security tab CLICKED - showing security panel");
+    console.log("🔒 Security tab CLICKED");
     showSecurityPanel();
   });
-  
-  // Update reference
-  window.securityTabRef = newSecurityTab;
-} else {
-  console.error("❌ securityTab element not found!");
 }
 
 /* ============================================
@@ -398,7 +382,7 @@ if (uploadPhotoBtn && profilePhotoInput) {
 }
 
 /* ============================================
-   SAVE ACCOUNT - ORIGINAL
+   SAVE ACCOUNT
    ============================================ */
 if (saveAccountBtn) {
   console.log("✅ Setting up Save Account");
@@ -472,7 +456,6 @@ if (saveAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
@@ -546,7 +529,7 @@ if (saveAccountBtn) {
 }
 
 /* ============================================
-   CHANGE PASSWORD - ORIGINAL
+   CHANGE PASSWORD
    ============================================ */
 if (changePasswordBtn) {
   changePasswordBtn.addEventListener("click", async function() {
@@ -598,7 +581,6 @@ if (changePasswordBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
@@ -661,7 +643,7 @@ if (changePasswordBtn) {
 }
 
 /* ============================================
-   LOGOUT - ORIGINAL
+   LOGOUT
    ============================================ */
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async function(e) {
@@ -692,7 +674,7 @@ if (logoutBtn) {
 }
 
 /* ============================================
-   DELETE ACCOUNT - ORIGINAL
+   DELETE ACCOUNT
    ============================================ */
 if (deleteAccountBtn) {
   deleteAccountBtn.addEventListener("click", async function(e) {
@@ -739,7 +721,6 @@ if (deleteAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
@@ -861,7 +842,7 @@ if (profileImageWrapper && profileImage) {
 }
 
 // ============================================
-// MOBILE MODAL FUNCTIONS - ADDED AT THE END
+// MOBILE MODAL FUNCTIONS
 // ============================================
 let mobileModal = document.getElementById('mobileProfileModal');
 let mobileModalContent = document.getElementById('mobileModalContent');
@@ -1018,4 +999,4 @@ window.addEventListener('resize', function() {
 });
 
 loadUserData();
-console.log("✅ Profile.js v72 loaded successfully");
+console.log("✅ Profile.js v73 loaded successfully");
