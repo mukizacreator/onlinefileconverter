@@ -29,7 +29,7 @@ togglePassword("signupPassword", "toggleSignup");
 togglePassword("signinPassword", "toggleSignin");
 
 /* ============================================
-   SIGN UP - WITH AUTO-LOGIN
+   SIGN UP - WITH EMAIL CHECK & AUTO-LOGIN
    ============================================ */
 const signupForm = document.getElementById("signupForm");
 if (signupForm) {
@@ -58,6 +58,21 @@ if (signupForm) {
     }
 
     try {
+      // STEP 1: Check if email already exists
+      toastInfo("Checking if email is available...");
+      const checkRes = await fetch("/api/get-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+
+      if (checkRes.ok) {
+        toastError("Email already registered. Redirecting to Sign In...");
+        setTimeout(() => { window.location.href = "signin.html"; }, 2000);
+        return;
+      }
+
+      // STEP 2: Send verification code
       toastInfo("Sending verification code...");
       const res = await fetch("/api/send-code", {
         method: "POST",
@@ -72,6 +87,7 @@ if (signupForm) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // STEP 3: Show verification modal
       const code = await showVerificationModal();
       
       if (!code) {
@@ -80,6 +96,7 @@ if (signupForm) {
         return;
       }
 
+      // STEP 4: Verify code
       const verifyRes = await fetch("/api/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -92,6 +109,7 @@ if (signupForm) {
         return;
       }
 
+      // STEP 5: Create account
       const signupRes = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -103,7 +121,7 @@ if (signupForm) {
         throw new Error(signupData.error || "Failed to create account.");
       }
 
-      // AUTO-LOGIN: Store user session immediately
+      // STEP 6: AUTO-LOGIN - Store user session immediately
       localStorage.setItem("loggedInUser", email);
       localStorage.setItem("userData", JSON.stringify({ username, email, photo: "" }));
 
@@ -135,6 +153,7 @@ if (signinForm) {
     }
 
     try {
+      // STEP 1: Verify credentials
       const res = await fetch("/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -153,6 +172,7 @@ if (signinForm) {
         return;
       }
 
+      // STEP 2: Send verification code
       toastInfo("Sending verification code to your email...");
       const codeRes = await fetch("/api/send-code", {
         method: "POST",
@@ -167,6 +187,7 @@ if (signinForm) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // STEP 3: Show verification modal
       const code = await showVerificationModal();
       
       if (!code) {
@@ -175,6 +196,7 @@ if (signinForm) {
         return;
       }
 
+      // STEP 4: Verify code
       const verifyRes = await fetch("/api/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -187,6 +209,7 @@ if (signinForm) {
         return;
       }
 
+      // STEP 5: Login successful
       localStorage.setItem("loggedInUser", email);
       localStorage.setItem("userData", JSON.stringify(data.user));
 
