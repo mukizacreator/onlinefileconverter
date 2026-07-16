@@ -9,33 +9,26 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=10">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
 <body>
 
-  <!-- ============================================
-       TOP NAVIGATION BAR
-       ============================================ -->
   <nav class="top-nav">
-    <!-- Mobile: Hamburger icon (visible on small screens) -->
-    <div class="nav-hamburger" id="hamburgerBtn">
-      <i class="fa-solid fa-bars"></i>
+    <div class="nav-left-wrapper">
+      <div class="nav-hamburger" id="hamburgerBtn">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+      <div class="nav-left" id="navLeft">
+        <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+        <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+        <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+      </div>
+      <div class="nav-mobile-dashboard" id="mobileDashboard">
+        <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+      </div>
     </div>
-    
-    <!-- Desktop: Full navigation links (visible on large screens) -->
-    <div class="nav-left" id="navLeft">
-      <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-      <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-      <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
-    </div>
-    
-    <!-- Mobile: Dashboard link (visible on small screens) -->
-    <div class="nav-mobile-dashboard" id="mobileDashboard">
-      <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-    </div>
-    
     <div class="nav-right">
       <div id="guestNav">
         <a href="signin.html" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
@@ -50,32 +43,21 @@
     </div>
   </nav>
 
-  <!-- ============================================
-       MOBILE DROPDOWN MENU
-       ============================================ -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
-  <!-- ============================================
-       PAGE HEADER
-       ============================================ -->
   <header>
     <h1>My Profile</h1>
     <p class="subtitle">Manage your account and security settings.</p>
   </header>
 
-  <!-- ============================================
-       MAIN CONTENT
-       ============================================ -->
   <main class="dashboard">
     <div class="converter-box" style="width:min(96%,1000px); padding:0; overflow:hidden;">
       <div style="display:flex; flex-wrap:wrap;">
 
-        <!-- LEFT SIDEBAR -->
         <aside style="width:220px; background:rgba(255,255,255,0.06); padding:20px;">
-          <!-- Profile Photo Section -->
           <div style="text-align:center; margin-bottom:20px;">
             <div id="profileImageWrapper" style="cursor:pointer; position:relative; display:inline-block;">
               <img id="profileImage" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" style="width:90px; height:90px; border-radius:50%; object-fit:cover; display:block; margin:auto; border:3px solid #00bcd4; transition: transform 0.3s;">
@@ -84,7 +66,6 @@
               </div>
             </div>
             
-            <!-- Upload and Remove Photo buttons -->
             <div style="display:flex; justify-content:center; gap:8px; margin-top:8px; flex-wrap:wrap;">
               <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
               <button id="uploadPhotoBtn" class="convert-btn" style="padding:5px 15px; font-size:0.75rem;">
@@ -97,15 +78,12 @@
             <p id="profileEmailDisplay" style="color:#aaa; font-size:0.8rem; margin:0; word-break:break-all;">user@email.com</p>
           </div>
 
-          <!-- Tab Navigation -->
           <a href="#" class="support-link" id="accountTab"><i class="fa-solid fa-user"></i> Account</a>
           <a href="#" class="support-link" id="securityTab"><i class="fa-solid fa-shield-halved"></i> Security</a>
         </aside>
 
-        <!-- RIGHT CONTENT -->
         <section style="flex:1; min-width:250px; padding:14px 20px;">
 
-          <!-- PROFILE VIEW -->
           <div id="profileView">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Profile Information</h2>
             <div style="background:rgba(255,255,255,0.06); padding:16px 20px; border-radius:10px;">
@@ -123,7 +101,6 @@
             </p>
           </div>
 
-          <!-- ACCOUNT PANEL -->
           <div id="accountPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
@@ -164,7 +141,6 @@
             </button>
           </div>
 
-          <!-- SECURITY PANEL -->
           <div id="securityPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
@@ -217,18 +193,12 @@
     </div>
   </main>
 
-  <!-- ============================================
-       SCRIPTS
-       ============================================ -->
   <script src="profile.js?v=10"></script>
-  <script src="notifications.js?v=4"></script>
-  <script src="modal.js?v=4"></script>
-  <script src="nav.js"></script>
+  <script src="notifications.js?v=10"></script>
+  <script src="modal.js?v=10"></script>
+  <script src="nav.js?v=10"></script>
 
   <script>
-    // ============================================
-    // HIDE NAVIGATION ON PROFILE PAGE
-    // ============================================
     (function() {
       const loggedInEmail = localStorage.getItem("loggedInUser");
       
@@ -244,9 +214,6 @@
     })();
   </script>
 
-  <!-- ============================================
-       FOOTER
-       ============================================ -->
   <footer>
     <div class="copyright">© 2026 Emmanuel MUKIZA</div>
   </footer>
