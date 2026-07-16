@@ -23,41 +23,39 @@
     var accountPanel = document.getElementById('accountPanel');
     var securityPanel = document.getElementById('securityPanel');
     
-    if (!accountTab || !securityTab || !profileView) {
+    if (!accountTab || !securityTab || !profileView || !accountPanel || !securityPanel) {
       return; // Elements not ready yet
     }
     
     clearInterval(checkInterval);
     console.log("📱 profile-mobile: DOM ready, setting up mobile modals");
     
-    // Modal elements
+    // ============================================
+    // GET OR CREATE MODAL ELEMENTS
+    // ============================================
     var modal = document.getElementById('mobileProfileModal');
     var modalContent = document.getElementById('mobileModalContent');
     var modalClose = document.getElementById('mobileModalClose');
     
-    // Check if modal elements exist, if not create them
+    // If modal doesn't exist, create it
     if (!modal) {
       console.log("📱 profile-mobile: Creating modal elements");
       
-      // Create modal overlay
       modal = document.createElement('div');
       modal.id = 'mobileProfileModal';
       modal.className = 'mobile-profile-modal';
       modal.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:99998;justify-content:center;align-items:center;padding:20px;';
       
-      // Create modal content
       var modalInner = document.createElement('div');
       modalInner.className = 'mobile-profile-modal-content';
       modalInner.style.cssText = 'background:rgba(25,35,45,0.98);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px 28px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative;';
       
-      // Close button
       var closeBtn = document.createElement('button');
       closeBtn.id = 'mobileModalClose';
       closeBtn.className = 'mobile-profile-modal-close';
       closeBtn.innerHTML = '&times;';
       closeBtn.style.cssText = 'position:absolute;top:12px;right:16px;background:none;border:none;color:#aaa;font-size:1.8rem;cursor:pointer;transition:0.3s;padding:4px 8px;border-radius:8px;';
       
-      // Content container
       var contentDiv = document.createElement('div');
       contentDiv.id = 'mobileModalContent';
       
@@ -66,7 +64,6 @@
       modal.appendChild(modalInner);
       document.body.appendChild(modal);
       
-      // Update references
       modal = document.getElementById('mobileProfileModal');
       modalContent = document.getElementById('mobileModalContent');
       modalClose = document.getElementById('mobileModalClose');
@@ -87,7 +84,7 @@
       // Setup event delegation after modal opens
       setTimeout(function() {
         setupModalEvents();
-      }, 100);
+      }, 150);
     }
     
     function closeModal() {
@@ -116,52 +113,118 @@
         var buttonId = button.id;
         console.log("🔘 Modal button clicked:", buttonId);
         
-        // Find the corresponding button in the main DOM and click it
+        // SAVE ACCOUNT BUTTON
         if (buttonId === 'saveAccountBtn') {
           e.preventDefault();
-          var mainBtn = document.getElementById('saveAccountBtn');
-          if (mainBtn) {
-            mainBtn.click();
+          console.log("💾 Save Account clicked in modal");
+          
+          // Get values from modal inputs
+          var modalPassword = document.getElementById('accountCurrentPassword') || document.getElementById('modalAccountCurrentPassword');
+          var modalEmail = document.getElementById('profileEmail') || document.getElementById('modalProfileEmail');
+          var modalUsername = document.getElementById('profileUsernameInput') || document.getElementById('modalProfileUsernameInput');
+          
+          // If modal inputs have different IDs, try to find them
+          if (!modalPassword) {
+            modalPassword = document.querySelector('#mobileModalContent #accountCurrentPassword');
+          }
+          if (!modalEmail) {
+            modalEmail = document.querySelector('#mobileModalContent #profileEmail');
+          }
+          if (!modalUsername) {
+            modalUsername = document.querySelector('#mobileModalContent #profileUsernameInput');
+          }
+          
+          // If we found modal inputs, copy values to main inputs then trigger click
+          var mainPassword = document.getElementById('accountCurrentPassword');
+          var mainEmail = document.getElementById('profileEmail');
+          var mainUsername = document.getElementById('profileUsernameInput');
+          var mainSaveBtn = document.getElementById('saveAccountBtn');
+          
+          if (modalPassword && mainPassword) {
+            mainPassword.value = modalPassword.value;
+          }
+          if (modalEmail && mainEmail) {
+            mainEmail.value = modalEmail.value;
+          }
+          if (modalUsername && mainUsername) {
+            mainUsername.value = modalUsername.value;
+          }
+          
+          if (mainSaveBtn) {
+            mainSaveBtn.click();
           } else {
             console.error("❌ saveAccountBtn not found in main DOM");
           }
           return;
         }
         
+        // CHANGE PASSWORD BUTTON
         if (buttonId === 'changePasswordBtn') {
           e.preventDefault();
-          var mainBtn = document.getElementById('changePasswordBtn');
-          if (mainBtn) {
-            mainBtn.click();
+          console.log("🔑 Change Password clicked in modal");
+          
+          // Get values from modal inputs
+          var modalCurPass = document.getElementById('currentPassword') || document.getElementById('modalCurrentPassword');
+          var modalNewPass = document.getElementById('newPassword') || document.getElementById('modalNewPassword');
+          var modalConfPass = document.getElementById('confirmPassword') || document.getElementById('modalConfirmPassword');
+          
+          // If modal inputs have different IDs, try to find them
+          if (!modalCurPass) {
+            modalCurPass = document.querySelector('#mobileModalContent #currentPassword');
+          }
+          if (!modalNewPass) {
+            modalNewPass = document.querySelector('#mobileModalContent #newPassword');
+          }
+          if (!modalConfPass) {
+            modalConfPass = document.querySelector('#mobileModalContent #confirmPassword');
+          }
+          
+          var mainCurPass = document.getElementById('currentPassword');
+          var mainNewPass = document.getElementById('newPassword');
+          var mainConfPass = document.getElementById('confirmPassword');
+          var mainChangeBtn = document.getElementById('changePasswordBtn');
+          
+          if (modalCurPass && mainCurPass) {
+            mainCurPass.value = modalCurPass.value;
+          }
+          if (modalNewPass && mainNewPass) {
+            mainNewPass.value = modalNewPass.value;
+          }
+          if (modalConfPass && mainConfPass) {
+            mainConfPass.value = modalConfPass.value;
+          }
+          
+          if (mainChangeBtn) {
+            mainChangeBtn.click();
           } else {
             console.error("❌ changePasswordBtn not found in main DOM");
           }
           return;
         }
         
+        // LOGOUT BUTTON
         if (buttonId === 'logoutBtn') {
           e.preventDefault();
-          var mainBtn = document.getElementById('logoutBtn');
-          if (mainBtn) {
-            mainBtn.click();
-          } else {
-            console.error("❌ logoutBtn not found in main DOM");
+          console.log("🚪 Logout clicked in modal");
+          var mainLogoutBtn = document.getElementById('logoutBtn');
+          if (mainLogoutBtn) {
+            mainLogoutBtn.click();
           }
           return;
         }
         
+        // DELETE ACCOUNT BUTTON
         if (buttonId === 'deleteAccountBtn') {
           e.preventDefault();
-          var mainBtn = document.getElementById('deleteAccountBtn');
-          if (mainBtn) {
-            mainBtn.click();
-          } else {
-            console.error("❌ deleteAccountBtn not found in main DOM");
+          console.log("🗑️ Delete Account clicked in modal");
+          var mainDeleteBtn = document.getElementById('deleteAccountBtn');
+          if (mainDeleteBtn) {
+            mainDeleteBtn.click();
           }
           return;
         }
         
-        // Password toggle
+        // PASSWORD TOGGLE
         if (button.classList.contains('password-toggle-btn')) {
           e.preventDefault();
           var parentWrapper = button.parentElement;
@@ -199,11 +262,11 @@
       securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
       securityTab = newSecurityTab;
       
-      // Account tab - opens modal
+      // ACCOUNT TAB - opens Account modal
       accountTab.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("📱 Mobile: Account tab clicked - opening modal");
+        console.log("📱 Mobile: Account tab clicked - opening Account modal");
         
         // Hide profile view
         if (profileView) {
@@ -220,11 +283,11 @@
         }
       });
       
-      // Security tab - opens modal
+      // SECURITY TAB - opens Security modal
       securityTab.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("📱 Mobile: Security tab clicked - opening modal");
+        console.log("📱 Mobile: Security tab clicked - opening Security modal");
         
         // Hide profile view
         if (profileView) {
@@ -235,6 +298,7 @@
         // Get security panel content
         if (securityPanel) {
           var html = securityPanel.innerHTML;
+          // Remove h2 from panel (modal adds its own)
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
           openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
         }
@@ -297,8 +361,8 @@
     setupMobileTabs();
     
     console.log("📱 profile-mobile: Mobile mode activated successfully!");
-    console.log("📱 profile-mobile: Account and Security tabs will open as modals");
+    console.log("📱 profile-mobile: Account tab → Account modal, Security tab → Security modal");
     
-  }, 300); // Check every 300ms for DOM readiness
+  }, 300);
   
 })();
