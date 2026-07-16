@@ -5,15 +5,12 @@
 (function() {
   'use strict';
   
-  // Get DOM elements
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileDropdown = document.getElementById('mobileDropdown');
   const body = document.body;
   
-  // State
   let isOpen = false;
   
-  // Hamburger click handler
   if (hamburgerBtn && mobileDropdown) {
     hamburgerBtn.addEventListener('click', function(e) {
       e.preventDefault();
@@ -22,15 +19,11 @@
     });
   }
   
-  // Toggle menu function
   function toggleMenu() {
     isOpen = !isOpen;
     
-    // Toggle classes
     if (hamburgerBtn) {
       hamburgerBtn.classList.toggle('open', isOpen);
-      
-      // Change icon between bars and times
       const icon = hamburgerBtn.querySelector('i');
       if (icon) {
         if (isOpen) {
@@ -45,7 +38,6 @@
       mobileDropdown.classList.toggle('open', isOpen);
     }
     
-    // Prevent body scroll when menu is open (optional)
     if (isOpen) {
       body.style.overflow = 'hidden';
     } else {
@@ -53,7 +45,6 @@
     }
   }
   
-  // Close menu function
   function closeMenu() {
     if (isOpen) {
       isOpen = false;
@@ -74,7 +65,6 @@
     }
   }
   
-  // Close dropdown when clicking outside
   document.addEventListener('click', function(e) {
     if (isOpen) {
       const target = e.target;
@@ -87,14 +77,12 @@
     }
   });
   
-  // Close dropdown when pressing Escape key
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && isOpen) {
       closeMenu();
     }
   });
   
-  // Close dropdown when window resizes to desktop size
   let resizeTimer;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
@@ -105,7 +93,6 @@
     }, 100);
   });
   
-  // Close dropdown when clicking a dropdown link
   if (mobileDropdown) {
     const links = mobileDropdown.querySelectorAll('.dropdown-link');
     links.forEach(function(link) {
