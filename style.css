@@ -325,7 +325,7 @@ form input, form select, form textarea {
 form input::placeholder, form textarea::placeholder { color: #cccccc; }
 
 /* ============================================
-   PASSWORD TOGGLE BUTTON - FIXED
+   PASSWORD TOGGLE BUTTON
    ============================================ */
 .password-toggle-btn {
   border: none;
@@ -385,6 +385,7 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
   text-decoration: none;
   font-weight: 600;
   transition: 0.3s;
+  display: inline;
 }
 
 .auth-link:hover {
@@ -395,14 +396,15 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
 .auth-switch-text {
   text-align: center;
   margin-top: 18px;
-  color: #aaa;
+  color: #aaaaaa;
   font-size: 0.95rem;
-  padding: 12px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .auth-switch-text .auth-link {
   font-weight: 700;
+  color: #00bcd4;
 }
 
 /* ============================================
@@ -649,12 +651,14 @@ footer {
 
 /* ============================================
    ============================================
-   MOBILE RESPONSIVE
+   MOBILE RESPONSIVE - COMPLETE OVERHAUL
    ============================================
    ============================================ */
 
 @media only screen and (max-width: 768px) {
-  /* ===== NAVIGATION ===== */
+  /* ==========================================
+     NAVIGATION - FIXED SPACING & PADDING
+     ========================================== */
   .top-nav .nav-left {
     display: none !important;
   }
@@ -665,7 +669,7 @@ footer {
   .nav-hamburger {
     display: block !important;
     font-size: 1.4rem !important;
-    padding: 5px 10px !important;
+    padding: 6px 12px !important;
   }
   
   .nav-mobile-dashboard {
@@ -673,34 +677,36 @@ footer {
   }
   
   .nav-mobile-dashboard .nav-link {
-    font-size: 0.8rem !important;
-    padding: 5px 14px !important;
+    font-size: 0.82rem !important;
+    padding: 6px 16px !important;
     gap: 8px !important;
   }
   
   .top-nav {
-    padding: 6px 10px !important;
-    gap: 4px !important;
+    padding: 8px 12px !important;
+    gap: 6px !important;
     flex-wrap: nowrap !important;
   }
   
   .nav-left-wrapper {
     display: flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 6px !important;
   }
   
   .top-nav .nav-right .nav-link {
-    padding: 5px 12px !important;
-    font-size: 0.72rem !important;
+    padding: 6px 14px !important;
+    font-size: 0.75rem !important;
     gap: 8px !important;
   }
   
   .top-nav .nav-right .nav-link i {
-    font-size: 0.65rem !important;
+    font-size: 0.7rem !important;
   }
   
-  /* ===== DROPDOWN ===== */
+  /* ==========================================
+     DROPDOWN
+     ========================================== */
   .mobile-dropdown {
     width: 100% !important;
   }
@@ -708,22 +714,24 @@ footer {
     display: flex !important;
   }
   
-  /* ===== CONVERTER BOX ===== */
+  /* ==========================================
+     CONVERTER BOX
+     ========================================== */
   .dashboard {
     padding: 4px 6px !important;
   }
   
   .converter-box {
-    padding: 12px 10px !important;
+    padding: 14px 12px !important;
     width: 100% !important;
     max-width: 100% !important;
-    border-radius: 12px !important;
-    gap: 8px !important;
+    border-radius: 14px !important;
+    gap: 10px !important;
     margin: 2px 0 !important;
   }
   
   .input-row {
-    gap: 6px !important;
+    gap: 8px !important;
     flex-direction: column !important;
     width: 100% !important;
   }
@@ -735,33 +743,35 @@ footer {
   }
   
   .custom-file-label {
-    font-size: 0.8rem !important;
-    padding: 8px 12px !important;
+    font-size: 0.82rem !important;
+    padding: 10px 14px !important;
     text-align: center !important;
     width: 100% !important;
   }
   
   #fileName {
-    font-size: 0.75rem !important;
+    font-size: 0.78rem !important;
     max-width: 100% !important;
     text-align: center !important;
     width: 100% !important;
   }
   
   .format-select {
-    font-size: 0.8rem !important;
-    padding: 8px 12px !important;
+    font-size: 0.82rem !important;
+    padding: 10px 14px !important;
     width: 100% !important;
     min-width: 0 !important;
   }
   
   .convert-btn {
-    font-size: 0.8rem !important;
-    padding: 8px 16px !important;
+    font-size: 0.82rem !important;
+    padding: 10px 18px !important;
     width: 100% !important;
   }
   
-  /* ===== HEADER ===== */
+  /* ==========================================
+     HEADER
+     ========================================== */
   header h1 {
     font-size: 1.3rem !important;
   }
@@ -769,16 +779,20 @@ footer {
     font-size: 0.75rem !important;
   }
   
-  /* ===== PROFILE ===== */
+  /* ==========================================
+     PROFILE
+     ========================================== */
   #profileNav #navProfilePhoto {
-    width: 20px !important;
-    height: 20px !important;
+    width: 22px !important;
+    height: 22px !important;
   }
   #profileNav #navUsername {
-    font-size: 0.65rem !important;
+    font-size: 0.7rem !important;
   }
   
-  /* ===== FOOTER ===== */
+  /* ==========================================
+     FOOTER
+     ========================================== */
   .footer-support {
     font-size: 0.65rem !important;
   }
@@ -786,13 +800,17 @@ footer {
     font-size: 0.6rem !important;
   }
   
-  /* ===== SUPPORT LINKS ===== */
+  /* ==========================================
+     SUPPORT LINKS
+     ========================================== */
   .support-link {
-    padding: 8px 12px !important;
-    font-size: 0.75rem !important;
+    padding: 10px 14px !important;
+    font-size: 0.78rem !important;
   }
   
-  /* ===== PASSWORD TOGGLE - FIXED INLINE ===== */
+  /* ==========================================
+     PASSWORD TOGGLE - FIXED INLINE
+     ========================================== */
   .password-toggle-btn {
     padding: 10px 14px !important;
     height: 44px !important;
@@ -800,38 +818,58 @@ footer {
   }
   
   .password-toggle-btn i {
-    font-size: 0.95rem !important;
+    font-size: 1rem !important;
+  }
+  
+  .password-wrapper {
+    gap: 8px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100% !important;
   }
   
   .password-wrapper input {
     padding: 10px 14px !important;
     height: 44px !important;
     font-size: 0.85rem !important;
+    flex: 1 !important;
+    width: auto !important;
   }
   
-  .password-wrapper {
-    gap: 6px !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
+  .password-wrapper .password-toggle-btn {
+    flex-shrink: 0 !important;
+    width: auto !important;
   }
   
-  /* ===== AUTH SWITCH TEXT - FIXED ===== */
+  /* ==========================================
+     AUTH SWITCH TEXT - FIXED
+     ========================================== */
   .auth-switch-text {
     font-size: 0.85rem !important;
     padding: 14px 0 !important;
-    margin-top: 14px !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+    margin-top: 16px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     text-align: center !important;
     width: 100% !important;
+    color: #aaaaaa !important;
   }
   
   .auth-switch-text .auth-link {
     font-size: 0.85rem !important;
     display: inline !important;
+    font-weight: 700 !important;
+    color: #00bcd4 !important;
+    text-decoration: none !important;
   }
   
-  /* ===== SIGNIN/SIGNUP FORM ===== */
+  .auth-switch-text .auth-link:hover {
+    text-decoration: underline !important;
+  }
+  
+  /* ==========================================
+     SIGNIN/SIGNUP FORM - FIXED
+     ========================================== */
   .converter-box form {
     width: 100% !important;
   }
@@ -840,17 +878,20 @@ footer {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 8px !important;
+    width: 100% !important;
   }
   
   .converter-box form .password-wrapper input {
     flex: 1 !important;
     width: auto !important;
+    min-width: 0 !important;
   }
   
   .converter-box form .password-wrapper .password-toggle-btn {
     flex-shrink: 0 !important;
     width: auto !important;
+    min-width: 44px !important;
   }
 }
 
@@ -859,43 +900,43 @@ footer {
    ============================================ */
 @media only screen and (max-width: 400px) {
   .top-nav .nav-right .nav-link {
-    padding: 4px 8px !important;
-    font-size: 0.6rem !important;
+    padding: 5px 10px !important;
+    font-size: 0.65rem !important;
     gap: 6px !important;
   }
   
   .top-nav .nav-right .nav-link i {
-    font-size: 0.55rem !important;
+    font-size: 0.6rem !important;
   }
   
   .nav-mobile-dashboard .nav-link {
-    font-size: 0.7rem !important;
-    padding: 4px 10px !important;
+    font-size: 0.72rem !important;
+    padding: 5px 12px !important;
     gap: 6px !important;
   }
   
   .nav-hamburger {
     font-size: 1.2rem !important;
-    padding: 4px 8px !important;
+    padding: 5px 10px !important;
   }
   
   .converter-box {
-    padding: 8px 6px !important;
+    padding: 10px 8px !important;
   }
   
   .custom-file-label {
-    font-size: 0.7rem !important;
-    padding: 6px 10px !important;
+    font-size: 0.72rem !important;
+    padding: 8px 12px !important;
   }
   
   .format-select {
-    font-size: 0.7rem !important;
-    padding: 6px 10px !important;
+    font-size: 0.72rem !important;
+    padding: 8px 12px !important;
   }
   
   .convert-btn {
-    font-size: 0.7rem !important;
-    padding: 6px 12px !important;
+    font-size: 0.72rem !important;
+    padding: 8px 14px !important;
   }
   
   .password-toggle-btn {
@@ -905,22 +946,22 @@ footer {
   }
   
   .password-toggle-btn i {
-    font-size: 0.8rem !important;
+    font-size: 0.85rem !important;
   }
   
   .password-wrapper input {
     padding: 8px 12px !important;
     height: 38px !important;
-    font-size: 0.75rem !important;
+    font-size: 0.78rem !important;
   }
   
   .auth-switch-text {
-    font-size: 0.75rem !important;
-    padding: 10px 0 !important;
+    font-size: 0.78rem !important;
+    padding: 12px 0 !important;
   }
   
   .auth-switch-text .auth-link {
-    font-size: 0.75rem !important;
+    font-size: 0.78rem !important;
   }
 }
 
