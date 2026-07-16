@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 75 (COMPLETE)
+// PROFILE.JS - VERSION 80 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v75 LOADED!");
+console.log("🚀 profile.js v80 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -71,10 +71,54 @@ console.log("  securityTab:", !!securityTab);
 console.log("  mobileModal:", !!mobileModal);
 
 /* ============================================
+   UPDATE UI WITH USER DATA
+   ============================================ */
+function updateUIWithUserData(data) {
+  console.log("📝 Updating UI with user data:", data);
+  
+  // Update sidebar
+  if (profileUsername) profileUsername.textContent = data.username || 'User';
+  if (profileEmailDisplay) profileEmailDisplay.textContent = data.email || 'user@email.com';
+  
+  // Update profile view
+  if (profileViewUsername) profileViewUsername.textContent = data.username || 'User';
+  if (profileViewEmail) profileViewEmail.textContent = data.email || 'user@email.com';
+  
+  // Update account panel
+  if (accountUsernameDisplay) accountUsernameDisplay.textContent = data.username || 'User';
+  if (accountEmailDisplay) accountEmailDisplay.textContent = data.email || 'user@email.com';
+  
+  // Update form fields
+  if (profileEmail) profileEmail.value = data.email || '';
+  if (profileUsernameInput) profileUsernameInput.value = data.username || '';
+  
+  // Update profile photo
+  if (profileImage) {
+    profileImage.src = data.photo || DEFAULT_ICON;
+  }
+  
+  // Update navigation profile photo
+  const navProfilePhoto = document.getElementById("navProfilePhoto");
+  if (navProfilePhoto) {
+    navProfilePhoto.src = data.photo || DEFAULT_ICON;
+  }
+  
+  const navUsername = document.getElementById("navUsername");
+  if (navUsername) {
+    navUsername.textContent = data.username || 'Profile';
+  }
+  
+  // Update delete photo button
+  updateDeletePhotoButton();
+}
+
+/* ============================================
    LOAD USER DATA FROM MONGODB
    ============================================ */
 async function loadUserData() {
   try {
+    console.log("🔄 Loading user data for:", loggedInEmail);
+    
     const res = await fetch("/api/get-user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -87,32 +131,16 @@ async function loadUserData() {
     currentUser = data;
     localStorage.setItem("userData", JSON.stringify(data));
 
-    console.log("User data loaded:", currentUser);
-
-    if (profileUsername) profileUsername.textContent = data.username || 'User';
-    if (profileEmailDisplay) profileEmailDisplay.textContent = data.email || 'user@email.com';
-    if (profileViewUsername) profileViewUsername.textContent = data.username || 'User';
-    if (profileViewEmail) profileViewEmail.textContent = data.email || 'user@email.com';
-    if (accountUsernameDisplay) accountUsernameDisplay.textContent = data.username || 'User';
-    if (accountEmailDisplay) accountEmailDisplay.textContent = data.email || 'user@email.com';
-    if (profileEmail) profileEmail.value = data.email || '';
-    if (profileUsernameInput) profileUsernameInput.value = data.username || '';
-    if (profileImage) profileImage.src = data.photo || DEFAULT_ICON;
-
-    const navProfilePhoto = document.getElementById("navProfilePhoto");
-    if (navProfilePhoto) {
-      navProfilePhoto.src = data.photo || DEFAULT_ICON;
-    }
-    const navUsername = document.getElementById("navUsername");
-    if (navUsername) navUsername.textContent = data.username || 'Profile';
-
-    updateDeletePhotoButton();
+    console.log("✅ User data loaded:", currentUser);
+    
+    // Update all UI elements
+    updateUIWithUserData(data);
     
     // Ensure profile view is visible, panels are hidden
     showProfileView();
     
   } catch (error) {
-    console.error("Load user error:", error);
+    console.error("❌ Load user error:", error);
     toastError("Failed to load user data.");
   }
 }
@@ -128,7 +156,9 @@ function openMobileModal(contentHTML) {
   document.body.style.overflow = 'hidden';
   
   // Re-bind any buttons inside the modal content
-  bindModalButtons();
+  setTimeout(function() {
+    bindModalButtons();
+  }, 100);
 }
 
 function closeMobileModal() {
@@ -164,12 +194,13 @@ document.addEventListener('keydown', function(e) {
    BIND MODAL BUTTONS
    ============================================ */
 function bindModalButtons() {
+  console.log("🔗 Binding modal buttons...");
+  
   // Find and bind save account button in modal
   const modalSaveBtn = document.getElementById('modalSaveAccountBtn');
   if (modalSaveBtn) {
     modalSaveBtn.addEventListener('click', async function(e) {
       e.preventDefault();
-      // Trigger the same save account logic
       await saveAccountHandler();
     });
   }
@@ -223,9 +254,30 @@ function showProfileView() {
 }
 
 function showAccountPanel() {
+  console.log("📋 showAccountPanel called, isMobile:", isMobile());
+  
   if (isMobile()) {
     // On mobile: Open modal with account content
-    const accountHTML = document.getElementById('accountPanel').innerHTML;
+    const accountPanelEl = document.getElementById('accountPanel');
+    if (!accountPanelEl) {
+      console.error("❌ accountPanel element not found!");
+      return;
+    }
+    
+    // Get the HTML content and replace button IDs for modal
+    let accountHTML = accountPanelEl.innerHTML;
+    
+    // Replace IDs for modal compatibility
+    accountHTML = accountHTML
+      .replace(/id="saveAccountBtn"/g, 'id="modalSaveAccountBtn"')
+      .replace(/id="accountCurrentPassword"/g, 'id="modalAccountCurrentPassword"')
+      .replace(/id="profileEmail"/g, 'id="modalProfileEmail"')
+      .replace(/id="profileUsernameInput"/g, 'id="modalProfileUsernameInput"')
+      .replace(/id="toggleAccountPassword"/g, 'id="modalToggleAccountPassword"');
+    
+    // Add modal-specific class for password toggle
+    accountHTML = accountHTML.replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"');
+    
     openMobileModal(`
       <h2><i class="fa-solid fa-user"></i> Account Information</h2>
       ${accountHTML}
@@ -247,13 +299,37 @@ function showAccountPanel() {
     if (accountTab) accountTab.classList.add('active');
     if (securityTab) securityTab.classList.remove('active');
   }
-  console.log("📋 Showing Account Panel");
 }
 
 function showSecurityPanel() {
+  console.log("🔒 showSecurityPanel called, isMobile:", isMobile());
+  
   if (isMobile()) {
     // On mobile: Open modal with security content
-    const securityHTML = document.getElementById('securityPanel').innerHTML;
+    const securityPanelEl = document.getElementById('securityPanel');
+    if (!securityPanelEl) {
+      console.error("❌ securityPanel element not found!");
+      return;
+    }
+    
+    // Get the HTML content and replace button IDs for modal
+    let securityHTML = securityPanelEl.innerHTML;
+    
+    // Replace IDs for modal compatibility
+    securityHTML = securityHTML
+      .replace(/id="changePasswordBtn"/g, 'id="modalChangePasswordBtn"')
+      .replace(/id="currentPassword"/g, 'id="modalCurrentPassword"')
+      .replace(/id="newPassword"/g, 'id="modalNewPassword"')
+      .replace(/id="confirmPassword"/g, 'id="modalConfirmPassword"')
+      .replace(/id="toggleCurrentPassword"/g, 'id="modalToggleCurrentPassword"')
+      .replace(/id="toggleNewPassword"/g, 'id="modalToggleNewPassword"')
+      .replace(/id="toggleConfirmPassword"/g, 'id="modalToggleConfirmPassword"')
+      .replace(/id="logoutBtn"/g, 'id="modalLogoutBtn"')
+      .replace(/id="deleteAccountBtn"/g, 'id="modalDeleteAccountBtn"');
+    
+    // Add modal-specific class for password toggle
+    securityHTML = securityHTML.replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"');
+    
     openMobileModal(`
       <h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>
       ${securityHTML}
@@ -275,7 +351,6 @@ function showSecurityPanel() {
     if (securityTab) securityTab.classList.add('active');
     if (accountTab) accountTab.classList.remove('active');
   }
-  console.log("📋 Showing Security Panel");
 }
 
 /* ============================================
@@ -343,6 +418,7 @@ showProfileView();
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
   
+  // Remove old listener by cloning
   const newAccountTab = accountTab.cloneNode(true);
   accountTab.parentNode.replaceChild(newAccountTab, accountTab);
   
@@ -362,6 +438,7 @@ if (accountTab) {
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
   
+  // Remove old listener by cloning
   const newSecurityTab = securityTab.cloneNode(true);
   securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
   
@@ -480,6 +557,8 @@ if (uploadPhotoBtn && profilePhotoInput) {
    SAVE ACCOUNT HANDLER - EXTRACTED FOR MODAL
    ============================================ */
 async function saveAccountHandler() {
+  console.log("💾 saveAccountHandler called");
+  
   const currentPassword = document.getElementById("accountCurrentPassword")?.value || document.getElementById("modalAccountCurrentPassword")?.value;
   const newEmail = document.getElementById("profileEmail")?.value?.trim().toLowerCase() || document.getElementById("modalProfileEmail")?.value?.trim().toLowerCase();
   const newUsername = document.getElementById("profileUsernameInput")?.value?.trim() || document.getElementById("modalProfileUsernameInput")?.value?.trim();
@@ -638,6 +717,8 @@ if (saveAccountBtn) {
    CHANGE PASSWORD HANDLER - EXTRACTED FOR MODAL
    ============================================ */
 async function changePasswordHandler() {
+  console.log("🔑 changePasswordHandler called");
+  
   const curPass = document.getElementById("currentPassword")?.value || document.getElementById("modalCurrentPassword")?.value;
   const newPass = document.getElementById("newPassword")?.value || document.getElementById("modalNewPassword")?.value;
   const confPass = document.getElementById("confirmPassword")?.value || document.getElementById("modalConfirmPassword")?.value;
@@ -971,5 +1052,6 @@ window.addEventListener('resize', function() {
   }
 });
 
+// Load user data on page load
 loadUserData();
-console.log("✅ Profile.js v75 loaded successfully");
+console.log("✅ Profile.js v80 loaded successfully");
