@@ -1555,3 +1555,59 @@ footer {
     display: none !important;
   }
 }
+
+
+/* ============================================
+   PROFILE PANELS - ENSURE PROPER DISPLAY
+   ============================================ */
+
+/* Default state - Profile View visible, panels hidden */
+#profileView {
+  display: block !important;
+}
+
+#accountPanel {
+  display: none !important;
+}
+
+#securityPanel {
+  display: none !important;
+}
+
+/* When active - show the panel */
+#accountPanel.active-panel {
+  display: block !important;
+}
+
+#securityPanel.active-panel {
+  display: block !important;
+}
+
+/* When hidden - hide profile view */
+#profileView.hidden-panel {
+  display: none !important;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE - PROFILE FIXES
+   ============================================ */
+@media only screen and (max-width: 768px) {
+  /* Ensure panels work on mobile */
+  #profileView,
+  #accountPanel,
+  #securityPanel {
+    width: 100% !important;
+  }
+  
+  /* Mobile tab links - ensure they're clickable */
+  .support-link {
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+  }
+  
+  .support-link:active {
+    background: rgba(0, 188, 212, 0.3) !important;
+    transform: scale(0.98) !important;
+  }
+}
