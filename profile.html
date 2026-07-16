@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=103">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -136,9 +136,7 @@
               <input type="text" id="profileUsernameInput" placeholder="Enter new username" class="profile-input">
             </div>
 
-            <button class="convert-btn profile-action-btn" id="saveAccountBtn">
-              <span id="saveAccountText">Save Changes</span>
-            </button>
+            <button class="convert-btn profile-action-btn" id="saveAccountBtn">Save Changes</button>
           </div>
 
           <!-- SECURITY PANEL -->
@@ -201,25 +199,23 @@
     </div>
   </div>
 
-  <script src="notifications.js?v=103"></script>
-  <script src="modal.js?v=103"></script>
-  <script src="nav.js?v=103"></script>
+  <script src="notifications.js"></script>
+  <script src="modal.js"></script>
+  <script src="nav.js"></script>
 
   <!-- ============================================
-       COMPLETE PROFILE SCRIPT - v103
+       COMPLETE PROFILE SCRIPT - v104
        ============================================ -->
   <script>
   // ============================================
-  // PROFILE - COMPLETE SCRIPT v103
+  // PROFILE - COMPLETE SCRIPT v104
   // ============================================
   (function() {
     'use strict';
     
-    console.log("🚀 PROFILE v103 STARTED");
+    console.log("🚀 PROFILE v104 STARTED");
     
     var loggedInEmail = localStorage.getItem("loggedInUser");
-    console.log("📧 loggedInEmail:", loggedInEmail);
-    
     if (!loggedInEmail) {
       window.location.href = "signin.html";
       return;
@@ -230,9 +226,8 @@
     if (userDataString) {
       try {
         currentUser = JSON.parse(userDataString);
-        console.log("✅ Parsed currentUser:", currentUser);
       } catch(e) {
-        console.error("❌ Error parsing userData:", e);
+        console.error("Error parsing userData:", e);
       }
     }
     
@@ -319,11 +314,6 @@
       modalContent.innerHTML = content;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
-      
-      // Re-bind buttons after modal opens
-      setTimeout(function() {
-        bindModalButtons();
-      }, 150);
     }
     
     function closeModal() {
@@ -337,7 +327,6 @@
       if (isMobile()) {
         var panel = document.getElementById('accountPanel');
         if (!panel) return;
-        // Get the HTML but keep the original IDs
         var html = panel.innerHTML;
         openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
       } else {
@@ -375,81 +364,71 @@
     }
     
     // ============================================
-    // BIND MODAL BUTTONS - FIXED v103
+    // EVENT DELEGATION - FIXED
     // ============================================
-    function bindModalButtons() {
-      console.log("🔗 Binding modal buttons...");
+    // Instead of binding directly to buttons, use event delegation
+    // on the modal content container
+    
+    function setupModalEventDelegation() {
+      var modalContent = document.getElementById('mobileModalContent');
+      if (!modalContent) return;
       
-      // SAVE ACCOUNT BUTTON
-      var saveBtn = document.getElementById('saveAccountBtn');
-      if (saveBtn) {
-        // Remove any existing listeners by cloning
-        var newSaveBtn = saveBtn.cloneNode(true);
-        saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-        newSaveBtn.addEventListener('click', function(e) {
+      console.log("🔗 Setting up event delegation on modal content");
+      
+      // Remove any existing listeners by cloning
+      var newModalContent = modalContent.cloneNode(true);
+      modalContent.parentNode.replaceChild(newModalContent, modalContent);
+      modalContent = newModalContent;
+      
+      // Add click event listener to the modal content
+      modalContent.addEventListener('click', function(e) {
+        var target = e.target;
+        var button = target.closest('button');
+        if (!button) return;
+        
+        var buttonId = button.id;
+        console.log("🔘 Button clicked in modal:", buttonId);
+        
+        // SAVE ACCOUNT
+        if (buttonId === 'saveAccountBtn') {
           e.preventDefault();
-          console.log("💾 Save Changes clicked");
           handleSaveAccount();
-        });
-        console.log("  ✅ Save Account bound");
-      }
-      
-      // CHANGE PASSWORD BUTTON
-      var changeBtn = document.getElementById('changePasswordBtn');
-      if (changeBtn) {
-        var newChangeBtn = changeBtn.cloneNode(true);
-        changeBtn.parentNode.replaceChild(newChangeBtn, changeBtn);
-        newChangeBtn.addEventListener('click', function(e) {
+          return;
+        }
+        
+        // CHANGE PASSWORD
+        if (buttonId === 'changePasswordBtn') {
           e.preventDefault();
-          console.log("🔑 Change Password clicked");
           handleChangePassword();
-        });
-        console.log("  ✅ Change Password bound");
-      }
-      
-      // LOGOUT BUTTON
-      var logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) {
-        var newLogoutBtn = logoutBtn.cloneNode(true);
-        logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
-        newLogoutBtn.addEventListener('click', function(e) {
+          return;
+        }
+        
+        // LOGOUT
+        if (buttonId === 'logoutBtn') {
           e.preventDefault();
-          console.log("🚪 Logout clicked");
           handleLogout();
-        });
-        console.log("  ✅ Logout bound");
-      }
-      
-      // DELETE ACCOUNT BUTTON
-      var deleteBtn = document.getElementById('deleteAccountBtn');
-      if (deleteBtn) {
-        var newDeleteBtn = deleteBtn.cloneNode(true);
-        deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
-        newDeleteBtn.addEventListener('click', function(e) {
+          return;
+        }
+        
+        // DELETE ACCOUNT
+        if (buttonId === 'deleteAccountBtn') {
           e.preventDefault();
-          console.log("🗑️ Delete Account clicked");
           handleDeleteAccount();
-        });
-        console.log("  ✅ Delete Account bound");
-      }
-      
-      // PASSWORD TOGGLES
-      var toggles = document.querySelectorAll('.password-toggle-btn');
-      toggles.forEach(function(btn) {
-        // Remove existing listeners
-        var newToggle = btn.cloneNode(true);
-        btn.parentNode.replaceChild(newToggle, btn);
-        newToggle.addEventListener('click', function(e) {
+          return;
+        }
+        
+        // PASSWORD TOGGLE
+        if (button.classList.contains('password-toggle-btn')) {
           e.preventDefault();
-          var parentWrapper = this.parentElement;
+          var parentWrapper = button.parentElement;
           var input = parentWrapper.querySelector('input');
           if (!input) {
             // Try finding by ID
-            var id = this.id.replace('toggle', '');
-            if (id) input = document.getElementById(id);
+            var inputId = buttonId.replace('toggle', '');
+            if (inputId) input = document.getElementById(inputId);
           }
           if (!input) return;
-          var icon = this.querySelector('i');
+          var icon = button.querySelector('i');
           if (input.type === 'password') {
             input.type = 'text';
             if (icon) { icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
@@ -457,10 +436,29 @@
             input.type = 'password';
             if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
           }
-        });
+          return;
+        }
       });
-      console.log("  ✅ Password toggles bound");
+      
+      console.log("✅ Event delegation setup complete");
     }
+    
+    // Override openModal to setup event delegation after content is inserted
+    var originalOpenModal = openModal;
+    openModal = function(content) {
+      var modal = document.getElementById('mobileProfileModal');
+      var modalContent = document.getElementById('mobileModalContent');
+      if (!modal || !modalContent) return;
+      
+      modalContent.innerHTML = content;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      
+      // Setup event delegation after content is inserted
+      setTimeout(function() {
+        setupModalEventDelegation();
+      }, 50);
+    };
     
     // ============================================
     // HANDLE SAVE ACCOUNT
@@ -843,7 +841,7 @@
       if (window.innerWidth > 768) closeModal();
     });
     
-    console.log("✅ Profile v103 completed!");
+    console.log("✅ Profile v104 completed!");
   })();
   </script>
 
