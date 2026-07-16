@@ -378,7 +378,7 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
 }
 
 /* ============================================
-   AUTH LINKS - FIXED
+   AUTH LINKS
    ============================================ */
 .auth-link {
   color: #00bcd4;
@@ -540,6 +540,11 @@ section h2 {
   border-radius: 8px;
 }
 
+/* Profile page tab content */
+#profileView, #accountPanel, #securityPanel {
+  width: 100%;
+}
+
 /* ============================================
    FOOTER
    ============================================ */
@@ -651,7 +656,7 @@ footer {
 
 /* ============================================
    ============================================
-   MOBILE RESPONSIVE - COMPLETE OVERHAUL
+   MOBILE RESPONSIVE - COMPLETE
    ============================================
    ============================================ */
 
@@ -679,7 +684,7 @@ footer {
   .nav-mobile-dashboard .nav-link {
     font-size: 0.82rem !important;
     padding: 6px 16px !important;
-    gap: 8px !important;
+    gap: 10px !important;
   }
   
   .top-nav {
@@ -697,7 +702,7 @@ footer {
   .top-nav .nav-right .nav-link {
     padding: 6px 14px !important;
     font-size: 0.75rem !important;
-    gap: 8px !important;
+    gap: 10px !important;
   }
   
   .top-nav .nav-right .nav-link i {
@@ -780,7 +785,7 @@ footer {
   }
   
   /* ==========================================
-     PROFILE
+     PROFILE - FIXED
      ========================================== */
   #profileNav #navProfilePhoto {
     width: 22px !important;
@@ -788,6 +793,72 @@ footer {
   }
   #profileNav #navUsername {
     font-size: 0.7rem !important;
+  }
+  
+  /* Profile page layout */
+  .converter-box {
+    padding: 10px !important;
+  }
+  
+  .converter-box > div {
+    flex-direction: column !important;
+  }
+  
+  aside {
+    width: 100% !important;
+    padding: 14px !important;
+  }
+  
+  aside img {
+    width: 65px !important;
+    height: 65px !important;
+  }
+  
+  section {
+    padding: 14px !important;
+    width: 100% !important;
+  }
+  
+  /* Profile tabs */
+  #profileView, #accountPanel, #securityPanel {
+    width: 100% !important;
+  }
+  
+  /* Profile password fields */
+  .profile-password-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+  
+  .profile-password-wrapper input {
+    flex: 1 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 40px !important;
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .profile-password-wrapper .password-toggle-btn {
+    height: 40px !important;
+    min-width: 40px !important;
+    padding: 0 10px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  /* Profile inputs */
+  .profile-input {
+    height: 40px !important;
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .profile-action-btn {
+    padding: 8px !important;
+    font-size: 0.8rem !important;
   }
   
   /* ==========================================
@@ -902,7 +973,7 @@ footer {
   .top-nav .nav-right .nav-link {
     padding: 5px 10px !important;
     font-size: 0.65rem !important;
-    gap: 6px !important;
+    gap: 8px !important;
   }
   
   .top-nav .nav-right .nav-link i {
@@ -912,7 +983,7 @@ footer {
   .nav-mobile-dashboard .nav-link {
     font-size: 0.72rem !important;
     padding: 5px 12px !important;
-    gap: 6px !important;
+    gap: 8px !important;
   }
   
   .nav-hamburger {
@@ -962,6 +1033,25 @@ footer {
   
   .auth-switch-text .auth-link {
     font-size: 0.78rem !important;
+  }
+  
+  /* Profile extra small */
+  .profile-password-wrapper input {
+    height: 36px !important;
+    padding: 6px 10px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .profile-password-wrapper .password-toggle-btn {
+    height: 36px !important;
+    min-width: 36px !important;
+    padding: 0 8px !important;
+  }
+  
+  .profile-input {
+    height: 36px !important;
+    padding: 6px 10px !important;
+    font-size: 0.75rem !important;
   }
 }
 
