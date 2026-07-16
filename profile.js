@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 55 (COMPLETE)
+// PROFILE.JS - VERSION 60 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v55 LOADED!");
+console.log("🚀 profile.js v60 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -155,14 +155,22 @@ function updateDeletePhotoButton() {
 }
 
 /* ============================================
-   ACCOUNT & SECURITY TABS
+   ACCOUNT & SECURITY TABS - FIXED
    ============================================ */
 console.log("Setting up tabs...");
 
-if (profileView) profileView.style.display = "block";
-if (accountPanel) accountPanel.style.display = "none";
-if (securityPanel) securityPanel.style.display = "none";
+// ENSURE ONLY PROFILE VIEW IS VISIBLE INITIALLY
+if (profileView) {
+  profileView.style.display = "block";
+}
+if (accountPanel) {
+  accountPanel.style.display = "none";
+}
+if (securityPanel) {
+  securityPanel.style.display = "none";
+}
 
+// Remove active class from tabs
 if (accountTab) {
   accountTab.classList.remove('active');
 }
@@ -170,16 +178,20 @@ if (securityTab) {
   securityTab.classList.remove('active');
 }
 
+// ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
   accountTab.addEventListener("click", function(e) {
     e.preventDefault();
     console.log("📋 Account tab CLICKED");
     
+    // HIDE ALL
     if (profileView) profileView.style.display = "none";
-    if (accountPanel) accountPanel.style.display = "block";
     if (securityPanel) securityPanel.style.display = "none";
+    // SHOW ACCOUNT
+    if (accountPanel) accountPanel.style.display = "block";
     
+    // Update active styles
     this.classList.add('active');
     if (securityTab) securityTab.classList.remove('active');
     
@@ -189,16 +201,20 @@ if (accountTab) {
   console.error("❌ accountTab element not found!");
 }
 
+// ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
   securityTab.addEventListener("click", function(e) {
     e.preventDefault();
     console.log("🔒 Security tab CLICKED");
     
+    // HIDE ALL
     if (profileView) profileView.style.display = "none";
-    if (securityPanel) securityPanel.style.display = "block";
     if (accountPanel) accountPanel.style.display = "none";
+    // SHOW SECURITY
+    if (securityPanel) securityPanel.style.display = "block";
     
+    // Update active styles
     this.classList.add('active');
     if (accountTab) accountTab.classList.remove('active');
     
@@ -207,6 +223,9 @@ if (securityTab) {
 } else {
   console.error("❌ securityTab element not found!");
 }
+
+// ===== CLICK ON ACCOUNT TAB PROGRAMMATICALLY TO SHOW ACCOUNT =====
+// This ensures that if user clicks on Account tab, it works properly
 
 /* ============================================
    PASSWORD TOGGLES
@@ -765,4 +784,4 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v55 loaded successfully");
+console.log("✅ Profile.js v60 loaded successfully");
