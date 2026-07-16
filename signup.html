@@ -67,9 +67,9 @@
 
         <div style="margin-bottom:14px;">
           <label for="signupPassword" style="display:block; margin-bottom:4px; font-weight:600; font-size:0.9rem;">Password</label>
-          <div style="display:flex; gap:8px;">
-            <input type="password" id="signupPassword" placeholder="Create password" required style="flex:1; padding:10px 14px; border:none; outline:none; border-radius:10px; background:rgba(255,255,255,0.12); color:white; font-size:0.95rem;">
-            <button type="button" id="toggleSignup" class="convert-btn" style="padding:10px 16px; white-space:nowrap; flex-shrink:0; font-size:0.85rem;">
+          <div class="password-wrapper">
+            <input type="password" id="signupPassword" placeholder="Create password" required>
+            <button type="button" id="toggleSignup" class="password-toggle-btn">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
@@ -86,6 +86,11 @@
         </div>
 
         <button type="submit" class="convert-btn" style="width:100%; padding:12px; font-size:0.95rem;">Create Account</button>
+
+        <!-- Add "Already have an account?" link -->
+        <div class="auth-switch-text">
+          Already have an account? <a href="signin.html" class="auth-link">Sign In</a>
+        </div>
 
         <div id="signupMessage" style="margin-top:14px; text-align:center;"></div>
       </form>
