@@ -84,6 +84,7 @@
 
         <section style="flex:1; min-width:250px; padding:14px 20px;">
 
+          <!-- PROFILE VIEW - DEFAULT VISIBLE -->
           <div id="profileView">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Profile Information</h2>
             <div style="background:rgba(255,255,255,0.06); padding:16px 20px; border-radius:10px;">
@@ -102,7 +103,8 @@
           </div>
 
           <!-- ACCOUNT PANEL -->
-          <div id="accountPanel">
+          <div id="accountPanel" style="display:none;">
+            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
             
             <div style="background:rgba(255,255,255,0.06); padding:12px 16px; border-radius:8px; margin-bottom:12px;">
@@ -140,7 +142,8 @@
           </div>
 
           <!-- SECURITY PANEL -->
-          <div id="securityPanel">
+          <div id="securityPanel" style="display:none;">
+            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
             
             <div style="margin-bottom:10px;">
@@ -190,7 +193,7 @@
   </main>
 
   <!-- ============================================
-       MOBILE PROFILE MODAL
+       MOBILE PROFILE MODAL - For small screens only
        ============================================ -->
   <div class="mobile-profile-modal" id="mobileProfileModal">
     <div class="mobile-profile-modal-content">
@@ -204,16 +207,16 @@
   <script src="nav.js"></script>
 
   <!-- ============================================
-       COMPLETE PROFILE SCRIPT - v104
+       COMPLETE PROFILE SCRIPT - v105 FINAL
        ============================================ -->
   <script>
   // ============================================
-  // PROFILE - COMPLETE SCRIPT v104
+  // PROFILE - FINAL VERSION 105
   // ============================================
   (function() {
     'use strict';
     
-    console.log("🚀 PROFILE v104 STARTED");
+    console.log("🚀 PROFILE v105 FINAL STARTED");
     
     var loggedInEmail = localStorage.getItem("loggedInUser");
     if (!loggedInEmail) {
@@ -235,6 +238,13 @@
       localStorage.removeItem("loggedInUser");
       window.location.href = "signin.html";
       return;
+    }
+    
+    // ============================================
+    // CHECK IF MOBILE
+    // ============================================
+    function isMobile() {
+      return window.innerWidth <= 768;
     }
     
     // ============================================
@@ -289,23 +299,50 @@
     }
     
     // ============================================
-    // TAB FUNCTIONS
+    // DESKTOP TAB FUNCTIONS (Original working)
     // ============================================
-    function isMobile() { return window.innerWidth <= 768; }
-    
     function showProfileView() {
       var pv = document.getElementById('profileView');
       var ap = document.getElementById('accountPanel');
       var sp = document.getElementById('securityPanel');
       var at = document.getElementById('accountTab');
       var st = document.getElementById('securityTab');
-      if (pv) { pv.style.display = "block"; pv.classList.remove('hidden-panel'); }
-      if (ap) { ap.style.display = "none"; ap.classList.remove('active-panel'); }
-      if (sp) { sp.style.display = "none"; sp.classList.remove('active-panel'); }
+      if (pv) { pv.style.display = "block"; }
+      if (ap) { ap.style.display = "none"; }
+      if (sp) { sp.style.display = "none"; }
       if (at) { at.classList.remove('active'); }
       if (st) { st.classList.remove('active'); }
     }
     
+    function showAccountPanelDesktop() {
+      var pv = document.getElementById('profileView');
+      var ap = document.getElementById('accountPanel');
+      var sp = document.getElementById('securityPanel');
+      var at = document.getElementById('accountTab');
+      var st = document.getElementById('securityTab');
+      if (pv) { pv.style.display = "none"; }
+      if (ap) { ap.style.display = "block"; }
+      if (sp) { sp.style.display = "none"; }
+      if (at) { at.classList.add('active'); }
+      if (st) { st.classList.remove('active'); }
+    }
+    
+    function showSecurityPanelDesktop() {
+      var pv = document.getElementById('profileView');
+      var ap = document.getElementById('accountPanel');
+      var sp = document.getElementById('securityPanel');
+      var at = document.getElementById('accountTab');
+      var st = document.getElementById('securityTab');
+      if (pv) { pv.style.display = "none"; }
+      if (sp) { sp.style.display = "block"; }
+      if (ap) { ap.style.display = "none"; }
+      if (st) { st.classList.add('active'); }
+      if (at) { at.classList.remove('active'); }
+    }
+    
+    // ============================================
+    // MOBILE MODAL FUNCTIONS
+    // ============================================
     function openModal(content) {
       var modal = document.getElementById('mobileProfileModal');
       var modalContent = document.getElementById('mobileModalContent');
@@ -323,71 +360,62 @@
       document.body.style.overflow = '';
     }
     
+    // ============================================
+    // SMART TAB SWITCHING - Desktop vs Mobile
+    // ============================================
     function showAccountPanel() {
       if (isMobile()) {
+        // MOBILE: Open modal
         var panel = document.getElementById('accountPanel');
         if (!panel) return;
         var html = panel.innerHTML;
+        // Remove the h2 title from panel content (modal adds its own)
+        html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
         openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
+        // Setup event delegation after modal opens
+        setTimeout(function() { setupModalEvents(); }, 100);
       } else {
-        var pv = document.getElementById('profileView');
-        var ap = document.getElementById('accountPanel');
-        var sp = document.getElementById('securityPanel');
-        var at = document.getElementById('accountTab');
-        var st = document.getElementById('securityTab');
-        if (pv) { pv.style.display = "none"; pv.classList.add('hidden-panel'); }
-        if (ap) { ap.style.display = "block"; ap.classList.add('active-panel'); }
-        if (sp) { sp.style.display = "none"; sp.classList.remove('active-panel'); }
-        if (at) { at.classList.add('active'); }
-        if (st) { st.classList.remove('active'); }
+        // DESKTOP: Show inline
+        showAccountPanelDesktop();
       }
     }
     
     function showSecurityPanel() {
       if (isMobile()) {
+        // MOBILE: Open modal
         var panel = document.getElementById('securityPanel');
         if (!panel) return;
         var html = panel.innerHTML;
+        // Remove the h2 title from panel content (modal adds its own)
+        html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
         openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
+        // Setup event delegation after modal opens
+        setTimeout(function() { setupModalEvents(); }, 100);
       } else {
-        var pv = document.getElementById('profileView');
-        var ap = document.getElementById('accountPanel');
-        var sp = document.getElementById('securityPanel');
-        var at = document.getElementById('accountTab');
-        var st = document.getElementById('securityTab');
-        if (pv) { pv.style.display = "none"; pv.classList.add('hidden-panel'); }
-        if (sp) { sp.style.display = "block"; sp.classList.add('active-panel'); }
-        if (ap) { ap.style.display = "none"; ap.classList.remove('active-panel'); }
-        if (st) { st.classList.add('active'); }
-        if (at) { at.classList.remove('active'); }
+        // DESKTOP: Show inline
+        showSecurityPanelDesktop();
       }
     }
     
     // ============================================
-    // EVENT DELEGATION - FIXED
+    // MODAL EVENT DELEGATION
     // ============================================
-    // Instead of binding directly to buttons, use event delegation
-    // on the modal content container
-    
-    function setupModalEventDelegation() {
+    function setupModalEvents() {
       var modalContent = document.getElementById('mobileModalContent');
       if (!modalContent) return;
       
-      console.log("🔗 Setting up event delegation on modal content");
-      
       // Remove any existing listeners by cloning
-      var newModalContent = modalContent.cloneNode(true);
-      modalContent.parentNode.replaceChild(newModalContent, modalContent);
-      modalContent = newModalContent;
+      var newContent = modalContent.cloneNode(true);
+      modalContent.parentNode.replaceChild(newContent, modalContent);
+      modalContent = newContent;
       
-      // Add click event listener to the modal content
       modalContent.addEventListener('click', function(e) {
         var target = e.target;
         var button = target.closest('button');
         if (!button) return;
         
         var buttonId = button.id;
-        console.log("🔘 Button clicked in modal:", buttonId);
+        console.log("🔘 Modal button clicked:", buttonId);
         
         // SAVE ACCOUNT
         if (buttonId === 'saveAccountBtn') {
@@ -423,7 +451,6 @@
           var parentWrapper = button.parentElement;
           var input = parentWrapper.querySelector('input');
           if (!input) {
-            // Try finding by ID
             var inputId = buttonId.replace('toggle', '');
             if (inputId) input = document.getElementById(inputId);
           }
@@ -440,25 +467,8 @@
         }
       });
       
-      console.log("✅ Event delegation setup complete");
+      console.log("✅ Modal event delegation setup complete");
     }
-    
-    // Override openModal to setup event delegation after content is inserted
-    var originalOpenModal = openModal;
-    openModal = function(content) {
-      var modal = document.getElementById('mobileProfileModal');
-      var modalContent = document.getElementById('mobileModalContent');
-      if (!modal || !modalContent) return;
-      
-      modalContent.innerHTML = content;
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      
-      // Setup event delegation after content is inserted
-      setTimeout(function() {
-        setupModalEventDelegation();
-      }, 50);
-    };
     
     // ============================================
     // HANDLE SAVE ACCOUNT
@@ -483,75 +493,101 @@
         return;
       }
       
-      toastInfo('Sending verification code...');
+      // Check if new email is already taken (if changed)
+      if (emailChanged) {
+        fetch('/api/get-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: newEmail.value.trim().toLowerCase() })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (!data.error) {
+            toastError('Email already used by another account.');
+            return;
+          }
+          // Email is available, proceed
+          sendVerificationAndUpdate();
+        })
+        .catch(function() {
+          // If error, assume email is available
+          sendVerificationAndUpdate();
+        });
+      } else {
+        sendVerificationAndUpdate();
+      }
       
-      fetch('/api/send-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: currentUser.email })
-      })
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.error) throw new Error(data.error);
-        toastInfo('Verification code sent to your email.');
-        return showVerificationModal();
-      })
-      .then(function(code) {
-        if (!code) {
-          toastWarning('Update cancelled.');
-          return;
-        }
-        return fetch('/api/verify-code', {
+      function sendVerificationAndUpdate() {
+        toastInfo('Sending verification code...');
+        
+        fetch('/api/send-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+          body: JSON.stringify({ email: currentUser.email })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.error) throw new Error(data.error);
+          toastInfo('Verification code sent to your email.');
+          return showVerificationModal();
+        })
+        .then(function(code) {
+          if (!code) {
+            toastWarning('Update cancelled.');
+            return;
+          }
+          return fetch('/api/verify-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+          });
+        })
+        .then(function(res) {
+          if (!res) return;
+          return res.json();
+        })
+        .then(function(data) {
+          if (!data) return;
+          if (!data.success) {
+            toastError('Incorrect verification code.');
+            return;
+          }
+          var updateData = { email: currentUser.email };
+          if (newEmail && newEmail.value) updateData.newEmail = newEmail.value.trim().toLowerCase();
+          if (newUsername && newUsername.value) updateData.newUsername = newUsername.value.trim();
+          
+          return fetch('/api/update-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updateData)
+          });
+        })
+        .then(function(res) {
+          if (!res) return;
+          return res.json();
+        })
+        .then(function(data) {
+          if (!data) return;
+          if (data.error) throw new Error(data.error);
+          
+          if (newEmail && newEmail.value) {
+            currentUser.email = newEmail.value.trim().toLowerCase();
+            localStorage.setItem('loggedInUser', currentUser.email);
+          }
+          if (newUsername && newUsername.value) {
+            currentUser.username = newUsername.value.trim();
+          }
+          localStorage.setItem('userData', JSON.stringify(currentUser));
+          
+          toastSuccess('Account updated! Refreshing...');
+          closeModal();
+          setTimeout(function() { window.location.reload(); }, 1500);
+        })
+        .catch(function(error) {
+          toastError(error.message || 'Failed to update account.');
+          console.error('Save account error:', error);
         });
-      })
-      .then(function(res) {
-        if (!res) return;
-        return res.json();
-      })
-      .then(function(data) {
-        if (!data) return;
-        if (!data.success) {
-          toastError('Incorrect verification code.');
-          return;
-        }
-        var updateData = { email: currentUser.email };
-        if (newEmail && newEmail.value) updateData.newEmail = newEmail.value.trim().toLowerCase();
-        if (newUsername && newUsername.value) updateData.newUsername = newUsername.value.trim();
-        
-        return fetch('/api/update-user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updateData)
-        });
-      })
-      .then(function(res) {
-        if (!res) return;
-        return res.json();
-      })
-      .then(function(data) {
-        if (!data) return;
-        if (data.error) throw new Error(data.error);
-        
-        if (newEmail && newEmail.value) {
-          currentUser.email = newEmail.value.trim().toLowerCase();
-          localStorage.setItem('loggedInUser', currentUser.email);
-        }
-        if (newUsername && newUsername.value) {
-          currentUser.username = newUsername.value.trim();
-        }
-        localStorage.setItem('userData', JSON.stringify(currentUser));
-        
-        toastSuccess('Account updated! Refreshing...');
-        closeModal();
-        setTimeout(function() { window.location.reload(); }, 1500);
-      })
-      .catch(function(error) {
-        toastError(error.message || 'Failed to update account.');
-        console.error('Save account error:', error);
-      });
+      }
     }
     
     // ============================================
@@ -729,6 +765,70 @@
     }
     
     // ============================================
+    // SETUP DESKTOP BUTTON EVENTS (Original working)
+    // ============================================
+    function setupDesktopButtons() {
+      // Save Account button
+      var saveBtn = document.getElementById('saveAccountBtn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          handleSaveAccount();
+        });
+      }
+      
+      // Change Password button
+      var changeBtn = document.getElementById('changePasswordBtn');
+      if (changeBtn) {
+        changeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          handleChangePassword();
+        });
+      }
+      
+      // Logout button
+      var logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          handleLogout();
+        });
+      }
+      
+      // Delete Account button
+      var deleteBtn = document.getElementById('deleteAccountBtn');
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          handleDeleteAccount();
+        });
+      }
+      
+      // Password toggles (desktop)
+      var toggles = document.querySelectorAll('.password-toggle-btn');
+      toggles.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          var parentWrapper = this.parentElement;
+          var input = parentWrapper.querySelector('input');
+          if (!input) {
+            var id = this.id.replace('toggle', '');
+            if (id) input = document.getElementById(id);
+          }
+          if (!input) return;
+          var icon = this.querySelector('i');
+          if (input.type === 'password') {
+            input.type = 'text';
+            if (icon) { icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
+          } else {
+            input.type = 'password';
+            if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
+          }
+        });
+      });
+    }
+    
+    // ============================================
     // SETUP EVENTS
     // ============================================
     console.log("🔧 Setting up events...");
@@ -738,7 +838,7 @@
     
     setTimeout(function() { loadFromServer(); }, 100);
     
-    // Account tab
+    // Tab clicks - use smart switching
     var accountTab = document.getElementById('accountTab');
     if (accountTab) {
       accountTab.addEventListener('click', function(e) {
@@ -748,7 +848,6 @@
       });
     }
     
-    // Security tab
     var securityTab = document.getElementById('securityTab');
     if (securityTab) {
       securityTab.addEventListener('click', function(e) {
@@ -770,6 +869,9 @@
         if (e.target === this) closeModal();
       });
     }
+    
+    // Setup desktop buttons
+    setupDesktopButtons();
     
     // Upload photo
     var uploadBtn = document.getElementById('uploadPhotoBtn');
@@ -836,12 +938,12 @@
       });
     }
     
-    // Close modal on resize
+    // Close modal on resize to desktop
     window.addEventListener('resize', function() {
       if (window.innerWidth > 768) closeModal();
     });
     
-    console.log("✅ Profile v104 completed!");
+    console.log("✅ Profile v105 FINAL completed!");
   })();
   </script>
 
