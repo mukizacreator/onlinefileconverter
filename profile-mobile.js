@@ -1,6 +1,5 @@
 // ============================================
-// PROFILE-MOBILE.JS - Mobile-only modal override
-// CLEAN REWRITE - v3
+// PROFILE-MOBILE.JS - FINAL WORKING SOLUTION
 // ============================================
 
 (function() {
@@ -14,7 +13,7 @@
   
   console.log("📱 profile-mobile: Mobile detected, activating modal mode");
   
-  // Wait for DOM and profile.js to fully load
+  // Wait for DOM to be fully ready
   var checkInterval = setInterval(function() {
     var accountTab = document.getElementById('accountTab');
     var securityTab = document.getElementById('securityTab');
@@ -27,7 +26,7 @@
     }
     
     clearInterval(checkInterval);
-    console.log("📱 profile-mobile: DOM ready, setting up modals");
+    console.log("📱 profile-mobile: All elements ready");
     
     // ============================================
     // GET OR CREATE MODAL ELEMENTS
@@ -63,27 +62,19 @@
       modal = document.getElementById('mobileProfileModal');
       modalContent = document.getElementById('mobileModalContent');
       modalClose = document.getElementById('mobileModalClose');
-      
-      console.log("📱 profile-mobile: Modal created");
     }
-    
-    // ============================================
-    // CORE VARIABLES
-    // ============================================
-    var currentModalType = ''; // 'account' or 'security'
     
     // ============================================
     // MODAL FUNCTIONS
     // ============================================
-    function openModal(contentHTML, type) {
+    function openModal(contentHTML) {
       if (!modal || !modalContent) return;
       
-      currentModalType = type || 'account';
       modalContent.innerHTML = contentHTML;
       modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
       
-      // Bind modal buttons after content is loaded
+      // Bind modal buttons after content loads
       setTimeout(function() {
         bindModalButtons();
       }, 200);
@@ -93,8 +84,6 @@
       if (!modal) return;
       modal.style.display = 'none';
       document.body.style.overflow = '';
-      currentModalType = '';
-      // Show profile view again
       if (profileView) {
         profileView.style.display = 'block';
         profileView.classList.remove('hidden-panel');
@@ -105,104 +94,132 @@
     // BIND MODAL BUTTONS - USING ORIGINAL HANDLERS
     // ============================================
     function bindModalButtons() {
-      console.log("🔗 Binding modal buttons for:", currentModalType);
+      console.log("🔗 Binding modal buttons");
       
-      // Get the modal content container
       var content = document.getElementById('mobileModalContent');
       if (!content) return;
       
-      // Find all buttons in the modal
+      // Find all buttons in modal
       var buttons = content.querySelectorAll('button');
-      console.log("  Found", buttons.length, "buttons in modal");
+      console.log("  Found", buttons.length, "buttons");
       
       buttons.forEach(function(btn) {
         var btnId = btn.id;
-        console.log("  Button ID:", btnId);
         
         // Remove existing listeners by cloning
         var newBtn = btn.cloneNode(true);
         btn.parentNode.replaceChild(newBtn, btn);
         btn = newBtn;
         
-        // SAVE ACCOUNT
+        // --- SAVE ACCOUNT ---
         if (btnId === 'saveAccountBtn') {
           btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log("💾 Save Account clicked in modal");
+            console.log("💾 Save Account clicked");
             
-            // Find the main button in the main DOM and click it
+            // Get values from modal inputs
+            var modalPassword = document.getElementById('accountCurrentPassword');
+            var modalEmail = document.getElementById('profileEmail');
+            var modalUsername = document.getElementById('profileUsernameInput');
+            
+            // Copy values to main DOM inputs
+            var mainPassword = document.getElementById('accountCurrentPassword');
+            var mainEmail = document.getElementById('profileEmail');
+            var mainUsername = document.getElementById('profileUsernameInput');
+            
+            if (modalPassword && mainPassword) {
+              mainPassword.value = modalPassword.value;
+            }
+            if (modalEmail && mainEmail) {
+              mainEmail.value = modalEmail.value;
+            }
+            if (modalUsername && mainUsername) {
+              mainUsername.value = modalUsername.value;
+            }
+            
+            // Trigger the main button click
             var mainBtn = document.getElementById('saveAccountBtn');
             if (mainBtn) {
-              // Trigger the click event
               mainBtn.click();
               console.log("  ✅ Main save button clicked");
-            } else {
-              console.error("  ❌ Main save button not found");
             }
           });
           console.log("  ✅ Save Account bound");
           return;
         }
         
-        // CHANGE PASSWORD
+        // --- CHANGE PASSWORD ---
         if (btnId === 'changePasswordBtn') {
           btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log("🔑 Change Password clicked in modal");
+            console.log("🔑 Change Password clicked");
             
+            // Get values from modal inputs
+            var modalCurPass = document.getElementById('currentPassword');
+            var modalNewPass = document.getElementById('newPassword');
+            var modalConfPass = document.getElementById('confirmPassword');
+            
+            // Copy values to main DOM inputs
+            var mainCurPass = document.getElementById('currentPassword');
+            var mainNewPass = document.getElementById('newPassword');
+            var mainConfPass = document.getElementById('confirmPassword');
+            
+            if (modalCurPass && mainCurPass) {
+              mainCurPass.value = modalCurPass.value;
+            }
+            if (modalNewPass && mainNewPass) {
+              mainNewPass.value = modalNewPass.value;
+            }
+            if (modalConfPass && mainConfPass) {
+              mainConfPass.value = modalConfPass.value;
+            }
+            
+            // Trigger the main button click
             var mainBtn = document.getElementById('changePasswordBtn');
             if (mainBtn) {
               mainBtn.click();
               console.log("  ✅ Main change password button clicked");
-            } else {
-              console.error("  ❌ Main change password button not found");
             }
           });
           console.log("  ✅ Change Password bound");
           return;
         }
         
-        // LOGOUT
+        // --- LOGOUT ---
         if (btnId === 'logoutBtn') {
           btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log("🚪 Logout clicked in modal");
-            
+            console.log("🚪 Logout clicked");
             var mainBtn = document.getElementById('logoutBtn');
             if (mainBtn) {
               mainBtn.click();
               console.log("  ✅ Main logout button clicked");
-            } else {
-              console.error("  ❌ Main logout button not found");
             }
           });
           console.log("  ✅ Logout bound");
           return;
         }
         
-        // DELETE ACCOUNT
+        // --- DELETE ACCOUNT ---
         if (btnId === 'deleteAccountBtn') {
           btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log("🗑️ Delete Account clicked in modal");
-            
+            console.log("🗑️ Delete Account clicked");
             var mainBtn = document.getElementById('deleteAccountBtn');
             if (mainBtn) {
               mainBtn.click();
               console.log("  ✅ Main delete button clicked");
-            } else {
-              console.error("  ❌ Main delete button not found");
             }
           });
           console.log("  ✅ Delete Account bound");
           return;
         }
         
-        // PASSWORD TOGGLE
+        // --- PASSWORD TOGGLE ---
         if (btn.classList && btn.classList.contains('password-toggle-btn')) {
           btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -229,8 +246,6 @@
           return;
         }
       });
-      
-      console.log("✅ Modal buttons binding complete");
     }
     
     // ============================================
@@ -246,53 +261,43 @@
       securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
       securityTab = newSecurityTab;
       
-      // ACCOUNT TAB - opens Account panel
+      // ACCOUNT TAB
       accountTab.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("📱 Mobile: Account tab clicked - opening Account modal");
+        console.log("📱 Account tab clicked");
         
-        // Hide profile view
         if (profileView) {
           profileView.style.display = 'none';
           profileView.classList.add('hidden-panel');
         }
         
-        // Get account panel content
         if (accountPanel) {
           var html = accountPanel.innerHTML;
-          // Remove h2 from panel (modal adds its own)
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-          openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html, 'account');
-        } else {
-          console.error("❌ accountPanel not found");
+          openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
         }
       });
       
-      // SECURITY TAB - opens Security panel
+      // SECURITY TAB
       securityTab.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("📱 Mobile: Security tab clicked - opening Security modal");
+        console.log("📱 Security tab clicked");
         
-        // Hide profile view
         if (profileView) {
           profileView.style.display = 'none';
           profileView.classList.add('hidden-panel');
         }
         
-        // Get security panel content
         if (securityPanel) {
           var html = securityPanel.innerHTML;
-          // Remove h2 from panel (modal adds its own)
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-          openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html, 'security');
-        } else {
-          console.error("❌ securityPanel not found");
+          openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
         }
       });
       
-      console.log("📱 profile-mobile: Tabs configured - Account -> Account panel, Security -> Security panel");
+      console.log("📱 profile-mobile: Tabs configured");
     }
     
     // ============================================
