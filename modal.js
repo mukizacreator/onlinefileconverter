@@ -1,6 +1,9 @@
 /* ============================================
-   CUSTOM MODAL SYSTEM - Modern & User-Friendly
+   CUSTOM MODAL SYSTEM - With Resend Option
    ============================================ */
+
+// Store email globally for resend functionality
+let currentModalEmail = null;
 
 function showModal(options) {
     const {
@@ -14,8 +17,13 @@ function showModal(options) {
         onConfirm,
         onCancel,
         showCancel = true,
-        stayOpenOnError = false
+        stayOpenOnError = false,
+        showResend = false,
+        email = null
     } = options;
+
+    // Store email for resend
+    if (email) currentModalEmail = email;
 
     const existingModal = document.getElementById('customModal');
     if (existingModal) existingModal.remove();
@@ -49,6 +57,8 @@ function showModal(options) {
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         animation: slideUp 0.3s ease;
         text-align: center;
+        max-height: 90vh;
+        overflow-y: auto;
     `;
 
     const titleEl = document.createElement('h2');
@@ -77,7 +87,6 @@ function showModal(options) {
     let errorMsgEl = null;
 
     if (input) {
-        // Error message element
         errorMsgEl = document.createElement('p');
         errorMsgEl.style.cssText = `
             color: #ff6b6b;
@@ -169,7 +178,71 @@ function showModal(options) {
         gap: 10px;
         justify-content: center;
         flex-wrap: wrap;
+        width: 100%;
     `;
+
+    // Resend button
+    if (showResend) {
+        const resendBtn = document.createElement('button');
+        resendBtn.textContent = '🔄 Resend Code';
+        resendBtn.style.cssText = `
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+            flex: 1;
+            min-width: 80px;
+        `;
+        resendBtn.onmouseover = () => {
+            resendBtn.style.background = 'rgba(255,255,255,0.12)';
+            resendBtn.style.color = 'white';
+        };
+        resendBtn.onmouseout = () => {
+            resendBtn.style.background = 'rgba(255,255,255,0.05)';
+            resendBtn.style.color = '#aaa';
+        };
+        resendBtn.onclick = async function() {
+            if (!currentModalEmail) {
+                toastError('No email found. Please try again.');
+                return;
+            }
+            
+            this.textContent = '⏳ Sending...';
+            this.disabled = true;
+            
+            try {
+                const res = await fetch("/api/send-code", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: currentModalEmail })
+                });
+                
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.error || "Failed to resend code.");
+                }
+                
+                toastSuccess('New verification code sent to your email!');
+                this.textContent = '✅ Sent!';
+                setTimeout(() => {
+                    this.textContent = '🔄 Resend Code';
+                    this.disabled = false;
+                }, 3000);
+                
+            } catch (error) {
+                toastError(error.message || 'Failed to resend code.');
+                this.textContent = '🔄 Resend Code';
+                this.disabled = false;
+            }
+        };
+        btnContainer.appendChild(resendBtn);
+    }
 
     let cancelBtn = null;
     if (showCancel) {
@@ -230,18 +303,15 @@ function showModal(options) {
         confirmBtn.style.transform = 'scale(1)';
     };
     
-    // Store the confirm button reference for error handling
     confirmBtn._modal = modal;
     confirmBtn._errorMsg = errorMsgEl;
     confirmBtn._input = inputEl;
     confirmBtn._stayOpen = stayOpenOnError;
 
     confirmBtn.onclick = () => {
-        // If this is a verification modal and stayOpenOnError is true
         if (confirmBtn._stayOpen && confirmBtn._input) {
             const value = confirmBtn._input.value.trim();
             if (!value || value.length < 4) {
-                // Show error but keep modal open
                 if (confirmBtn._errorMsg) {
                     confirmBtn._errorMsg.textContent = 'Please enter a valid code.';
                     confirmBtn._errorMsg.style.display = 'block';
@@ -260,8 +330,9 @@ function showModal(options) {
     btnContainer.appendChild(confirmBtn);
     modal.appendChild(btnContainer);
 
+    // Close on outside click - only if not stayOpenOnError
     overlay.onclick = (e) => {
-        if (e.target === overlay) {
+        if (e.target === overlay && !stayOpenOnError) {
             overlay.remove();
             if (onCancel) onCancel();
             if (overlay._resolve) overlay._resolve(null);
@@ -299,7 +370,7 @@ modalStyles.textContent = `
 `;
 document.head.appendChild(modalStyles);
 
-function showVerificationModal() {
+function showVerificationModal(email = null) {
     return showModal({
         title: '🔐 Verification Code',
         message: 'Enter the 6-digit code sent to your email.\n\nAlso check your SPAM/JUNK folder.',
@@ -309,7 +380,9 @@ function showVerificationModal() {
         confirmText: 'Verify',
         cancelText: 'Cancel',
         showCancel: true,
-        stayOpenOnError: true  // This keeps the modal open on wrong code
+        stayOpenOnError: true,
+        showResend: true,
+        email: email
     });
 }
 
@@ -340,4 +413,4 @@ window.showVerificationModal = showVerificationModal;
 window.showConfirmModal = showConfirmModal;
 window.showAlertModal = showAlertModal;
 
-console.log("✅ Modal system loaded successfully!");
+console.log("✅ Modal system v50 loaded successfully!");
