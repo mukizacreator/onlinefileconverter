@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=65">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -103,7 +103,7 @@
           </div>
 
           <!-- ACCOUNT PANEL - HIDDEN BY DEFAULT -->
-          <div id="accountPanel" style="display:none;">
+          <div id="accountPanel">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
             
@@ -138,11 +138,13 @@
               <input type="text" id="profileUsernameInput" placeholder="Enter new username" class="profile-input">
             </div>
 
-            <button class="convert-btn profile-action-btn" id="saveAccountBtn">Save Changes</button>
+            <button class="convert-btn profile-action-btn" id="saveAccountBtn">
+              <span id="saveAccountText">Save Changes</span>
+            </button>
           </div>
 
           <!-- SECURITY PANEL - HIDDEN BY DEFAULT -->
-          <div id="securityPanel" style="display:none;">
+          <div id="securityPanel">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
             
@@ -192,22 +194,26 @@
     </div>
   </main>
 
-  <!-- ============================================
-       MOBILE PROFILE MODAL - For small screens only
-       ============================================ -->
-  <div class="mobile-profile-modal" id="mobileProfileModal">
-    <div class="mobile-profile-modal-content">
-      <button class="mobile-profile-modal-close" id="mobileModalClose">&times;</button>
-      <div id="mobileModalContent"></div>
-    </div>
-  </div>
+  <script src="profile.js?v=65"></script>
+  <script src="notifications.js?v=65"></script>
+  <script src="modal.js?v=65"></script>
+  <script src="nav.js?v=65"></script>
 
-  <script src="notifications.js"></script>
-  <script src="modal.js"></script>
-  <script src="nav.js"></script>
-  <script src="profile.js"></script>
-  <!-- Mobile override - only affects small screens -->
-  <script src="profile-mobile.js"></script>
+  <script>
+    (function() {
+      const loggedInEmail = localStorage.getItem("loggedInUser");
+      
+      const profileNav = document.getElementById("profileNav");
+      if (profileNav) {
+        profileNav.style.display = "none";
+      }
+      
+      const guestNav = document.getElementById("guestNav");
+      if (loggedInEmail && guestNav) {
+        guestNav.style.display = "none";
+      }
+    })();
+  </script>
 
   <footer>
     <div class="copyright">© 2026 Emmanuel MUKIZA</div>
