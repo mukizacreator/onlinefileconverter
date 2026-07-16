@@ -1,8 +1,6 @@
 /* ============================================
    PASSWORD SHOW/HIDE TOGGLE LOGIC
    ============================================ */
-// Reusable function to handle switching password input visibility and updating the eye icon
-// Used on both Sign Up and Sign In forms
 function togglePassword(inputId, buttonId) {
   const input = document.getElementById(inputId);
   const button = document.getElementById(buttonId);
@@ -12,14 +10,12 @@ function togglePassword(inputId, buttonId) {
   button.addEventListener("click", () => {
     const icon = button.querySelector("i");
     if (input.type === "password") {
-      // Show password: change type to text, update icon to eye-slash
       input.type = "text";
       if (icon) {
         icon.classList.remove("fa-eye");
         icon.classList.add("fa-eye-slash");
       }
     } else {
-      // Hide password: change type to password, update icon to eye
       input.type = "password";
       if (icon) {
         icon.classList.remove("fa-eye-slash");
@@ -29,45 +25,32 @@ function togglePassword(inputId, buttonId) {
   });
 }
 
-// Initialize password toggle for both Sign Up and Sign In forms
 togglePassword("signupPassword", "toggleSignup");
 togglePassword("signinPassword", "toggleSignin");
 
 /* ============================================
-   SIGN UP - MONGODB
+   SIGN UP - MONGODB WITH AUTO-LOGIN
    ============================================ */
-// Complete registration flow:
-// 1. Validate user input (username, password strength, password match)
-// 2. Send verification code to email
-// 3. Show verification modal for 6-digit code
-// 4. Verify code with server
-// 5. Create account in MongoDB
-// 6. Redirect to sign-in page
 const signupForm = document.getElementById("signupForm");
 if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Get form values
     const username = document.getElementById("signupUsername").value.trim();
     const email = document.getElementById("signupEmail").value.trim().toLowerCase();
     const password = document.getElementById("signupPassword").value;
     const confirmPassword = document.getElementById("signupConfirmPassword").value;
 
-    // ===== VALIDATION 1: Username length =====
     if (username.length < 3) {
       toastError("Username must have at least 3 characters.");
       return;
     }
 
-    // ===== VALIDATION 2: Password match =====
     if (password !== confirmPassword) {
       toastError("Passwords do not match.");
       return;
     }
 
-    // ===== VALIDATION 3: Password strength =====
-    // Regex: At least 5 chars, one capital letter, one number, one symbol
     const strongPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{5,}$/;
     if (!strongPassword.test(password)) {
       toastError("Password: 5+ chars, one capital, one number, one symbol.");
@@ -75,7 +58,6 @@ if (signupForm) {
     }
 
     try {
-      // ===== STEP 1: Send verification code =====
       toastInfo("Sending verification code...");
       const res = await fetch("/api/send-code", {
         method: "POST",
@@ -90,14 +72,15 @@ if (signupForm) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // ===== STEP 2: Show verification modal =====
       const code = await showVerificationModal();
+      
+      // If user cancelled/closes the modal, refresh the page
       if (!code) {
-        toastWarning("Sign up cancelled.");
+        toastWarning("Sign up cancelled. Refreshing page...");
+        setTimeout(() => { window.location.reload(); }, 500);
         return;
       }
 
-      // ===== STEP 3: Verify code =====
       const verifyRes = await fetch("/api/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -110,7 +93,6 @@ if (signupForm) {
         return;
       }
 
-      // ===== STEP 4: Create account =====
       const signupRes = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -122,9 +104,13 @@ if (signupForm) {
         throw new Error(signupData.error || "Failed to create account.");
       }
 
-      toastSuccess("Account created! Please sign in.");
+      // AUTO-LOGIN: Store user session immediately
+      localStorage.setItem("loggedInUser", email);
+      localStorage.setItem("userData", JSON.stringify({ username, email, photo: "" }));
+
+      toastSuccess("Account created! You are now logged in.");
       signupForm.reset();
-      setTimeout(() => { window.location.href = "signin.html"; }, 2000);
+      setTimeout(() => { window.location.href = "index.html"; }, 1500);
 
     } catch (error) {
       toastError(error.message || "Failed to create account.");
@@ -136,22 +122,15 @@ if (signupForm) {
 /* ============================================
    SIGN IN - MONGODB WITH REDIRECT
    ============================================ */
-// Complete login flow:
-// 1. Verify credentials against MongoDB
-// 2. If account not found, redirect to sign-up
-// 3. On success, store session in localStorage
-// 4. Redirect to dashboard
 const signinForm = document.getElementById("signinForm");
 if (signinForm) {
   signinForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Get login credentials
     const email = document.getElementById("signinEmail").value.trim().toLowerCase();
     const password = document.getElementById("signinPassword").value;
 
     try {
-      // ===== STEP 1: Send login request =====
       const res = await fetch("/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -161,7 +140,6 @@ if (signinForm) {
       const data = await res.json();
       
       if (!res.ok) {
-        // ===== ERROR 1: Account not found =====
         if (data.error === "Account not found.") {
           toastError("Account not registered. Redirecting to sign up...");
           setTimeout(() => { window.location.href = "signup.html"; }, 2000);
@@ -171,7 +149,6 @@ if (signinForm) {
         return;
       }
 
-      // ===== STEP 2: Login success - store session =====
       localStorage.setItem("loggedInUser", email);
       localStorage.setItem("userData", JSON.stringify(data.user));
 
@@ -188,15 +165,6 @@ if (signinForm) {
 /* ============================================
    FORGOT PASSWORD - MONGODB
    ============================================ */
-// Complete password reset flow:
-// 1. User enters registered email
-// 2. Check if email exists in database
-// 3. Send verification code to email
-// 4. Verify code
-// 5. Get new password (with strength validation)
-// 6. Confirm new password
-// 7. Update password in database
-// 8. Redirect to sign-in
 const forgotPasswordLink = document.getElementById("forgotPasswordLink");
 
 if (forgotPasswordLink) {
@@ -204,7 +172,6 @@ if (forgotPasswordLink) {
     e.preventDefault();
     console.log("Forgot password clicked");
     
-    // ===== STEP 1: Get user's email =====
     const email = await showModal({
       title: '🔑 Reset Password',
       message: 'Enter your registered email:',
@@ -216,8 +183,10 @@ if (forgotPasswordLink) {
       showCancel: true
     });
     
+    // If user cancels/closes modal, refresh page
     if (!email) {
-      toastWarning("Password reset cancelled.");
+      toastWarning("Password reset cancelled. Refreshing page...");
+      setTimeout(() => { window.location.reload(); }, 500);
       return;
     }
 
@@ -228,7 +197,6 @@ if (forgotPasswordLink) {
     }
 
     try {
-      // ===== STEP 2: Check if email exists =====
       const userRes = await fetch("/api/get-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -242,7 +210,6 @@ if (forgotPasswordLink) {
 
       console.log("User found:", userData.email);
 
-      // ===== STEP 3: Send verification code =====
       const res = await fetch("/api/send-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -256,7 +223,6 @@ if (forgotPasswordLink) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // ===== STEP 4: Show verification modal =====
       const code = await showModal({
         title: '🔐 Verification Code',
         message: 'Enter the 6-digit code sent to your email.\n\nAlso check your SPAM/JUNK folder.',
@@ -268,12 +234,13 @@ if (forgotPasswordLink) {
         showCancel: true
       });
 
+      // If user cancels/closes modal, refresh page
       if (!code) {
-        toastWarning("Password reset cancelled.");
+        toastWarning("Password reset cancelled. Refreshing page...");
+        setTimeout(() => { window.location.reload(); }, 500);
         return;
       }
 
-      // ===== STEP 5: Verify code =====
       const verifyRes = await fetch("/api/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -286,7 +253,6 @@ if (forgotPasswordLink) {
         return;
       }
 
-      // ===== STEP 6: Get new password =====
       const newPassword = await showModal({
         title: '🔑 New Password',
         message: 'Enter new password (5+ chars, one capital, one number, one symbol):',
@@ -298,25 +264,24 @@ if (forgotPasswordLink) {
         showCancel: true
       });
 
+      // If user cancels/closes modal, refresh page
       if (!newPassword) {
-        toastWarning("Password reset cancelled.");
+        toastWarning("Password reset cancelled. Refreshing page...");
+        setTimeout(() => { window.location.reload(); }, 500);
         return;
       }
 
-      // ===== STEP 7: Validate new password strength =====
       const strongPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{5,}$/;
       if (!strongPassword.test(newPassword)) {
         toastError("Password: 5+ chars, one capital, one number, one symbol.");
         return;
       }
 
-      // ===== STEP 8: Ensure new password is different =====
       if (userData.password === newPassword) {
         toastError("New password must be different.");
         return;
       }
 
-      // ===== STEP 9: Confirm new password =====
       const confirmPassword = await showModal({
         title: '🔑 Confirm Password',
         message: 'Re-enter your new password:',
@@ -328,8 +293,10 @@ if (forgotPasswordLink) {
         showCancel: true
       });
 
+      // If user cancels/closes modal, refresh page
       if (!confirmPassword) {
-        toastWarning("Password reset cancelled.");
+        toastWarning("Password reset cancelled. Refreshing page...");
+        setTimeout(() => { window.location.reload(); }, 500);
         return;
       }
 
@@ -338,7 +305,6 @@ if (forgotPasswordLink) {
         return;
       }
 
-      // ===== STEP 10: Update password in database =====
       const updateRes = await fetch("/api/update-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
