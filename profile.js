@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 50 (COMPLETE)
+// PROFILE.JS - VERSION 55 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v50 LOADED!");
+console.log("🚀 profile.js v55 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -765,4 +765,4 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v50 loaded successfully");
+console.log("✅ Profile.js v55 loaded successfully");
