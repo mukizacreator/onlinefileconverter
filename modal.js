@@ -1,37 +1,25 @@
 /* ============================================
    CUSTOM MODAL SYSTEM - Modern & User-Friendly
    ============================================ */
-// A fully customizable modal system with glass-morphism design
-// Supports: alerts, confirmations, and password/input prompts
-// Features: keyboard shortcuts (Enter/Escape), click outside to close,
-//           password show/hide toggle, async/await support
 
-// ============================================
-// MAIN MODAL FUNCTION
-// ============================================
-// Core function that creates and displays a custom modal
-// Returns a Promise that resolves with user input or confirmation
 function showModal(options) {
-    // Destructure options with defaults
     const {
-        title,                  // Modal title (string)
-        message,                // Modal message (string, supports \n for line breaks)
-        input = false,          // Show input field? (boolean)
-        inputPlaceholder = '',  // Placeholder text for input
-        inputType = 'text',     // Input type: 'text' or 'password'
-        confirmText = 'Confirm', // Text on confirm button
-        cancelText = 'Cancel',   // Text on cancel button
-        onConfirm,              // Callback when confirm is clicked
-        onCancel,               // Callback when cancel is clicked
-        showCancel = true       // Show cancel button? (boolean)
+        title,
+        message,
+        input = false,
+        inputPlaceholder = '',
+        inputType = 'text',
+        confirmText = 'Confirm',
+        cancelText = 'Cancel',
+        onConfirm,
+        onCancel,
+        showCancel = true,
+        stayOpenOnError = false
     } = options;
 
-    // Remove any existing modal to prevent duplicates
     const existingModal = document.getElementById('customModal');
     if (existingModal) existingModal.remove();
 
-    // ===== CREATE OVERLAY =====
-    // Dark background with blur effect behind the modal
     const overlay = document.createElement('div');
     overlay.id = 'customModal';
     overlay.style.cssText = `
@@ -50,8 +38,6 @@ function showModal(options) {
         animation: fadeIn 0.3s ease;
     `;
 
-    // ===== CREATE MODAL BOX =====
-    // Glass-morphism design with rounded corners and shadow
     const modal = document.createElement('div');
     modal.style.cssText = `
         background: rgba(25, 35, 45, 0.95);
@@ -65,7 +51,6 @@ function showModal(options) {
         text-align: center;
     `;
 
-    // ===== TITLE =====
     const titleEl = document.createElement('h2');
     titleEl.textContent = title;
     titleEl.style.cssText = `
@@ -76,7 +61,6 @@ function showModal(options) {
     `;
     modal.appendChild(titleEl);
 
-    // ===== MESSAGE =====
     const msgEl = document.createElement('p');
     msgEl.textContent = message;
     msgEl.style.cssText = `
@@ -89,10 +73,22 @@ function showModal(options) {
     `;
     modal.appendChild(msgEl);
 
-    // ===== INPUT FIELD (Optional) =====
     let inputEl = null;
+    let errorMsgEl = null;
+
     if (input) {
-        // Wrapper for input and optional toggle button
+        // Error message element
+        errorMsgEl = document.createElement('p');
+        errorMsgEl.style.cssText = `
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin: 0 0 10px 0;
+            display: none;
+            text-align: left;
+            font-family: 'Segoe UI', sans-serif;
+        `;
+        modal.appendChild(errorMsgEl);
+
         const wrapper = document.createElement('div');
         wrapper.style.cssText = `
             display: flex;
@@ -102,7 +98,6 @@ function showModal(options) {
             width: 100%;
         `;
 
-        // Create input field
         inputEl = document.createElement('input');
         inputEl.type = inputType === 'password' ? 'password' : inputType;
         inputEl.placeholder = inputPlaceholder;
@@ -122,7 +117,6 @@ function showModal(options) {
         `;
         wrapper.appendChild(inputEl);
 
-        // If password type, add show/hide toggle button
         if (inputType === 'password') {
             const toggleBtn = document.createElement('button');
             toggleBtn.type = 'button';
@@ -141,14 +135,12 @@ function showModal(options) {
                 align-items: center;
                 justify-content: center;
             `;
-            // Hover effects
             toggleBtn.onmouseover = () => {
                 toggleBtn.style.background = 'rgba(255,255,255,0.15)';
             };
             toggleBtn.onmouseout = () => {
                 toggleBtn.style.background = 'rgba(255,255,255,0.08)';
             };
-            // Toggle password visibility
             toggleBtn.onclick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -168,10 +160,9 @@ function showModal(options) {
         }
 
         modal.appendChild(wrapper);
-        inputEl.focus(); // Auto-focus input field
+        inputEl.focus();
     }
 
-    // ===== BUTTONS CONTAINER =====
     const btnContainer = document.createElement('div');
     btnContainer.style.cssText = `
         display: flex;
@@ -180,7 +171,6 @@ function showModal(options) {
         flex-wrap: wrap;
     `;
 
-    // ===== CANCEL BUTTON =====
     let cancelBtn = null;
     if (showCancel) {
         cancelBtn = document.createElement('button');
@@ -199,7 +189,6 @@ function showModal(options) {
             flex: 1;
             min-width: 80px;
         `;
-        // Hover effects
         cancelBtn.onmouseover = () => {
             cancelBtn.style.background = 'rgba(255,255,255,0.15)';
             cancelBtn.style.color = 'white';
@@ -208,7 +197,6 @@ function showModal(options) {
             cancelBtn.style.background = 'rgba(255,255,255,0.08)';
             cancelBtn.style.color = '#aaa';
         };
-        // Cancel button handler
         cancelBtn.onclick = () => {
             overlay.remove();
             if (onCancel) onCancel();
@@ -217,8 +205,6 @@ function showModal(options) {
         btnContainer.appendChild(cancelBtn);
     }
 
-    // ===== CONFIRM BUTTON =====
-    // Primary action button (cyan themed)
     const confirmBtn = document.createElement('button');
     confirmBtn.textContent = confirmText;
     confirmBtn.style.cssText = `
@@ -235,7 +221,6 @@ function showModal(options) {
         flex: 1;
         min-width: 80px;
     `;
-    // Hover effects with scale animation
     confirmBtn.onmouseover = () => {
         confirmBtn.style.background = '#008ba3';
         confirmBtn.style.transform = 'scale(1.02)';
@@ -244,19 +229,37 @@ function showModal(options) {
         confirmBtn.style.background = '#00bcd4';
         confirmBtn.style.transform = 'scale(1)';
     };
-    // Confirm button handler
+    
+    // Store the confirm button reference for error handling
+    confirmBtn._modal = modal;
+    confirmBtn._errorMsg = errorMsgEl;
+    confirmBtn._input = inputEl;
+    confirmBtn._stayOpen = stayOpenOnError;
+
     confirmBtn.onclick = () => {
+        // If this is a verification modal and stayOpenOnError is true
+        if (confirmBtn._stayOpen && confirmBtn._input) {
+            const value = confirmBtn._input.value.trim();
+            if (!value || value.length < 4) {
+                // Show error but keep modal open
+                if (confirmBtn._errorMsg) {
+                    confirmBtn._errorMsg.textContent = 'Please enter a valid code.';
+                    confirmBtn._errorMsg.style.display = 'block';
+                    confirmBtn._input.style.borderColor = '#ff6b6b';
+                }
+                return;
+            }
+        }
+        
         const value = inputEl ? inputEl.value.trim() : true;
         overlay.remove();
         if (onConfirm) onConfirm(value);
         if (overlay._resolve) overlay._resolve(value);
     };
-    btnContainer.appendChild(confirmBtn);
 
+    btnContainer.appendChild(confirmBtn);
     modal.appendChild(btnContainer);
 
-    // ===== CLOSE ON OUTSIDE CLICK =====
-    // Clicking the overlay (background) closes the modal
     overlay.onclick = (e) => {
         if (e.target === overlay) {
             overlay.remove();
@@ -265,9 +268,6 @@ function showModal(options) {
         }
     };
 
-    // ===== KEYBOARD SUPPORT =====
-    // Enter key: Confirm action
-    // Escape key: Cancel action
     modal.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -281,17 +281,11 @@ function showModal(options) {
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
 
-    // ===== RETURN PROMISE =====
-    // Allows async/await usage: const result = await showModal({...})
     return new Promise((resolve) => {
         overlay._resolve = resolve;
     });
 }
 
-// ============================================
-// CSS ANIMATIONS
-// ============================================
-// Injects animation keyframes for fadeIn and slideUp effects
 const modalStyles = document.createElement('style');
 modalStyles.textContent = `
     @keyframes fadeIn {
@@ -305,14 +299,6 @@ modalStyles.textContent = `
 `;
 document.head.appendChild(modalStyles);
 
-/* ============================================
-   SHORTHAND FUNCTIONS
-   ============================================ */
-// Pre-configured modal types for common use cases
-
-// ===== VERIFICATION MODAL =====
-// Prompts user to enter 6-digit verification code
-// Includes SPAM folder reminder to help users find the email
 function showVerificationModal() {
     return showModal({
         title: '🔐 Verification Code',
@@ -322,13 +308,11 @@ function showVerificationModal() {
         inputType: 'text',
         confirmText: 'Verify',
         cancelText: 'Cancel',
-        showCancel: true
+        showCancel: true,
+        stayOpenOnError: true  // This keeps the modal open on wrong code
     });
 }
 
-// ===== CONFIRMATION MODAL =====
-// Asks user to confirm an action (e.g., delete, logout)
-// Returns true if confirmed, false/null if cancelled
 function showConfirmModal(title, message, confirmText = 'Confirm', cancelText = 'Cancel') {
     return showModal({
         title: title,
@@ -340,9 +324,6 @@ function showConfirmModal(title, message, confirmText = 'Confirm', cancelText = 
     });
 }
 
-// ===== ALERT MODAL =====
-// Shows a simple message with only an OK button
-// Used for information messages that don't require choice
 function showAlertModal(title, message, confirmText = 'OK') {
     return showModal({
         title: title,
@@ -354,14 +335,9 @@ function showAlertModal(title, message, confirmText = 'OK') {
     });
 }
 
-/* ============================================
-   EXPOSE FUNCTIONS GLOBALLY
-   ============================================ */
-// Make functions available for use in other scripts (profile.js, auth.js, etc.)
 window.showModal = showModal;
 window.showVerificationModal = showVerificationModal;
 window.showConfirmModal = showConfirmModal;
 window.showAlertModal = showAlertModal;
 
 console.log("✅ Modal system loaded successfully!");
-console.log("📝 Verification message: Enter the 6-digit code sent to your email. Also check SPAM/JUNK folder.");
