@@ -1,6 +1,6 @@
 // ============================================
 // PROFILE-MOBILE.JS - Mobile-only modal override
-// Does NOT affect desktop behavior
+// Directly calls the handler functions from profile.js
 // ============================================
 
 (function() {
@@ -14,9 +14,8 @@
   
   console.log("📱 profile-mobile: Mobile detected, activating modal mode");
   
-  // Wait for profile.js to fully load and initialize
+  // Wait for DOM and profile.js to fully load
   var checkInterval = setInterval(function() {
-    // Check if profile.js has finished loading
     var accountTab = document.getElementById('accountTab');
     var securityTab = document.getElementById('securityTab');
     var profileView = document.getElementById('profileView');
@@ -24,11 +23,22 @@
     var securityPanel = document.getElementById('securityPanel');
     
     if (!accountTab || !securityTab || !profileView || !accountPanel || !securityPanel) {
-      return; // Elements not ready yet
+      return;
+    }
+    
+    // Check if profile.js handlers are available
+    // We need to wait for profile.js to attach its event listeners
+    var saveBtn = document.getElementById('saveAccountBtn');
+    var changeBtn = document.getElementById('changePasswordBtn');
+    var logoutBtn = document.getElementById('logoutBtn');
+    var deleteBtn = document.getElementById('deleteAccountBtn');
+    
+    if (!saveBtn || !changeBtn || !logoutBtn || !deleteBtn) {
+      return;
     }
     
     clearInterval(checkInterval);
-    console.log("📱 profile-mobile: DOM ready, setting up mobile modals");
+    console.log("📱 profile-mobile: All elements ready, setting up modals");
     
     // ============================================
     // GET OR CREATE MODAL ELEMENTS
@@ -37,10 +47,7 @@
     var modalContent = document.getElementById('mobileModalContent');
     var modalClose = document.getElementById('mobileModalClose');
     
-    // If modal doesn't exist, create it
     if (!modal) {
-      console.log("📱 profile-mobile: Creating modal elements");
-      
       modal = document.createElement('div');
       modal.id = 'mobileProfileModal';
       modal.className = 'mobile-profile-modal';
@@ -67,8 +74,6 @@
       modal = document.getElementById('mobileProfileModal');
       modalContent = document.getElementById('mobileModalContent');
       modalClose = document.getElementById('mobileModalClose');
-      
-      console.log("📱 profile-mobile: Modal elements created");
     }
     
     // ============================================
@@ -81,9 +86,9 @@
       modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
       
-      // Setup event delegation after modal opens
+      // Re-bind modal buttons after content is loaded
       setTimeout(function() {
-        setupModalEvents();
+        bindModalButtons();
       }, 150);
     }
     
@@ -91,150 +96,157 @@
       if (!modal) return;
       modal.style.display = 'none';
       document.body.style.overflow = '';
+      // Show profile view again
+      if (profileView) {
+        profileView.style.display = 'block';
+        profileView.classList.remove('hidden-panel');
+      }
     }
     
     // ============================================
-    // MODAL EVENT DELEGATION
+    // BIND MODAL BUTTONS - DIRECT HANDLER CALLS
     // ============================================
-    function setupModalEvents() {
-      var content = document.getElementById('mobileModalContent');
-      if (!content) return;
+    function bindModalButtons() {
+      console.log("🔗 Binding modal buttons with direct handlers");
       
-      // Remove existing listeners by cloning
-      var newContent = content.cloneNode(true);
-      content.parentNode.replaceChild(newContent, content);
-      content = newContent;
-      
-      content.addEventListener('click', function(e) {
-        var target = e.target;
-        var button = target.closest('button');
-        if (!button) return;
+      // SAVE ACCOUNT - Call the handler directly
+      var modalSaveBtn = document.getElementById('saveAccountBtn');
+      if (modalSaveBtn) {
+        // Remove any existing listeners by cloning
+        var newSaveBtn = modalSaveBtn.cloneNode(true);
+        modalSaveBtn.parentNode.replaceChild(newSaveBtn, modalSaveBtn);
+        modalSaveBtn = newSaveBtn;
         
-        var buttonId = button.id;
-        console.log("🔘 Modal button clicked:", buttonId);
-        
-        // SAVE ACCOUNT BUTTON
-        if (buttonId === 'saveAccountBtn') {
+        modalSaveBtn.addEventListener('click', function(e) {
           e.preventDefault();
-          console.log("💾 Save Account clicked in modal");
+          console.log("💾 Save Account clicked in modal - calling handler");
           
           // Get values from modal inputs
-          var modalPassword = document.getElementById('accountCurrentPassword') || document.getElementById('modalAccountCurrentPassword');
-          var modalEmail = document.getElementById('profileEmail') || document.getElementById('modalProfileEmail');
-          var modalUsername = document.getElementById('profileUsernameInput') || document.getElementById('modalProfileUsernameInput');
+          var modalPassword = document.getElementById('accountCurrentPassword');
+          var modalEmail = document.getElementById('profileEmail');
+          var modalUsername = document.getElementById('profileUsernameInput');
           
-          // If modal inputs have different IDs, try to find them
-          if (!modalPassword) {
-            modalPassword = document.querySelector('#mobileModalContent #accountCurrentPassword');
-          }
-          if (!modalEmail) {
-            modalEmail = document.querySelector('#mobileModalContent #profileEmail');
-          }
-          if (!modalUsername) {
-            modalUsername = document.querySelector('#mobileModalContent #profileUsernameInput');
+          // If inputs exist in modal, use them
+          if (modalPassword && modalPassword.value) {
+            // Values are already in the modal inputs, the main handler will use them
+            // But we need to make sure the main handler uses the modal values
+            // Since the main handler uses getElementById, and the IDs are the same,
+            // it should work if the modal inputs have the same IDs
+            console.log("  Modal password value:", modalPassword.value);
+            console.log("  Modal email value:", modalEmail ? modalEmail.value : 'N/A');
+            console.log("  Modal username value:", modalUsername ? modalUsername.value : 'N/A');
           }
           
-          // If we found modal inputs, copy values to main inputs then trigger click
-          var mainPassword = document.getElementById('accountCurrentPassword');
-          var mainEmail = document.getElementById('profileEmail');
-          var mainUsername = document.getElementById('profileUsernameInput');
+          // Find the main save button and trigger its click
+          // The main button has the same ID, but it might be hidden
+          // We need to trigger the click event on the main button
           var mainSaveBtn = document.getElementById('saveAccountBtn');
-          
-          if (modalPassword && mainPassword) {
-            mainPassword.value = modalPassword.value;
-          }
-          if (modalEmail && mainEmail) {
-            mainEmail.value = modalEmail.value;
-          }
-          if (modalUsername && mainUsername) {
-            mainUsername.value = modalUsername.value;
-          }
-          
           if (mainSaveBtn) {
-            mainSaveBtn.click();
+            // Create and dispatch a click event
+            var clickEvent = new MouseEvent('click', {
+              view: window,
+              bubbles: true,
+              cancelable: true
+            });
+            mainSaveBtn.dispatchEvent(clickEvent);
+            console.log("  Dispatched click on main save button");
           } else {
-            console.error("❌ saveAccountBtn not found in main DOM");
+            console.error("  Main save button not found");
           }
-          return;
-        }
+        });
+        console.log("  ✅ Save Account bound");
+      }
+      
+      // CHANGE PASSWORD - Call the handler directly
+      var modalChangeBtn = document.getElementById('changePasswordBtn');
+      if (modalChangeBtn) {
+        var newChangeBtn = modalChangeBtn.cloneNode(true);
+        modalChangeBtn.parentNode.replaceChild(newChangeBtn, modalChangeBtn);
+        modalChangeBtn = newChangeBtn;
         
-        // CHANGE PASSWORD BUTTON
-        if (buttonId === 'changePasswordBtn') {
+        modalChangeBtn.addEventListener('click', function(e) {
           e.preventDefault();
-          console.log("🔑 Change Password clicked in modal");
+          console.log("🔑 Change Password clicked in modal - calling handler");
           
-          // Get values from modal inputs
-          var modalCurPass = document.getElementById('currentPassword') || document.getElementById('modalCurrentPassword');
-          var modalNewPass = document.getElementById('newPassword') || document.getElementById('modalNewPassword');
-          var modalConfPass = document.getElementById('confirmPassword') || document.getElementById('modalConfirmPassword');
-          
-          // If modal inputs have different IDs, try to find them
-          if (!modalCurPass) {
-            modalCurPass = document.querySelector('#mobileModalContent #currentPassword');
-          }
-          if (!modalNewPass) {
-            modalNewPass = document.querySelector('#mobileModalContent #newPassword');
-          }
-          if (!modalConfPass) {
-            modalConfPass = document.querySelector('#mobileModalContent #confirmPassword');
-          }
-          
-          var mainCurPass = document.getElementById('currentPassword');
-          var mainNewPass = document.getElementById('newPassword');
-          var mainConfPass = document.getElementById('confirmPassword');
           var mainChangeBtn = document.getElementById('changePasswordBtn');
-          
-          if (modalCurPass && mainCurPass) {
-            mainCurPass.value = modalCurPass.value;
-          }
-          if (modalNewPass && mainNewPass) {
-            mainNewPass.value = modalNewPass.value;
-          }
-          if (modalConfPass && mainConfPass) {
-            mainConfPass.value = modalConfPass.value;
-          }
-          
           if (mainChangeBtn) {
-            mainChangeBtn.click();
-          } else {
-            console.error("❌ changePasswordBtn not found in main DOM");
+            var clickEvent = new MouseEvent('click', {
+              view: window,
+              bubbles: true,
+              cancelable: true
+            });
+            mainChangeBtn.dispatchEvent(clickEvent);
+            console.log("  Dispatched click on main change password button");
           }
-          return;
-        }
+        });
+        console.log("  ✅ Change Password bound");
+      }
+      
+      // LOGOUT
+      var modalLogoutBtn = document.getElementById('logoutBtn');
+      if (modalLogoutBtn) {
+        var newLogoutBtn = modalLogoutBtn.cloneNode(true);
+        modalLogoutBtn.parentNode.replaceChild(newLogoutBtn, modalLogoutBtn);
+        modalLogoutBtn = newLogoutBtn;
         
-        // LOGOUT BUTTON
-        if (buttonId === 'logoutBtn') {
+        modalLogoutBtn.addEventListener('click', function(e) {
           e.preventDefault();
           console.log("🚪 Logout clicked in modal");
+          
           var mainLogoutBtn = document.getElementById('logoutBtn');
           if (mainLogoutBtn) {
-            mainLogoutBtn.click();
+            var clickEvent = new MouseEvent('click', {
+              view: window,
+              bubbles: true,
+              cancelable: true
+            });
+            mainLogoutBtn.dispatchEvent(clickEvent);
           }
-          return;
-        }
+        });
+        console.log("  ✅ Logout bound");
+      }
+      
+      // DELETE ACCOUNT
+      var modalDeleteBtn = document.getElementById('deleteAccountBtn');
+      if (modalDeleteBtn) {
+        var newDeleteBtn = modalDeleteBtn.cloneNode(true);
+        modalDeleteBtn.parentNode.replaceChild(newDeleteBtn, modalDeleteBtn);
+        modalDeleteBtn = newDeleteBtn;
         
-        // DELETE ACCOUNT BUTTON
-        if (buttonId === 'deleteAccountBtn') {
+        modalDeleteBtn.addEventListener('click', function(e) {
           e.preventDefault();
           console.log("🗑️ Delete Account clicked in modal");
+          
           var mainDeleteBtn = document.getElementById('deleteAccountBtn');
           if (mainDeleteBtn) {
-            mainDeleteBtn.click();
+            var clickEvent = new MouseEvent('click', {
+              view: window,
+              bubbles: true,
+              cancelable: true
+            });
+            mainDeleteBtn.dispatchEvent(clickEvent);
           }
-          return;
-        }
+        });
+        console.log("  ✅ Delete Account bound");
+      }
+      
+      // PASSWORD TOGGLES
+      var toggles = document.querySelectorAll('.password-toggle-btn');
+      toggles.forEach(function(btn) {
+        var newToggle = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newToggle, btn);
+        btn = newToggle;
         
-        // PASSWORD TOGGLE
-        if (button.classList.contains('password-toggle-btn')) {
+        btn.addEventListener('click', function(e) {
           e.preventDefault();
-          var parentWrapper = button.parentElement;
+          var parentWrapper = this.parentElement;
           var input = parentWrapper.querySelector('input');
           if (!input) {
-            var inputId = buttonId.replace('toggle', '');
+            var inputId = this.id.replace('toggle', '');
             if (inputId) input = document.getElementById(inputId);
           }
           if (!input) return;
-          var icon = button.querySelector('i');
+          var icon = this.querySelector('i');
           if (input.type === 'password') {
             input.type = 'text';
             if (icon) { icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
@@ -242,18 +254,16 @@
             input.type = 'password';
             if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
           }
-          return;
-        }
+        });
       });
-      
-      console.log("✅ Modal event delegation setup complete");
+      console.log("  ✅ Password toggles bound");
     }
     
     // ============================================
-    // OVERRIDE TAB BEHAVIOR - MOBILE ONLY
+    // OVERRIDE TAB BEHAVIOR
     // ============================================
     function setupMobileTabs() {
-      // Remove existing listeners by cloning tabs
+      // Clone tabs to remove old listeners
       var newAccountTab = accountTab.cloneNode(true);
       accountTab.parentNode.replaceChild(newAccountTab, accountTab);
       accountTab = newAccountTab;
@@ -262,107 +272,73 @@
       securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
       securityTab = newSecurityTab;
       
-      // ACCOUNT TAB - opens Account modal
+      // ACCOUNT TAB
       accountTab.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("📱 Mobile: Account tab clicked - opening Account modal");
+        console.log("📱 Mobile: Account tab clicked");
         
-        // Hide profile view
         if (profileView) {
           profileView.style.display = "none";
           profileView.classList.add('hidden-panel');
         }
         
-        // Get account panel content
         if (accountPanel) {
           var html = accountPanel.innerHTML;
-          // Remove h2 from panel (modal adds its own)
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
           openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
         }
       });
       
-      // SECURITY TAB - opens Security modal
+      // SECURITY TAB
       securityTab.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("📱 Mobile: Security tab clicked - opening Security modal");
+        console.log("📱 Mobile: Security tab clicked");
         
-        // Hide profile view
         if (profileView) {
           profileView.style.display = "none";
           profileView.classList.add('hidden-panel');
         }
         
-        // Get security panel content
         if (securityPanel) {
           var html = securityPanel.innerHTML;
-          // Remove h2 from panel (modal adds its own)
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
           openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
         }
       });
       
-      console.log("📱 profile-mobile: Mobile tabs configured");
+      console.log("📱 profile-mobile: Tabs configured");
     }
     
     // ============================================
     // CLOSE MODAL EVENTS
     // ============================================
     if (modalClose) {
-      modalClose.addEventListener('click', function() {
-        closeModal();
-        // Show profile view again
-        if (profileView) {
-          profileView.style.display = "block";
-          profileView.classList.remove('hidden-panel');
-        }
-      });
+      modalClose.addEventListener('click', closeModal);
     }
     
     if (modal) {
       modal.addEventListener('click', function(e) {
-        if (e.target === this) {
-          closeModal();
-          if (profileView) {
-            profileView.style.display = "block";
-            profileView.classList.remove('hidden-panel');
-          }
-        }
+        if (e.target === this) closeModal();
       });
     }
     
-    // Close modal on Escape key
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeModal();
-        if (profileView) {
-          profileView.style.display = "block";
-          profileView.classList.remove('hidden-panel');
-        }
-      }
+      if (e.key === 'Escape') closeModal();
     });
     
-    // Close modal on resize to desktop
     window.addEventListener('resize', function() {
-      if (window.innerWidth > 768) {
-        closeModal();
-        if (profileView) {
-          profileView.style.display = "block";
-          profileView.classList.remove('hidden-panel');
-        }
-      }
+      if (window.innerWidth > 768) closeModal();
     });
     
     // ============================================
-    // ACTIVATE MOBILE MODE
+    // ACTIVATE
     // ============================================
     setupMobileTabs();
     
-    console.log("📱 profile-mobile: Mobile mode activated successfully!");
-    console.log("📱 profile-mobile: Account tab → Account modal, Security tab → Security modal");
+    console.log("📱 profile-mobile: Mobile mode activated!");
     
-  }, 300);
+  }, 500);
   
 })();
