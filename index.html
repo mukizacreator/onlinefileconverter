@@ -2,14 +2,9 @@
 <html lang="en">
 
 <head>
-  <!-- ============================================
-       METADATA & SEO CONFIGURATION
-       ============================================ -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  <!-- SEO meta tags -->
   <meta name="description" content="Convert PDF, DOCX, JPG, PNG, WEBP, MP3, EPUB and many other file formats online for free. Fast, secure and easy to use.">
   <meta name="keywords" content="file converter, online file converter, convert pdf to docx, convert docx to pdf, convert jpg to png, convert png to jpg, convert webp to png, convert mp3 to wav, convert epub to pdf, universal converter, free online converter">
   <meta name="robots" content="index, follow">
@@ -18,17 +13,11 @@
   <meta property="og:image" content="favicon.png">
   <title>Online File Converter | Universal File Conversion</title>
   
-  <!-- ============================================
-       FAVICON & ICON LINKS
-       ============================================ -->
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
   
-  <!-- ============================================
-       STYLESHEETS
-       ============================================ -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=10">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -38,34 +27,24 @@
        TOP NAVIGATION BAR
        ============================================ -->
   <nav class="top-nav">
-    <!-- LEFT SIDE -->
     <div class="nav-left-wrapper">
-      <!-- Hamburger icon - visible on mobile only -->
       <div class="nav-hamburger" id="hamburgerBtn">
         <i class="fa-solid fa-bars"></i>
       </div>
-      
-      <!-- Desktop: Full navigation links (visible on large screens) -->
       <div class="nav-left" id="navLeft">
         <a href="index.html" class="nav-link active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
         <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
         <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
       </div>
-      
-      <!-- Mobile: Dashboard link (visible on small screens) -->
       <div class="nav-mobile-dashboard" id="mobileDashboard">
         <a href="index.html" class="nav-link active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
       </div>
     </div>
-    
-    <!-- RIGHT SIDE -->
     <div class="nav-right" id="navRight">
-      <!-- Guest Navigation -->
       <div id="guestNav">
         <a href="signin.html" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
         <a href="signup.html" class="nav-link"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
       </div>
-      <!-- Profile Navigation -->
       <div id="profileNav" style="display:none;">
         <a href="profile.html" class="nav-link" id="profileButton">
           <img id="navProfilePhoto" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #00bcd4; margin-right:4px;">
@@ -76,7 +55,7 @@
   </nav>
 
   <!-- ============================================
-       MOBILE DROPDOWN MENU - ONLY SHOWS ON MOBILE
+       MOBILE DROPDOWN MENU
        ============================================ -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
@@ -92,7 +71,7 @@
   </header>
 
   <!-- ============================================
-       MAIN CONTENT - FILE CONVERTER TOOL
+       MAIN CONTENT
        ============================================ -->
   <main class="dashboard">
     <div class="converter-box">
@@ -119,18 +98,12 @@
        SCRIPTS
        ============================================ -->
   <script src="script.js"></script>
-  
-  <!-- Navigation Controller -->
-  <script src="nav.js"></script>
+  <script src="nav.js?v=10"></script>
 
-  <!-- Auth Script -->
   <script>
   (function() {
     try {
       const loggedInEmail = localStorage.getItem("loggedInUser");
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const user = users.find((u) => u.email === loggedInEmail);
-      
       let userData = null;
       try {
         userData = JSON.parse(localStorage.getItem("userData"));
@@ -195,12 +168,9 @@
   })();
 </script>
 
-  <script src="notifications.js?v=4"></script>
-  <script src="modal.js?v=4"></script>
+  <script src="notifications.js?v=10"></script>
+  <script src="modal.js?v=10"></script>
 
-  <!-- ============================================
-       FOOTER
-       ============================================ -->
   <footer>
     <section class="footer-support">
       My system supports: Documents: PDF, DOCX, DOC, ODT, TXT, EPUB, RTF, HTML | Images: JPG, PNG, WEBP, TIFF, BMP, GIF.<br>
