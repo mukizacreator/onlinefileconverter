@@ -522,318 +522,193 @@ footer {
 
 /* ============================================
    ============================================
-   MOBILE RESPONSIVE - COMPLETE OVERRIDE
+   MOBILE RESPONSIVE
    ============================================
    ============================================ */
 
-@media (max-width: 768px) {
-  /* ==========================================
-     STEP 1: HIDE DESKTOP NAVIGATION COMPLETELY
-     ========================================== */
-  .top-nav .nav-left,
-  .top-nav .nav-left a,
-  .top-nav .nav-left .nav-link,
-  .top-nav > .nav-left {
+/* MOBILE VIEW - Hide Desktop Nav, Show Hamburger */
+@media only screen and (max-width: 768px) {
+  /* HIDE DESKTOP NAV - COMPLETELY */
+  .top-nav .nav-left {
     display: none !important;
   }
   
-  /* Also hide any nav-left that might be inside */
   .nav-left {
     display: none !important;
   }
   
-  /* ==========================================
-     STEP 2: SHOW MOBILE ELEMENTS
-     ========================================== */
+  /* SHOW HAMBURGER */
   .nav-hamburger {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
+    display: block !important;
+    font-size: 1.4rem !important;
+    padding: 4px 10px !important;
   }
   
+  /* SHOW MOBILE DASHBOARD */
   .nav-mobile-dashboard {
-    display: flex !important;
-    align-items: center;
+    display: block !important;
   }
   
   .nav-mobile-dashboard .nav-link {
-    padding: 6px 14px;
-    font-size: 0.85rem;
+    font-size: 0.8rem !important;
+    padding: 4px 12px !important;
   }
   
-  /* ==========================================
-     STEP 3: MOBILE NAV LAYOUT
-     ========================================== */
+  /* MOBILE NAV LAYOUT */
   .top-nav {
-    display: flex !important;
+    padding: 6px 10px !important;
+    gap: 4px !important;
     flex-wrap: nowrap !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 8px 12px !important;
-    gap: 6px !important;
   }
   
   .nav-left-wrapper {
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
-    flex: 1 !important;
-  }
-  
-  .top-nav .nav-right {
-    display: flex !important;
-    align-items: center !important;
     gap: 4px !important;
-    flex-shrink: 0 !important;
   }
   
   .top-nav .nav-right .nav-link {
-    padding: 5px 10px !important;
-    font-size: 0.75rem !important;
-  }
-  
-  .top-nav .nav-right .nav-link i {
+    padding: 4px 8px !important;
     font-size: 0.7rem !important;
   }
   
-  /* ==========================================
-     STEP 4: DROPDOWN STYLES
-     ========================================== */
+  .top-nav .nav-right .nav-link i {
+    font-size: 0.6rem !important;
+  }
+  
+  /* MOBILE DROPDOWN */
   .mobile-dropdown {
-    animation: dropdownSlide 0.25s ease forwards;
+    width: 100% !important;
   }
   
-  @keyframes dropdownSlide {
-    0% { opacity: 0; transform: translateY(-10px); }
-    100% { opacity: 1; transform: translateY(0); }
+  .mobile-dropdown.open {
+    display: flex !important;
   }
   
-  /* ==========================================
-     STEP 5: CONVERTER BOX - FULL WIDTH
-     ========================================== */
+  /* CONVERTER BOX - FULL WIDTH */
   .dashboard {
-    padding: 6px 8px !important;
+    padding: 4px 6px !important;
   }
   
   .converter-box {
-    padding: 14px 12px !important;
+    padding: 12px 10px !important;
     width: 100% !important;
     max-width: 100% !important;
-    min-width: 0 !important;
-    border-radius: 14px !important;
-    gap: 10px !important;
-    margin: 4px 0 !important;
+    border-radius: 12px !important;
+    gap: 8px !important;
+    margin: 2px 0 !important;
   }
   
   .input-row {
-    gap: 8px !important;
+    gap: 6px !important;
     flex-direction: column !important;
     width: 100% !important;
-    display: flex !important;
-    flex-wrap: nowrap !important;
   }
   
   .input-row > * {
     width: 100% !important;
     max-width: 100% !important;
-    min-width: 0 !important;
-    flex: 1 1 auto !important;
     box-sizing: border-box !important;
   }
   
   .custom-file-label {
-    font-size: 0.85rem !important;
-    padding: 10px 16px !important;
+    font-size: 0.8rem !important;
+    padding: 8px 12px !important;
     text-align: center !important;
     width: 100% !important;
-    display: block !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    box-sizing: border-box !important;
   }
   
   #fileName {
-    font-size: 0.8rem !important;
+    font-size: 0.75rem !important;
     max-width: 100% !important;
     text-align: center !important;
-    padding: 4px 8px !important;
-    word-break: break-all !important;
     width: 100% !important;
-    box-sizing: border-box !important;
   }
   
   .format-select {
-    font-size: 0.85rem !important;
-    padding: 10px 14px !important;
+    font-size: 0.8rem !important;
+    padding: 8px 12px !important;
     width: 100% !important;
     min-width: 0 !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
   }
   
   .convert-btn {
-    font-size: 0.85rem !important;
-    padding: 10px 20px !important;
+    font-size: 0.8rem !important;
+    padding: 8px 16px !important;
     width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
   }
   
-  /* ==========================================
-     STEP 6: HEADER ON MOBILE
-     ========================================== */
-  header {
-    padding: 0 12px !important;
-  }
+  /* HEADER */
   header h1 {
-    font-size: 1.4rem !important;
+    font-size: 1.3rem !important;
   }
   .subtitle {
-    font-size: 0.8rem !important;
+    font-size: 0.75rem !important;
   }
   
-  /* ==========================================
-     STEP 7: PROFILE ON MOBILE
-     ========================================== */
+  /* PROFILE */
   #profileNav #navProfilePhoto {
-    width: 24px !important;
-    height: 24px !important;
-    border-width: 1.5px !important;
+    width: 20px !important;
+    height: 20px !important;
   }
-  
   #profileNav #navUsername {
-    font-size: 0.7rem !important;
-  }
-  
-  /* ==========================================
-     STEP 8: SUPPORT LINKS
-     ========================================== */
-  .support-link {
-    padding: 10px 14px !important;
-    font-size: 0.8rem !important;
-  }
-  
-  /* ==========================================
-     STEP 9: PROFILE PAGE
-     ========================================== */
-  aside {
-    width: 100% !important;
-    padding: 14px !important;
-  }
-  aside img {
-    width: 65px !important;
-    height: 65px !important;
-  }
-  section {
-    padding: 14px !important;
-  }
-  
-  /* ==========================================
-     STEP 10: FOOTER
-     ========================================== */
-  .footer-support {
-    font-size: 0.7rem !important;
-    padding: 0 8px !important;
-  }
-  .copyright {
     font-size: 0.65rem !important;
   }
-}
-
-/* ============================================
-   EXTRA SMALL SCREENS (≤ 480px)
-   ============================================ */
-@media (max-width: 480px) {
-  .top-nav {
-    padding: 4px 6px !important;
-    gap: 3px !important;
-  }
   
-  .nav-hamburger {
-    font-size: 1.1rem !important;
-    padding: 4px 8px !important;
+  /* FOOTER */
+  .footer-support {
+    font-size: 0.65rem !important;
   }
-  
-  .nav-mobile-dashboard .nav-link {
-    padding: 4px 8px !important;
-    font-size: 0.7rem !important;
-  }
-  
-  .top-nav .nav-right .nav-link {
-    padding: 3px 6px !important;
+  .copyright {
     font-size: 0.6rem !important;
   }
   
-  .top-nav .nav-right .nav-link i {
-    font-size: 0.55rem !important;
-  }
-  
-  #profileNav #navProfilePhoto {
-    width: 16px !important;
-    height: 16px !important;
-  }
-  
-  #profileNav #navUsername {
-    font-size: 0.55rem !important;
-  }
-  
-  .dropdown-link {
-    padding: 10px 16px !important;
-    font-size: 0.8rem !important;
-  }
-  
-  .converter-box {
-    padding: 10px 8px !important;
-    border-radius: 12px !important;
-    gap: 8px !important;
-  }
-  
-  .custom-file-label {
-    font-size: 0.75rem !important;
-    padding: 8px 12px !important;
-  }
-  
-  #fileName {
-    font-size: 0.7rem !important;
-  }
-  
-  .format-select {
-    font-size: 0.75rem !important;
-    padding: 8px 10px !important;
-  }
-  
-  .convert-btn {
-    font-size: 0.75rem !important;
-    padding: 8px 12px !important;
-  }
-  
-  header h1 {
-    font-size: 1.2rem !important;
-  }
-  .subtitle {
-    font-size: 0.7rem !important;
-  }
-  
+  /* SUPPORT LINKS */
   .support-link {
     padding: 8px 12px !important;
-    font-size: 0.7rem !important;
-  }
-  
-  aside img {
-    width: 55px !important;
-    height: 55px !important;
-  }
-  section h2 {
-    font-size: 1.1rem !important;
+    font-size: 0.75rem !important;
   }
 }
 
-/* ============================================
-   ENSURE DESKTOP LAYOUT REMAINS UNCHANGED
-   ============================================ */
-@media (min-width: 769px) {
+/* EXTRA SMALL */
+@media only screen and (max-width: 400px) {
+  .top-nav .nav-right .nav-link {
+    padding: 3px 5px !important;
+    font-size: 0.6rem !important;
+  }
+  
+  .nav-mobile-dashboard .nav-link {
+    font-size: 0.7rem !important;
+    padding: 3px 8px !important;
+  }
+  
+  .nav-hamburger {
+    font-size: 1.2rem !important;
+    padding: 3px 6px !important;
+  }
+  
+  .converter-box {
+    padding: 8px 6px !important;
+  }
+  
+  .custom-file-label {
+    font-size: 0.7rem !important;
+    padding: 6px 10px !important;
+  }
+  
+  .format-select {
+    font-size: 0.7rem !important;
+    padding: 6px 10px !important;
+  }
+  
+  .convert-btn {
+    font-size: 0.7rem !important;
+    padding: 6px 12px !important;
+  }
+}
+
+/* DESKTOP VIEW - Hide Mobile Elements */
+@media only screen and (min-width: 769px) {
   .nav-hamburger {
     display: none !important;
   }
@@ -846,11 +721,11 @@ footer {
     display: none !important;
   }
   
-  .nav-left {
+  .top-nav .nav-left {
     display: flex !important;
   }
   
-  .top-nav .nav-left {
+  .nav-left {
     display: flex !important;
   }
 }
