@@ -87,26 +87,33 @@ if (signupForm) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // STEP 3: Show verification modal
-      const code = await showVerificationModal();
+      // STEP 3: Show verification modal (stays open on wrong code)
+      let code = null;
+      let verified = false;
       
-      if (!code) {
-        toastWarning("Sign up cancelled. Refreshing page...");
-        setTimeout(() => { window.location.reload(); }, 500);
-        return;
-      }
+      while (!verified) {
+        code = await showVerificationModal();
+        
+        if (!code) {
+          toastWarning("Sign up cancelled. Refreshing page...");
+          setTimeout(() => { window.location.reload(); }, 500);
+          return;
+        }
 
-      // STEP 4: Verify code
-      const verifyRes = await fetch("/api/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: code.trim() })
-      });
+        // STEP 4: Verify code
+        const verifyRes = await fetch("/api/verify-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code: code.trim() })
+        });
 
-      const verifyData = await verifyRes.json();
-      if (!verifyData.success) {
-        toastError("Incorrect verification code.");
-        return;
+        const verifyData = await verifyRes.json();
+        if (verifyData.success) {
+          verified = true;
+        } else {
+          toastError("Incorrect verification code. Please try again.");
+          // Modal stays open - user can try again
+        }
       }
 
       // STEP 5: Create account
@@ -187,26 +194,33 @@ if (signinForm) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // STEP 3: Show verification modal
-      const code = await showVerificationModal();
+      // STEP 3: Show verification modal (stays open on wrong code)
+      let code = null;
+      let verified = false;
       
-      if (!code) {
-        toastWarning("Sign in cancelled. Refreshing page...");
-        setTimeout(() => { window.location.reload(); }, 500);
-        return;
-      }
+      while (!verified) {
+        code = await showVerificationModal();
+        
+        if (!code) {
+          toastWarning("Sign in cancelled. Refreshing page...");
+          setTimeout(() => { window.location.reload(); }, 500);
+          return;
+        }
 
-      // STEP 4: Verify code
-      const verifyRes = await fetch("/api/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: code.trim() })
-      });
+        // STEP 4: Verify code
+        const verifyRes = await fetch("/api/verify-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code: code.trim() })
+        });
 
-      const verifyData = await verifyRes.json();
-      if (!verifyData.success) {
-        toastError("Incorrect verification code. Please try again.");
-        return;
+        const verifyData = await verifyRes.json();
+        if (verifyData.success) {
+          verified = true;
+        } else {
+          toastError("Incorrect verification code. Please try again.");
+          // Modal stays open - user can try again
+        }
       }
 
       // STEP 5: Login successful
@@ -283,33 +297,41 @@ if (forgotPasswordLink) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      const code = await showModal({
-        title: '🔐 Verification Code',
-        message: 'Enter the 6-digit code sent to your email.\n\nAlso check your SPAM/JUNK folder.',
-        input: true,
-        inputPlaceholder: 'Enter 6-digit code',
-        inputType: 'text',
-        confirmText: 'Verify',
-        cancelText: 'Cancel',
-        showCancel: true
-      });
+      // Verification loop - stays open on wrong code
+      let code = null;
+      let verified = false;
+      
+      while (!verified) {
+        code = await showModal({
+          title: '🔐 Verification Code',
+          message: 'Enter the 6-digit code sent to your email.\n\nAlso check your SPAM/JUNK folder.',
+          input: true,
+          inputPlaceholder: 'Enter 6-digit code',
+          inputType: 'text',
+          confirmText: 'Verify',
+          cancelText: 'Cancel',
+          showCancel: true,
+          stayOpenOnError: true
+        });
+        
+        if (!code) {
+          toastWarning("Password reset cancelled. Refreshing page...");
+          setTimeout(() => { window.location.reload(); }, 500);
+          return;
+        }
 
-      if (!code) {
-        toastWarning("Password reset cancelled. Refreshing page...");
-        setTimeout(() => { window.location.reload(); }, 500);
-        return;
-      }
+        const verifyRes = await fetch("/api/verify-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: cleanEmail, code: code.trim() })
+        });
 
-      const verifyRes = await fetch("/api/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: cleanEmail, code: code.trim() })
-      });
-
-      const verifyData = await verifyRes.json();
-      if (!verifyData.success) {
-        toastError("Incorrect verification code.");
-        return;
+        const verifyData = await verifyRes.json();
+        if (verifyData.success) {
+          verified = true;
+        } else {
+          toastError("Incorrect verification code. Please try again.");
+        }
       }
 
       const newPassword = await showModal({
