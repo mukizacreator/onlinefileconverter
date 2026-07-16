@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=102">
+  <link rel="stylesheet" href="style.css?v=103">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -101,7 +101,7 @@
             </p>
           </div>
 
-          <!-- ACCOUNT PANEL - WITHOUT duplicate title -->
+          <!-- ACCOUNT PANEL -->
           <div id="accountPanel">
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
             
@@ -141,7 +141,7 @@
             </button>
           </div>
 
-          <!-- SECURITY PANEL - WITHOUT duplicate title -->
+          <!-- SECURITY PANEL -->
           <div id="securityPanel">
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
             
@@ -201,33 +201,30 @@
     </div>
   </div>
 
-  <script src="notifications.js?v=102"></script>
-  <script src="modal.js?v=102"></script>
-  <script src="nav.js?v=102"></script>
+  <script src="notifications.js?v=103"></script>
+  <script src="modal.js?v=103"></script>
+  <script src="nav.js?v=103"></script>
 
   <!-- ============================================
-       COMPLETE PROFILE SCRIPT - WITH FIXES
+       COMPLETE PROFILE SCRIPT - v103
        ============================================ -->
   <script>
   // ============================================
-  // PROFILE - COMPLETE SCRIPT v102
+  // PROFILE - COMPLETE SCRIPT v103
   // ============================================
   (function() {
     'use strict';
     
-    console.log("🚀 PROFILE v102 STARTED");
+    console.log("🚀 PROFILE v103 STARTED");
     
-    // Get user from localStorage
     var loggedInEmail = localStorage.getItem("loggedInUser");
     console.log("📧 loggedInEmail:", loggedInEmail);
     
     if (!loggedInEmail) {
-      console.log("❌ No logged in user, redirecting...");
       window.location.href = "signin.html";
       return;
     }
     
-    // Get user data
     var currentUser = null;
     var userDataString = localStorage.getItem("userData");
     if (userDataString) {
@@ -240,43 +237,26 @@
     }
     
     if (!currentUser) {
-      console.log("❌ No currentUser, redirecting...");
       localStorage.removeItem("loggedInUser");
       window.location.href = "signin.html";
       return;
     }
     
     // ============================================
-    // UPDATE DOM WITH USER DATA
+    // UPDATE UI
     // ============================================
     function updateAllUI(data) {
-      console.log("📝 Updating UI with:", data);
-      
       function setText(id, value, fallback) {
         var el = document.getElementById(id);
-        if (el) {
-          el.textContent = value || fallback || 'User';
-          return true;
-        }
-        return false;
+        if (el) el.textContent = value || fallback || 'User';
       }
-      
       function setValue(id, value) {
         var el = document.getElementById(id);
-        if (el) {
-          el.value = value || '';
-          return true;
-        }
-        return false;
+        if (el) el.value = value || '';
       }
-      
       function setImage(id, src) {
         var el = document.getElementById(id);
-        if (el) {
-          el.src = src || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-          return true;
-        }
-        return false;
+        if (el) el.src = src || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
       }
       
       setText('profileUsername', data.username);
@@ -291,19 +271,10 @@
       setImage('navProfilePhoto', data.photo);
       
       var navUserEl = document.getElementById('navUsername');
-      if (navUserEl) {
-        navUserEl.textContent = data.username || 'Profile';
-      }
-      
-      console.log("✅ UI update complete!");
+      if (navUserEl) navUserEl.textContent = data.username || 'Profile';
     }
     
-    // ============================================
-    // LOAD DATA FROM SERVER
-    // ============================================
     function loadFromServer() {
-      console.log("🔄 Loading from server...");
-      
       fetch("/api/get-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -315,10 +286,9 @@
         currentUser = data;
         localStorage.setItem("userData", JSON.stringify(data));
         updateAllUI(data);
-        console.log("✅ Server data loaded!");
       })
       .catch(function(error) {
-        console.error("❌ Server error:", error);
+        console.error("Server error:", error);
         if (currentUser) updateAllUI(currentUser);
       });
     }
@@ -326,9 +296,7 @@
     // ============================================
     // TAB FUNCTIONS
     // ============================================
-    function isMobile() {
-      return window.innerWidth <= 768;
-    }
+    function isMobile() { return window.innerWidth <= 768; }
     
     function showProfileView() {
       var pv = document.getElementById('profileView');
@@ -336,7 +304,6 @@
       var sp = document.getElementById('securityPanel');
       var at = document.getElementById('accountTab');
       var st = document.getElementById('securityTab');
-      
       if (pv) { pv.style.display = "block"; pv.classList.remove('hidden-panel'); }
       if (ap) { ap.style.display = "none"; ap.classList.remove('active-panel'); }
       if (sp) { sp.style.display = "none"; sp.classList.remove('active-panel'); }
@@ -356,7 +323,7 @@
       // Re-bind buttons after modal opens
       setTimeout(function() {
         bindModalButtons();
-      }, 100);
+      }, 150);
     }
     
     function closeModal() {
@@ -370,7 +337,7 @@
       if (isMobile()) {
         var panel = document.getElementById('accountPanel');
         if (!panel) return;
-        // Use innerHTML without the h2 title (already added in modal)
+        // Get the HTML but keep the original IDs
         var html = panel.innerHTML;
         openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
       } else {
@@ -408,7 +375,7 @@
     }
     
     // ============================================
-    // BIND MODAL BUTTONS - FIXED
+    // BIND MODAL BUTTONS - FIXED v103
     // ============================================
     function bindModalButtons() {
       console.log("🔗 Binding modal buttons...");
@@ -416,57 +383,70 @@
       // SAVE ACCOUNT BUTTON
       var saveBtn = document.getElementById('saveAccountBtn');
       if (saveBtn) {
-        saveBtn.onclick = function(e) {
+        // Remove any existing listeners by cloning
+        var newSaveBtn = saveBtn.cloneNode(true);
+        saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+        newSaveBtn.addEventListener('click', function(e) {
           e.preventDefault();
           console.log("💾 Save Changes clicked");
           handleSaveAccount();
-        };
+        });
         console.log("  ✅ Save Account bound");
       }
       
       // CHANGE PASSWORD BUTTON
       var changeBtn = document.getElementById('changePasswordBtn');
       if (changeBtn) {
-        changeBtn.onclick = function(e) {
+        var newChangeBtn = changeBtn.cloneNode(true);
+        changeBtn.parentNode.replaceChild(newChangeBtn, changeBtn);
+        newChangeBtn.addEventListener('click', function(e) {
           e.preventDefault();
           console.log("🔑 Change Password clicked");
           handleChangePassword();
-        };
+        });
         console.log("  ✅ Change Password bound");
       }
       
       // LOGOUT BUTTON
       var logoutBtn = document.getElementById('logoutBtn');
       if (logoutBtn) {
-        logoutBtn.onclick = function(e) {
+        var newLogoutBtn = logoutBtn.cloneNode(true);
+        logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+        newLogoutBtn.addEventListener('click', function(e) {
           e.preventDefault();
           console.log("🚪 Logout clicked");
           handleLogout();
-        };
+        });
         console.log("  ✅ Logout bound");
       }
       
       // DELETE ACCOUNT BUTTON
       var deleteBtn = document.getElementById('deleteAccountBtn');
       if (deleteBtn) {
-        deleteBtn.onclick = function(e) {
+        var newDeleteBtn = deleteBtn.cloneNode(true);
+        deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
+        newDeleteBtn.addEventListener('click', function(e) {
           e.preventDefault();
           console.log("🗑️ Delete Account clicked");
           handleDeleteAccount();
-        };
+        });
         console.log("  ✅ Delete Account bound");
       }
       
-      // PASSWORD TOGGLES IN MODAL
+      // PASSWORD TOGGLES
       var toggles = document.querySelectorAll('.password-toggle-btn');
       toggles.forEach(function(btn) {
-        btn.onclick = function(e) {
+        // Remove existing listeners
+        var newToggle = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newToggle, btn);
+        newToggle.addEventListener('click', function(e) {
           e.preventDefault();
-          var input = this.parentElement.querySelector('input');
+          var parentWrapper = this.parentElement;
+          var input = parentWrapper.querySelector('input');
           if (!input) {
             // Try finding by ID
-            var inputId = this.id.replace('toggle', '');
-            input = document.getElementById(inputId);
+            var id = this.id.replace('toggle', '');
+            if (id) input = document.getElementById(id);
           }
           if (!input) return;
           var icon = this.querySelector('i');
@@ -477,7 +457,7 @@
             input.type = 'password';
             if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
           }
-        };
+        });
       });
       console.log("  ✅ Password toggles bound");
     }
@@ -486,6 +466,8 @@
     // HANDLE SAVE ACCOUNT
     // ============================================
     function handleSaveAccount() {
+      console.log("💾 handleSaveAccount called");
+      
       var currentPassword = document.getElementById('accountCurrentPassword');
       var newEmail = document.getElementById('profileEmail');
       var newUsername = document.getElementById('profileUsernameInput');
@@ -505,7 +487,6 @@
       
       toastInfo('Sending verification code...');
       
-      // Send verification code
       fetch('/api/send-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -538,10 +519,9 @@
           toastError('Incorrect verification code.');
           return;
         }
-        // Update account
         var updateData = { email: currentUser.email };
-        if (newEmail && newEmail.value) updateData.newEmail = newEmail.value;
-        if (newUsername && newUsername.value) updateData.newUsername = newUsername.value;
+        if (newEmail && newEmail.value) updateData.newEmail = newEmail.value.trim().toLowerCase();
+        if (newUsername && newUsername.value) updateData.newUsername = newUsername.value.trim();
         
         return fetch('/api/update-user', {
           method: 'POST',
@@ -557,12 +537,13 @@
         if (!data) return;
         if (data.error) throw new Error(data.error);
         
-        // Update local data
         if (newEmail && newEmail.value) {
-          currentUser.email = newEmail.value;
-          localStorage.setItem('loggedInUser', newEmail.value);
+          currentUser.email = newEmail.value.trim().toLowerCase();
+          localStorage.setItem('loggedInUser', currentUser.email);
         }
-        if (newUsername && newUsername.value) currentUser.username = newUsername.value;
+        if (newUsername && newUsername.value) {
+          currentUser.username = newUsername.value.trim();
+        }
         localStorage.setItem('userData', JSON.stringify(currentUser));
         
         toastSuccess('Account updated! Refreshing...');
@@ -579,6 +560,8 @@
     // HANDLE CHANGE PASSWORD
     // ============================================
     function handleChangePassword() {
+      console.log("🔑 handleChangePassword called");
+      
       var curPass = document.getElementById('currentPassword');
       var newPass = document.getElementById('newPassword');
       var confPass = document.getElementById('confirmPassword');
@@ -670,6 +653,7 @@
     // HANDLE LOGOUT
     // ============================================
     function handleLogout() {
+      console.log("🚪 handleLogout called");
       if (confirm('Are you sure you want to log out?')) {
         localStorage.removeItem('loggedInUser');
         localStorage.removeItem('userData');
@@ -683,6 +667,7 @@
     // HANDLE DELETE ACCOUNT
     // ============================================
     function handleDeleteAccount() {
+      console.log("🗑️ handleDeleteAccount called");
       if (!confirm('Are you sure you want to delete your account? This cannot be undone!')) return;
       if (!confirm('Are you absolutely sure?')) return;
       
@@ -750,11 +735,9 @@
     // ============================================
     console.log("🔧 Setting up events...");
     
-    // Update UI immediately
     updateAllUI(currentUser);
     showProfileView();
     
-    // Load from server
     setTimeout(function() { loadFromServer(); }, 100);
     
     // Account tab
@@ -855,12 +838,12 @@
       });
     }
     
-    // Close modal on resize to desktop
+    // Close modal on resize
     window.addEventListener('resize', function() {
       if (window.innerWidth > 768) closeModal();
     });
     
-    console.log("✅ Profile v102 completed!");
+    console.log("✅ Profile v103 completed!");
   })();
   </script>
 
