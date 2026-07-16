@@ -58,7 +58,6 @@ if (signupForm) {
     }
 
     try {
-      // STEP 1: Check if email already exists
       toastInfo("Checking if email is available...");
       const checkRes = await fetch("/api/get-user", {
         method: "POST",
@@ -72,7 +71,6 @@ if (signupForm) {
         return;
       }
 
-      // STEP 2: Send verification code
       toastInfo("Sending verification code...");
       const res = await fetch("/api/send-code", {
         method: "POST",
@@ -87,12 +85,12 @@ if (signupForm) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // STEP 3: Show verification modal (stays open on wrong code)
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal();
+        code = await showVerificationModal(email);
         
         if (!code) {
           toastWarning("Sign up cancelled. Refreshing page...");
@@ -100,7 +98,6 @@ if (signupForm) {
           return;
         }
 
-        // STEP 4: Verify code
         const verifyRes = await fetch("/api/verify-code", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -116,7 +113,6 @@ if (signupForm) {
         }
       }
 
-      // STEP 5: Create account
       const signupRes = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -128,7 +124,6 @@ if (signupForm) {
         throw new Error(signupData.error || "Failed to create account.");
       }
 
-      // STEP 6: AUTO-LOGIN - Store user session immediately
       localStorage.setItem("loggedInUser", email);
       localStorage.setItem("userData", JSON.stringify({ username, email, photo: "" }));
 
@@ -160,7 +155,6 @@ if (signinForm) {
     }
 
     try {
-      // STEP 1: Verify credentials
       const res = await fetch("/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -179,7 +173,6 @@ if (signinForm) {
         return;
       }
 
-      // STEP 2: Send verification code
       toastInfo("Sending verification code to your email...");
       const codeRes = await fetch("/api/send-code", {
         method: "POST",
@@ -194,12 +187,12 @@ if (signinForm) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // STEP 3: Show verification modal (stays open on wrong code)
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal();
+        code = await showVerificationModal(email);
         
         if (!code) {
           toastWarning("Sign in cancelled. Refreshing page...");
@@ -207,7 +200,6 @@ if (signinForm) {
           return;
         }
 
-        // STEP 4: Verify code
         const verifyRes = await fetch("/api/verify-code", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -219,11 +211,9 @@ if (signinForm) {
           verified = true;
         } else {
           toastError("Incorrect verification code. Please try again.");
-          // Modal stays open - user can try again
         }
       }
 
-      // STEP 5: Login successful
       localStorage.setItem("loggedInUser", email);
       localStorage.setItem("userData", JSON.stringify(data.user));
 
@@ -238,7 +228,7 @@ if (signinForm) {
 }
 
 /* ============================================
-   FORGOT PASSWORD - WITH REFRESH ON CANCEL
+   FORGOT PASSWORD - WITH VERIFICATION LOOP
    ============================================ */
 const forgotPasswordLink = document.getElementById("forgotPasswordLink");
 
@@ -302,17 +292,7 @@ if (forgotPasswordLink) {
       let verified = false;
       
       while (!verified) {
-        code = await showModal({
-          title: '🔐 Verification Code',
-          message: 'Enter the 6-digit code sent to your email.\n\nAlso check your SPAM/JUNK folder.',
-          input: true,
-          inputPlaceholder: 'Enter 6-digit code',
-          inputType: 'text',
-          confirmText: 'Verify',
-          cancelText: 'Cancel',
-          showCancel: true,
-          stayOpenOnError: true
-        });
+        code = await showVerificationModal(cleanEmail);
         
         if (!code) {
           toastWarning("Password reset cancelled. Refreshing page...");
