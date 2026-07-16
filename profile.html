@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=30">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -118,9 +118,9 @@
             
             <div style="margin-bottom:10px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password *</label>
-              <div style="display:flex; gap:6px;">
-                <input type="password" id="accountCurrentPassword" placeholder="Enter your current password" style="flex:1; padding:6px 12px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem;">
-                <button type="button" id="toggleAccountPassword" class="convert-btn" style="padding:6px 10px; white-space:nowrap; flex-shrink:0; font-size:0.75rem;">
+              <div class="profile-password-wrapper">
+                <input type="password" id="accountCurrentPassword" placeholder="Enter your current password" class="profile-input">
+                <button type="button" id="toggleAccountPassword" class="password-toggle-btn">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
@@ -128,15 +128,15 @@
 
             <div style="margin-bottom:10px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Email</label>
-              <input type="email" id="profileEmail" placeholder="Enter new email" style="width:100%; padding:6px 12px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem;">
+              <input type="email" id="profileEmail" placeholder="Enter new email" class="profile-input">
             </div>
 
             <div style="margin-bottom:12px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Username</label>
-              <input type="text" id="profileUsernameInput" placeholder="Enter new username" style="width:100%; padding:6px 12px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem;">
+              <input type="text" id="profileUsernameInput" placeholder="Enter new username" class="profile-input">
             </div>
 
-            <button class="convert-btn" id="saveAccountBtn" style="width:100%; padding:8px; font-size:0.85rem;">
+            <button class="convert-btn profile-action-btn" id="saveAccountBtn">
               <span id="saveAccountText">Save Changes</span>
             </button>
           </div>
@@ -147,9 +147,9 @@
             
             <div style="margin-bottom:10px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password</label>
-              <div style="display:flex; gap:6px;">
-                <input type="password" id="currentPassword" placeholder="Enter current password" style="flex:1; padding:6px 12px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem;">
-                <button type="button" id="toggleCurrentPassword" class="convert-btn" style="padding:6px 10px; white-space:nowrap; flex-shrink:0; font-size:0.75rem;">
+              <div class="profile-password-wrapper">
+                <input type="password" id="currentPassword" placeholder="Enter current password" class="profile-input">
+                <button type="button" id="toggleCurrentPassword" class="password-toggle-btn">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
@@ -157,9 +157,9 @@
 
             <div style="margin-bottom:6px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Password</label>
-              <div style="display:flex; gap:6px;">
-                <input type="password" id="newPassword" placeholder="Enter new password" style="flex:1; padding:6px 12px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem;">
-                <button type="button" id="toggleNewPassword" class="convert-btn" style="padding:6px 10px; white-space:nowrap; flex-shrink:0; font-size:0.75rem;">
+              <div class="profile-password-wrapper">
+                <input type="password" id="newPassword" placeholder="Enter new password" class="profile-input">
+                <button type="button" id="toggleNewPassword" class="password-toggle-btn">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
@@ -171,19 +171,17 @@
 
             <div style="margin-bottom:12px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Confirm Password</label>
-              <div style="display:flex; gap:6px;">
-                <input type="password" id="confirmPassword" placeholder="Confirm new password" style="flex:1; padding:6px 12px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem;">
-                <button type="button" id="toggleConfirmPassword" class="convert-btn" style="padding:6px 10px; white-space:nowrap; flex-shrink:0; font-size:0.75rem;">
+              <div class="profile-password-wrapper">
+                <input type="password" id="confirmPassword" placeholder="Confirm new password" class="profile-input">
+                <button type="button" id="toggleConfirmPassword" class="password-toggle-btn">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
             </div>
 
-            <button class="convert-btn" id="changePasswordBtn" style="width:100%; padding:8px; font-size:0.85rem;">Change Password</button>
-            <br><br>
-            <button class="convert-btn" id="logoutBtn" style="width:100%; padding:8px; font-size:0.85rem; background:#ff9800;">Log Out</button>
-            <br><br>
-            <button class="convert-btn" id="deleteAccountBtn" style="width:100%; padding:8px; font-size:0.85rem; background:#e53935;">Delete Account</button>
+            <button class="convert-btn profile-action-btn" id="changePasswordBtn">Change Password</button>
+            <button class="convert-btn profile-action-btn" id="logoutBtn" style="background:#ff9800;">Log Out</button>
+            <button class="convert-btn profile-action-btn" id="deleteAccountBtn" style="background:#e53935;">Delete Account</button>
           </div>
 
           <div id="profileMessage" style="display:none;"></div>
@@ -193,10 +191,10 @@
     </div>
   </main>
 
-  <script src="profile.js?v=10"></script>
-  <script src="notifications.js?v=10"></script>
-  <script src="modal.js?v=10"></script>
-  <script src="nav.js?v=10"></script>
+  <script src="profile.js?v=30"></script>
+  <script src="notifications.js?v=30"></script>
+  <script src="modal.js?v=30"></script>
+  <script src="nav.js?v=30"></script>
 
   <script>
     (function() {
