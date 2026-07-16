@@ -102,7 +102,7 @@
             </p>
           </div>
 
-          <!-- ACCOUNT PANEL -->
+          <!-- ACCOUNT PANEL - HIDDEN BY DEFAULT -->
           <div id="accountPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
@@ -141,7 +141,7 @@
             <button class="convert-btn profile-action-btn" id="saveAccountBtn">Save Changes</button>
           </div>
 
-          <!-- SECURITY PANEL -->
+          <!-- SECURITY PANEL - HIDDEN BY DEFAULT -->
           <div id="securityPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
@@ -207,16 +207,16 @@
   <script src="nav.js"></script>
 
   <!-- ============================================
-       COMPLETE PROFILE SCRIPT - v105 FINAL
+       PROFILE SCRIPT - v106 CLEAN
        ============================================ -->
   <script>
   // ============================================
-  // PROFILE - FINAL VERSION 105
+  // PROFILE - v106 CLEAN
   // ============================================
   (function() {
     'use strict';
     
-    console.log("🚀 PROFILE v105 FINAL STARTED");
+    console.log("🚀 PROFILE v106 CLEAN STARTED");
     
     var loggedInEmail = localStorage.getItem("loggedInUser");
     if (!loggedInEmail) {
@@ -299,7 +299,7 @@
     }
     
     // ============================================
-    // DESKTOP TAB FUNCTIONS (Original working)
+    // DESKTOP FUNCTIONS - ORIGINAL WORKING
     // ============================================
     function showProfileView() {
       var pv = document.getElementById('profileView');
@@ -351,6 +351,9 @@
       modalContent.innerHTML = content;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
+      
+      // Setup event delegation for modal buttons
+      setTimeout(function() { setupModalEvents(); }, 100);
     }
     
     function closeModal() {
@@ -361,55 +364,17 @@
     }
     
     // ============================================
-    // SMART TAB SWITCHING - Desktop vs Mobile
-    // ============================================
-    function showAccountPanel() {
-      if (isMobile()) {
-        // MOBILE: Open modal
-        var panel = document.getElementById('accountPanel');
-        if (!panel) return;
-        var html = panel.innerHTML;
-        // Remove the h2 title from panel content (modal adds its own)
-        html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-        openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
-        // Setup event delegation after modal opens
-        setTimeout(function() { setupModalEvents(); }, 100);
-      } else {
-        // DESKTOP: Show inline
-        showAccountPanelDesktop();
-      }
-    }
-    
-    function showSecurityPanel() {
-      if (isMobile()) {
-        // MOBILE: Open modal
-        var panel = document.getElementById('securityPanel');
-        if (!panel) return;
-        var html = panel.innerHTML;
-        // Remove the h2 title from panel content (modal adds its own)
-        html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-        openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
-        // Setup event delegation after modal opens
-        setTimeout(function() { setupModalEvents(); }, 100);
-      } else {
-        // DESKTOP: Show inline
-        showSecurityPanelDesktop();
-      }
-    }
-    
-    // ============================================
     // MODAL EVENT DELEGATION
     // ============================================
     function setupModalEvents() {
       var modalContent = document.getElementById('mobileModalContent');
       if (!modalContent) return;
       
-      // Remove any existing listeners by cloning
+      // Remove existing listeners by cloning
       var newContent = modalContent.cloneNode(true);
       modalContent.parentNode.replaceChild(newContent, modalContent);
-      modalContent = newContent;
       
-      modalContent.addEventListener('click', function(e) {
+      newContent.addEventListener('click', function(e) {
         var target = e.target;
         var button = target.closest('button');
         if (!button) return;
@@ -417,35 +382,26 @@
         var buttonId = button.id;
         console.log("🔘 Modal button clicked:", buttonId);
         
-        // SAVE ACCOUNT
         if (buttonId === 'saveAccountBtn') {
           e.preventDefault();
           handleSaveAccount();
           return;
         }
-        
-        // CHANGE PASSWORD
         if (buttonId === 'changePasswordBtn') {
           e.preventDefault();
           handleChangePassword();
           return;
         }
-        
-        // LOGOUT
         if (buttonId === 'logoutBtn') {
           e.preventDefault();
           handleLogout();
           return;
         }
-        
-        // DELETE ACCOUNT
         if (buttonId === 'deleteAccountBtn') {
           e.preventDefault();
           handleDeleteAccount();
           return;
         }
-        
-        // PASSWORD TOGGLE
         if (button.classList.contains('password-toggle-btn')) {
           e.preventDefault();
           var parentWrapper = button.parentElement;
@@ -466,8 +422,39 @@
           return;
         }
       });
-      
-      console.log("✅ Modal event delegation setup complete");
+    }
+    
+    // ============================================
+    // SMART TAB SWITCHING
+    // ============================================
+    function showAccountPanel() {
+      if (isMobile()) {
+        // MOBILE: Open modal
+        var panel = document.getElementById('accountPanel');
+        if (!panel) return;
+        var html = panel.innerHTML;
+        // Remove h2 from panel (modal adds its own)
+        html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
+        openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
+      } else {
+        // DESKTOP: Show inline
+        showAccountPanelDesktop();
+      }
+    }
+    
+    function showSecurityPanel() {
+      if (isMobile()) {
+        // MOBILE: Open modal
+        var panel = document.getElementById('securityPanel');
+        if (!panel) return;
+        var html = panel.innerHTML;
+        // Remove h2 from panel (modal adds its own)
+        html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
+        openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
+      } else {
+        // DESKTOP: Show inline
+        showSecurityPanelDesktop();
+      }
     }
     
     // ============================================
@@ -493,7 +480,7 @@
         return;
       }
       
-      // Check if new email is already taken (if changed)
+      // Check if new email is already taken
       if (emailChanged) {
         fetch('/api/get-user', {
           method: 'POST',
@@ -506,13 +493,9 @@
             toastError('Email already used by another account.');
             return;
           }
-          // Email is available, proceed
           sendVerificationAndUpdate();
         })
-        .catch(function() {
-          // If error, assume email is available
-          sendVerificationAndUpdate();
-        });
+        .catch(function() { sendVerificationAndUpdate(); });
       } else {
         sendVerificationAndUpdate();
       }
@@ -765,10 +748,9 @@
     }
     
     // ============================================
-    // SETUP DESKTOP BUTTON EVENTS (Original working)
+    // SETUP DESKTOP BUTTON EVENTS
     // ============================================
     function setupDesktopButtons() {
-      // Save Account button
       var saveBtn = document.getElementById('saveAccountBtn');
       if (saveBtn) {
         saveBtn.addEventListener('click', function(e) {
@@ -777,7 +759,6 @@
         });
       }
       
-      // Change Password button
       var changeBtn = document.getElementById('changePasswordBtn');
       if (changeBtn) {
         changeBtn.addEventListener('click', function(e) {
@@ -786,7 +767,6 @@
         });
       }
       
-      // Logout button
       var logoutBtn = document.getElementById('logoutBtn');
       if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
@@ -795,7 +775,6 @@
         });
       }
       
-      // Delete Account button
       var deleteBtn = document.getElementById('deleteAccountBtn');
       if (deleteBtn) {
         deleteBtn.addEventListener('click', function(e) {
@@ -804,7 +783,7 @@
         });
       }
       
-      // Password toggles (desktop)
+      // Desktop password toggles
       var toggles = document.querySelectorAll('.password-toggle-btn');
       toggles.forEach(function(btn) {
         btn.addEventListener('click', function(e) {
@@ -838,7 +817,7 @@
     
     setTimeout(function() { loadFromServer(); }, 100);
     
-    // Tab clicks - use smart switching
+    // Tab clicks
     var accountTab = document.getElementById('accountTab');
     if (accountTab) {
       accountTab.addEventListener('click', function(e) {
@@ -870,7 +849,6 @@
       });
     }
     
-    // Setup desktop buttons
     setupDesktopButtons();
     
     // Upload photo
@@ -943,7 +921,7 @@
       if (window.innerWidth > 768) closeModal();
     });
     
-    console.log("✅ Profile v105 FINAL completed!");
+    console.log("✅ Profile v106 CLEAN completed!");
   })();
   </script>
 
