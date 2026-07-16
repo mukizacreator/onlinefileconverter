@@ -15,75 +15,56 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=10">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
 <body>
 
-  <!-- ============================================
-       TOP NAVIGATION BAR
-       ============================================ -->
   <nav class="top-nav">
-    <!-- Mobile: Hamburger icon (visible on small screens) -->
-    <div class="nav-hamburger" id="hamburgerBtn">
-      <i class="fa-solid fa-bars"></i>
+    <div class="nav-left-wrapper">
+      <div class="nav-hamburger" id="hamburgerBtn">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+      <div class="nav-left" id="navLeft">
+        <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+        <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
+        <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
+      </div>
+      <div class="nav-mobile-dashboard" id="mobileDashboard">
+        <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+      </div>
     </div>
-    
-    <!-- Desktop: Full navigation links (visible on large screens) -->
-    <div class="nav-left" id="navLeft">
-      <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-      <a href="projects.html" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
-      <a href="about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
-    </div>
-    
-    <!-- Mobile: Dashboard link (visible on small screens) -->
-    <div class="nav-mobile-dashboard" id="mobileDashboard">
-      <a href="index.html" class="nav-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-    </div>
-    
     <div class="nav-right">
       <a href="signin.html" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
       <a href="signup.html" class="nav-link active"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
     </div>
   </nav>
 
-  <!-- ============================================
-       MOBILE DROPDOWN MENU
-       ============================================ -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
-  <!-- ============================================
-       PAGE HEADER
-       ============================================ -->
   <header>
     <h1>Create Account</h1>
     <p class="subtitle">Register securely to unlock larger file conversions.</p>
   </header>
 
-  <!-- ============================================
-       MAIN CONTENT - SIGN UP FORM
-       ============================================ -->
   <main class="dashboard">
     <div class="converter-box" style="max-width:520px; padding:20px 28px; gap:12px;">
       <form id="signupForm" autocomplete="off" style="width:100%;">
         
-        <!-- USERNAME FIELD -->
         <div style="margin-bottom:14px;">
           <label for="signupUsername" style="display:block; margin-bottom:4px; font-weight:600; font-size:0.9rem;">Username</label>
           <input type="text" id="signupUsername" placeholder="Choose a username" minlength="3" required style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:10px; background:rgba(255,255,255,0.12); color:white; font-size:0.95rem;">
         </div>
 
-        <!-- EMAIL FIELD -->
         <div style="margin-bottom:14px;">
           <label for="signupEmail" style="display:block; margin-bottom:4px; font-weight:600; font-size:0.9rem;">Email</label>
           <input type="email" id="signupEmail" placeholder="Enter your email" required style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:10px; background:rgba(255,255,255,0.12); color:white; font-size:0.95rem;">
         </div>
 
-        <!-- PASSWORD FIELD WITH SHOW/HIDE TOGGLE -->
         <div style="margin-bottom:14px;">
           <label for="signupPassword" style="display:block; margin-bottom:4px; font-weight:600; font-size:0.9rem;">Password</label>
           <div style="display:flex; gap:8px;">
@@ -94,38 +75,28 @@
           </div>
         </div>
 
-        <!-- CONFIRM PASSWORD FIELD -->
         <div style="margin-bottom:14px;">
           <label for="signupConfirmPassword" style="display:block; margin-bottom:4px; font-weight:600; font-size:0.9rem;">Confirm Password</label>
           <input type="password" id="signupConfirmPassword" placeholder="Re-enter password" required style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:10px; background:rgba(255,255,255,0.12); color:white; font-size:0.95rem;">
         </div>
 
-        <!-- PASSWORD REQUIREMENTS -->
         <div style="color:#bbb; font-size:0.75rem; line-height:1.6; margin-bottom:14px; background:rgba(255,255,255,0.05); padding:8px 14px; border-radius:8px;">
           <i class="fa-solid fa-circle-info" style="color:#00bcd4; margin-right:4px;"></i>
           Requirements: At least 5 chars, one capital letter, one number, one symbol
         </div>
 
-        <!-- SUBMIT BUTTON -->
         <button type="submit" class="convert-btn" style="width:100%; padding:12px; font-size:0.95rem;">Create Account</button>
 
-        <!-- MESSAGE CONTAINER -->
         <div id="signupMessage" style="margin-top:14px; text-align:center;"></div>
       </form>
     </div>
   </main>
 
-  <!-- ============================================
-       JAVASCRIPT
-       ============================================ -->
-  <script src="auth.js?v=5"></script>
-  <script src="notifications.js?v=4"></script>
-  <script src="modal.js?v=4"></script>
-  <script src="nav.js"></script>
+  <script src="auth.js?v=10"></script>
+  <script src="notifications.js?v=10"></script>
+  <script src="modal.js?v=10"></script>
+  <script src="nav.js?v=10"></script>
 
-  <!-- ============================================
-       FOOTER
-       ============================================ -->
   <footer>
     <div class="copyright">© 2026 Emmanuel MUKIZA</div>
   </footer>
