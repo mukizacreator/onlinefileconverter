@@ -1,31 +1,42 @@
 // ============================================
-// PROFILE.JS - VERSION 85 (COMPLETE)
+// PROFILE.JS - VERSION 100 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v85 LOADED!");
+console.log("🚀 profile.js v100 LOADED!");
 
+// Immediately try to load user data from localStorage
 const loggedInEmail = localStorage.getItem("loggedInUser");
+console.log("📍 loggedInEmail:", loggedInEmail);
+
 if (!loggedInEmail) {
+  console.log("❌ No logged in user, redirecting to signin.html");
   window.location.href = "signin.html";
+  // Stop execution
+  throw new Error("No logged in user");
 }
 
 let currentUser = null;
 const userData = localStorage.getItem("userData");
+console.log("📍 userData from localStorage:", userData);
+
 if (userData) {
   try {
     currentUser = JSON.parse(userData);
+    console.log("📍 Parsed currentUser:", currentUser);
   } catch(e) {
-    console.error("Error parsing userData:", e);
+    console.error("❌ Error parsing userData:", e);
   }
 }
 
 if (!currentUser) {
+  console.log("❌ No currentUser, redirecting to signin.html");
   localStorage.removeItem("loggedInUser");
   window.location.href = "signin.html";
+  throw new Error("No currentUser");
 }
 
-console.log("Current user from localStorage:", currentUser);
-
-/* DOM ELEMENTS */
+/* ============================================
+   DOM ELEMENTS
+   ============================================ */
 const profileImage = document.getElementById("profileImage");
 const profilePhotoInput = document.getElementById("profilePhotoInput");
 const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
@@ -66,65 +77,59 @@ function isMobile() {
   return window.innerWidth <= 768;
 }
 
-console.log("🔍 Elements found:");
-console.log("  profileView:", !!profileView);
-console.log("  accountPanel:", !!accountPanel);
-console.log("  securityPanel:", !!securityPanel);
-console.log("  accountTab:", !!accountTab);
-console.log("  securityTab:", !!securityTab);
-console.log("  mobileModal:", !!mobileModal);
-
 /* ============================================
-   UPDATE UI WITH USER DATA - FIXED
+   UPDATE UI WITH USER DATA - IMMEDIATE
    ============================================ */
 function updateUIWithUserData(data) {
   console.log("📝 Updating UI with user data:", data);
+  console.log("📝 Data username:", data.username);
+  console.log("📝 Data email:", data.email);
   
-  // Update sidebar - using textContent to ensure it works
+  // Update sidebar
   if (profileUsername) {
     profileUsername.textContent = data.username || 'User';
-    console.log("  profileUsername updated to:", profileUsername.textContent);
+    console.log("  ✅ profileUsername updated to:", profileUsername.textContent);
   }
   if (profileEmailDisplay) {
     profileEmailDisplay.textContent = data.email || 'user@email.com';
-    console.log("  profileEmailDisplay updated to:", profileEmailDisplay.textContent);
+    console.log("  ✅ profileEmailDisplay updated to:", profileEmailDisplay.textContent);
   }
   
   // Update profile view
   if (profileViewUsername) {
     profileViewUsername.textContent = data.username || 'User';
-    console.log("  profileViewUsername updated to:", profileViewUsername.textContent);
+    console.log("  ✅ profileViewUsername updated to:", profileViewUsername.textContent);
   }
   if (profileViewEmail) {
     profileViewEmail.textContent = data.email || 'user@email.com';
-    console.log("  profileViewEmail updated to:", profileViewEmail.textContent);
+    console.log("  ✅ profileViewEmail updated to:", profileViewEmail.textContent);
   }
   
   // Update account panel
   if (accountUsernameDisplay) {
     accountUsernameDisplay.textContent = data.username || 'User';
-    console.log("  accountUsernameDisplay updated to:", accountUsernameDisplay.textContent);
+    console.log("  ✅ accountUsernameDisplay updated to:", accountUsernameDisplay.textContent);
   }
   if (accountEmailDisplay) {
     accountEmailDisplay.textContent = data.email || 'user@email.com';
-    console.log("  accountEmailDisplay updated to:", accountEmailDisplay.textContent);
+    console.log("  ✅ accountEmailDisplay updated to:", accountEmailDisplay.textContent);
   }
   
   // Update form fields
   if (profileEmail) {
     profileEmail.value = data.email || '';
-    console.log("  profileEmail value set to:", profileEmail.value);
+    console.log("  ✅ profileEmail value set to:", profileEmail.value);
   }
   if (profileUsernameInput) {
     profileUsernameInput.value = data.username || '';
-    console.log("  profileUsernameInput value set to:", profileUsernameInput.value);
+    console.log("  ✅ profileUsernameInput value set to:", profileUsernameInput.value);
   }
   
   // Update profile photo
   if (profileImage) {
     const photoSrc = data.photo || DEFAULT_ICON;
     profileImage.src = photoSrc;
-    console.log("  profileImage src set to:", photoSrc);
+    console.log("  ✅ profileImage src set to:", photoSrc);
   }
   
   // Update navigation profile photo
@@ -132,13 +137,13 @@ function updateUIWithUserData(data) {
   if (navProfilePhoto) {
     const photoSrc = data.photo || DEFAULT_ICON;
     navProfilePhoto.src = photoSrc;
-    console.log("  navProfilePhoto src set to:", photoSrc);
+    console.log("  ✅ navProfilePhoto src set to:", photoSrc);
   }
   
   const navUsername = document.getElementById("navUsername");
   if (navUsername) {
     navUsername.textContent = data.username || 'Profile';
-    console.log("  navUsername updated to:", navUsername.textContent);
+    console.log("  ✅ navUsername updated to:", navUsername.textContent);
   }
   
   // Update delete photo button
@@ -148,11 +153,11 @@ function updateUIWithUserData(data) {
 }
 
 /* ============================================
-   LOAD USER DATA FROM MONGODB
+   LOAD USER DATA FROM SERVER
    ============================================ */
-async function loadUserData() {
+async function loadUserDataFromServer() {
   try {
-    console.log("🔄 Loading user data for:", loggedInEmail);
+    console.log("🔄 Loading user data from server for:", loggedInEmail);
     
     const res = await fetch("/api/get-user", {
       method: "POST",
@@ -160,7 +165,11 @@ async function loadUserData() {
       body: JSON.stringify({ email: loggedInEmail })
     });
 
+    console.log("📡 Server response status:", res.status);
+    
     const data = await res.json();
+    console.log("📡 Server response data:", data);
+    
     if (!res.ok) throw new Error(data.error);
 
     currentUser = data;
@@ -174,17 +183,39 @@ async function loadUserData() {
     // Ensure profile view is visible, panels are hidden
     showProfileView();
     
+    return true;
+    
   } catch (error) {
-    console.error("❌ Load user error:", error);
+    console.error("❌ Server load error:", error);
     // Try to use cached data if available
     if (currentUser) {
       console.log("⚠️ Using cached user data:", currentUser);
       updateUIWithUserData(currentUser);
+      showProfileView();
+      return true;
     } else {
+      console.error("❌ No cached data available!");
       toastError("Failed to load user data.");
+      return false;
     }
   }
 }
+
+/* ============================================
+   IMMEDIATE UI UPDATE ON PAGE LOAD
+   ============================================ */
+// Immediately update UI with cached data
+if (currentUser) {
+  console.log("📦 Immediately updating UI with cached data:", currentUser);
+  updateUIWithUserData(currentUser);
+  showProfileView();
+}
+
+// Then load from server to get latest data
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("📄 DOM fully loaded, loading from server...");
+  loadUserDataFromServer();
+});
 
 /* ============================================
    MOBILE MODAL FUNCTIONS
@@ -242,7 +273,6 @@ document.addEventListener('keydown', function(e) {
 function bindModalButtons() {
   console.log("🔗 Binding modal buttons...");
   
-  // Find and bind save account button in modal
   const modalSaveBtn = document.getElementById('modalSaveAccountBtn');
   if (modalSaveBtn) {
     console.log("  Found modalSaveAccountBtn");
@@ -252,7 +282,6 @@ function bindModalButtons() {
     });
   }
   
-  // Find and bind change password button in modal
   const modalChangePwdBtn = document.getElementById('modalChangePasswordBtn');
   if (modalChangePwdBtn) {
     console.log("  Found modalChangePasswordBtn");
@@ -262,7 +291,6 @@ function bindModalButtons() {
     });
   }
   
-  // Bind password toggle buttons in modal
   const modalToggleBtns = document.querySelectorAll('.modal-password-toggle');
   modalToggleBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -279,13 +307,11 @@ function bindModalButtons() {
     });
   });
   
-  // Bind logout button in modal
   const modalLogoutBtn = document.getElementById('modalLogoutBtn');
   if (modalLogoutBtn) {
     console.log("  Found modalLogoutBtn");
     modalLogoutBtn.addEventListener('click', async function(e) {
       e.preventDefault();
-      // Trigger logout
       const confirm = await showConfirmModal(
         '🚪 Log Out',
         'Are you sure you want to log out?',
@@ -304,13 +330,11 @@ function bindModalButtons() {
     });
   }
   
-  // Bind delete account button in modal
   const modalDeleteBtn = document.getElementById('modalDeleteAccountBtn');
   if (modalDeleteBtn) {
     console.log("  Found modalDeleteAccountBtn");
     modalDeleteBtn.addEventListener('click', async function(e) {
       e.preventDefault();
-      // Trigger delete account
       await deleteAccountHandler();
     });
   }
@@ -341,14 +365,12 @@ function showAccountPanel() {
   console.log("📋 showAccountPanel called, isMobile:", isMobile());
   
   if (isMobile()) {
-    // On mobile: Open modal with account content
     const accountPanelEl = document.getElementById('accountPanel');
     if (!accountPanelEl) {
       console.error("❌ accountPanel element not found!");
       return;
     }
     
-    // Get the HTML content
     let accountHTML = accountPanelEl.innerHTML;
     console.log("📋 Account HTML length:", accountHTML.length);
     
@@ -358,13 +380,8 @@ function showAccountPanel() {
       .replace(/id="accountCurrentPassword"/g, 'id="modalAccountCurrentPassword"')
       .replace(/id="profileEmail"/g, 'id="modalProfileEmail"')
       .replace(/id="profileUsernameInput"/g, 'id="modalProfileUsernameInput"')
-      .replace(/id="toggleAccountPassword"/g, 'id="modalToggleAccountPassword"');
-    
-    // Add modal-specific class for password toggle
-    accountHTML = accountHTML.replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"');
-    
-    // Also update labels to point to modal IDs
-    accountHTML = accountHTML
+      .replace(/id="toggleAccountPassword"/g, 'id="modalToggleAccountPassword"')
+      .replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"')
       .replace(/for="accountCurrentPassword"/g, 'for="modalAccountCurrentPassword"')
       .replace(/for="profileEmail"/g, 'for="modalProfileEmail"')
       .replace(/for="profileUsernameInput"/g, 'for="modalProfileUsernameInput"');
@@ -374,7 +391,6 @@ function showAccountPanel() {
       ${accountHTML}
     `);
   } else {
-    // On desktop: Show inline
     if (profileView) {
       profileView.style.display = "none";
       profileView.classList.add('hidden-panel');
@@ -396,14 +412,12 @@ function showSecurityPanel() {
   console.log("🔒 showSecurityPanel called, isMobile:", isMobile());
   
   if (isMobile()) {
-    // On mobile: Open modal with security content
     const securityPanelEl = document.getElementById('securityPanel');
     if (!securityPanelEl) {
       console.error("❌ securityPanel element not found!");
       return;
     }
     
-    // Get the HTML content
     let securityHTML = securityPanelEl.innerHTML;
     console.log("🔒 Security HTML length:", securityHTML.length);
     
@@ -417,13 +431,8 @@ function showSecurityPanel() {
       .replace(/id="toggleNewPassword"/g, 'id="modalToggleNewPassword"')
       .replace(/id="toggleConfirmPassword"/g, 'id="modalToggleConfirmPassword"')
       .replace(/id="logoutBtn"/g, 'id="modalLogoutBtn"')
-      .replace(/id="deleteAccountBtn"/g, 'id="modalDeleteAccountBtn"');
-    
-    // Add modal-specific class for password toggle
-    securityHTML = securityHTML.replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"');
-    
-    // Also update labels to point to modal IDs
-    securityHTML = securityHTML
+      .replace(/id="deleteAccountBtn"/g, 'id="modalDeleteAccountBtn"')
+      .replace(/class="password-toggle-btn"/g, 'class="password-toggle-btn modal-password-toggle"')
       .replace(/for="currentPassword"/g, 'for="modalCurrentPassword"')
       .replace(/for="newPassword"/g, 'for="modalNewPassword"')
       .replace(/for="confirmPassword"/g, 'for="modalConfirmPassword"');
@@ -433,7 +442,6 @@ function showSecurityPanel() {
       ${securityHTML}
     `);
   } else {
-    // On desktop: Show inline
     if (profileView) {
       profileView.style.display = "none";
       profileView.classList.add('hidden-panel');
@@ -505,18 +513,14 @@ function updateDeletePhotoButton() {
 }
 
 /* ============================================
-   ACCOUNT & SECURITY TABS - FIXED
+   ACCOUNT & SECURITY TABS
    ============================================ */
 console.log("Setting up tabs...");
 
-// Ensure default state
 showProfileView();
 
-// ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
-  
-  // Remove old listener by cloning
   const newAccountTab = accountTab.cloneNode(true);
   accountTab.parentNode.replaceChild(newAccountTab, accountTab);
   
@@ -532,11 +536,8 @@ if (accountTab) {
   console.error("❌ accountTab element not found!");
 }
 
-// ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
-  
-  // Remove old listener by cloning
   const newSecurityTab = securityTab.cloneNode(true);
   securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
   
@@ -652,7 +653,7 @@ if (uploadPhotoBtn && profilePhotoInput) {
 }
 
 /* ============================================
-   SAVE ACCOUNT HANDLER - EXTRACTED FOR MODAL
+   SAVE ACCOUNT HANDLER
    ============================================ */
 async function saveAccountHandler() {
   console.log("💾 saveAccountHandler called");
@@ -786,7 +787,6 @@ async function saveAccountHandler() {
       saveBtn.disabled = false;
     }
 
-    // Close mobile modal if open
     closeMobileModal();
 
     setTimeout(function() {
@@ -803,16 +803,13 @@ async function saveAccountHandler() {
   }
 }
 
-/* ============================================
-   SAVE ACCOUNT BUTTON
-   ============================================ */
 if (saveAccountBtn) {
   console.log("✅ Setting up Save Account");
   saveAccountBtn.addEventListener("click", saveAccountHandler);
 }
 
 /* ============================================
-   CHANGE PASSWORD HANDLER - EXTRACTED FOR MODAL
+   CHANGE PASSWORD HANDLER
    ============================================ */
 async function changePasswordHandler() {
   console.log("🔑 changePasswordHandler called");
@@ -918,10 +915,8 @@ async function changePasswordHandler() {
       changeBtn.textContent = "Change Password";
     }
 
-    // Close mobile modal if open
     closeMobileModal();
 
-    // Clear password fields
     const curPassInput = document.getElementById("currentPassword");
     const newPassInput = document.getElementById("newPassword");
     const confPassInput = document.getElementById("confirmPassword");
@@ -939,12 +934,40 @@ async function changePasswordHandler() {
   }
 }
 
-/* ============================================
-   CHANGE PASSWORD BUTTON
-   ============================================ */
 if (changePasswordBtn) {
   console.log("✅ Setting up Change Password");
   changePasswordBtn.addEventListener("click", changePasswordHandler);
+}
+
+/* ============================================
+   LOGOUT
+   ============================================ */
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", async function(e) {
+    e.preventDefault();
+    
+    const confirm = await showConfirmModal(
+      '🚪 Log Out',
+      'Are you sure you want to log out?',
+      'Yes, Log Out',
+      'Cancel'
+    );
+    
+    if (confirm === null || confirm === false) {
+      window.location.reload();
+      return;
+    }
+    
+    if (confirm) {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("userData");
+      toastSuccess("Logged out successfully!");
+      closeMobileModal();
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1500);
+    }
+  });
 }
 
 /* ============================================
@@ -1079,40 +1102,6 @@ async function deleteAccountHandler() {
   }
 }
 
-/* ============================================
-   LOGOUT
-   ============================================ */
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", async function(e) {
-    e.preventDefault();
-    
-    const confirm = await showConfirmModal(
-      '🚪 Log Out',
-      'Are you sure you want to log out?',
-      'Yes, Log Out',
-      'Cancel'
-    );
-    
-    if (confirm === null || confirm === false) {
-      window.location.reload();
-      return;
-    }
-    
-    if (confirm) {
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("userData");
-      toastSuccess("Logged out successfully!");
-      closeMobileModal();
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 1500);
-    }
-  });
-}
-
-/* ============================================
-   DELETE ACCOUNT BUTTON
-   ============================================ */
 if (deleteAccountBtn) {
   deleteAccountBtn.addEventListener("click", deleteAccountHandler);
 }
@@ -1169,16 +1158,4 @@ window.addEventListener('resize', function() {
   }
 });
 
-// Load user data on page load - IMMEDIATELY
-console.log("🔄 Starting immediate data load...");
-
-// First, try to use cached data immediately
-if (currentUser) {
-  console.log("📦 Using cached user data immediately:", currentUser);
-  updateUIWithUserData(currentUser);
-}
-
-// Then load from server to get latest data
-loadUserData();
-
-console.log("✅ Profile.js v85 loaded successfully");
+console.log("✅ Profile.js v100 loaded successfully");
