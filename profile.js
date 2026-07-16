@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 40 (COMPLETE)
+// PROFILE.JS - VERSION 50 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v40 LOADED!");
+console.log("🚀 profile.js v50 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -387,7 +387,7 @@ if (saveAccountBtn) {
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal();
+        code = await showVerificationModal(currentUser.email);
         
         if (!code) {
           toastWarning("Update cancelled. Refreshing page...");
@@ -511,7 +511,7 @@ if (changePasswordBtn) {
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal();
+        code = await showVerificationModal(currentUser.email);
         
         if (!code) {
           toastWarning("Password change cancelled. Refreshing page...");
@@ -649,7 +649,7 @@ if (deleteAccountBtn) {
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal();
+        code = await showVerificationModal(currentUser.email);
         
         if (!code) {
           toastWarning("Deletion cancelled. Refreshing page...");
@@ -765,4 +765,4 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v40 loaded successfully");
+console.log("✅ Profile.js v50 loaded successfully");
