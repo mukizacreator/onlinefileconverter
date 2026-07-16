@@ -1525,3 +1525,33 @@ footer {
     gap: 6px !important;
   }
 }
+
+/* ============================================
+   PROFILE PAGE - ENSURE PANELS WORK ON MOBILE
+   ============================================ */
+@media only screen and (max-width: 768px) {
+  /* Profile panels - ensure proper display */
+  #profileView, #accountPanel, #securityPanel {
+    display: block !important;
+    width: 100% !important;
+  }
+  
+  /* Hide all panels by default, show only profileView */
+  #accountPanel, #securityPanel {
+    display: none !important;
+  }
+  
+  /* When active, show the panel */
+  #accountPanel.active-panel {
+    display: block !important;
+  }
+  
+  #securityPanel.active-panel {
+    display: block !important;
+  }
+  
+  /* Hide profileView when a tab is active */
+  #profileView.hidden-panel {
+    display: none !important;
+  }
+}
