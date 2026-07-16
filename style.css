@@ -60,7 +60,7 @@ a { color: inherit; }
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 }
 
 .nav-link i {
@@ -89,7 +89,7 @@ a { color: inherit; }
 #profileNav a {
   display: flex !important;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 #navProfilePhoto {
@@ -266,6 +266,7 @@ input[type="file"] { display: none; }
   word-break: break-word;
   max-width: 220px;
   font-size: 0.9rem;
+  padding: 4px 0;
 }
 
 .format-select {
@@ -658,13 +659,13 @@ footer {
 
 /* ============================================
    ============================================
-   MOBILE RESPONSIVE - COMPLETE
+   MOBILE RESPONSIVE
    ============================================
    ============================================ */
 
 @media only screen and (max-width: 768px) {
   /* ==========================================
-     NAVIGATION - FIXED SPACING & PADDING
+     NAVIGATION - ICONS REMOVED ON MOBILE
      ========================================== */
   .top-nav .nav-left {
     display: none !important;
@@ -686,7 +687,12 @@ footer {
   .nav-mobile-dashboard .nav-link {
     font-size: 0.82rem !important;
     padding: 6px 16px !important;
-    gap: 12px !important;
+  }
+  
+  /* Remove icons from mobile nav links */
+  .nav-mobile-dashboard .nav-link i,
+  .top-nav .nav-right .nav-link i {
+    display: none !important;
   }
   
   .top-nav {
@@ -704,11 +710,6 @@ footer {
   .top-nav .nav-right .nav-link {
     padding: 6px 14px !important;
     font-size: 0.75rem !important;
-    gap: 12px !important;
-  }
-  
-  .top-nav .nav-right .nav-link i {
-    font-size: 0.7rem !important;
   }
   
   /* ==========================================
@@ -761,6 +762,7 @@ footer {
     max-width: 100% !important;
     text-align: center !important;
     width: 100% !important;
+    padding: 6px 0 !important;
   }
   
   .format-select {
@@ -787,7 +789,7 @@ footer {
   }
   
   /* ==========================================
-     PROFILE - FIXED FULL WIDTH
+     PROFILE - FULL WIDTH FIX
      ========================================== */
   #profileNav #navProfilePhoto {
     width: 22px !important;
@@ -797,7 +799,6 @@ footer {
     font-size: 0.7rem !important;
   }
   
-  /* Profile page layout - full width */
   .converter-box {
     padding: 10px !important;
     width: 100% !important;
@@ -826,13 +827,11 @@ footer {
     min-width: 0 !important;
   }
   
-  /* Profile tabs - full width */
   #profileView, #accountPanel, #securityPanel {
     width: 100% !important;
     display: block !important;
   }
   
-  /* Profile password fields - full width */
   .profile-password-wrapper {
     display: flex !important;
     flex-direction: row !important;
@@ -857,7 +856,6 @@ footer {
     font-size: 0.8rem !important;
   }
   
-  /* Profile inputs */
   .profile-input {
     height: 40px !important;
     padding: 8px 12px !important;
@@ -890,7 +888,7 @@ footer {
   }
   
   /* ==========================================
-     PASSWORD TOGGLE - FIXED INLINE
+     PASSWORD TOGGLE
      ========================================== */
   .password-toggle-btn {
     padding: 10px 14px !important;
@@ -924,7 +922,7 @@ footer {
   }
   
   /* ==========================================
-     AUTH SWITCH TEXT - FIXED
+     AUTH SWITCH TEXT
      ========================================== */
   .auth-switch-text {
     font-size: 0.85rem !important;
@@ -949,7 +947,7 @@ footer {
   }
   
   /* ==========================================
-     SIGNIN/SIGNUP FORM - FIXED
+     SIGNIN/SIGNUP FORM
      ========================================== */
   .converter-box form {
     width: 100% !important;
@@ -983,17 +981,11 @@ footer {
   .top-nav .nav-right .nav-link {
     padding: 5px 10px !important;
     font-size: 0.65rem !important;
-    gap: 10px !important;
-  }
-  
-  .top-nav .nav-right .nav-link i {
-    font-size: 0.6rem !important;
   }
   
   .nav-mobile-dashboard .nav-link {
     font-size: 0.72rem !important;
     padding: 5px 12px !important;
-    gap: 10px !important;
   }
   
   .nav-hamburger {
@@ -1008,6 +1000,11 @@ footer {
   .custom-file-label {
     font-size: 0.72rem !important;
     padding: 8px 12px !important;
+  }
+  
+  #fileName {
+    font-size: 0.7rem !important;
+    padding: 4px 0 !important;
   }
   
   .format-select {
@@ -1045,7 +1042,6 @@ footer {
     font-size: 0.78rem !important;
   }
   
-  /* Profile extra small */
   .profile-password-wrapper input {
     height: 36px !important;
     padding: 6px 10px !important;
@@ -1087,5 +1083,10 @@ footer {
   
   .nav-left {
     display: flex !important;
+  }
+  
+  /* Desktop nav link spacing - keep as original */
+  .nav-link {
+    gap: 6px !important;
   }
 }
