@@ -114,4 +114,110 @@
               </div>
               <div>
                 <p style="color:#aaa; margin:0; font-size:0.65rem; text-transform:uppercase; letter-spacing:1px;">Current Email</p>
-                <p style="font-size:0
+                <p style="font-size:0.95rem; font-weight:600; margin:2px 0 0 0; word-break:break-all;" id="accountEmailDisplay">user@email.com</p>
+              </div>
+            </div>
+            
+            <div style="margin-bottom:10px;">
+              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password *</label>
+              <div class="profile-password-wrapper">
+                <input type="password" id="accountCurrentPassword" placeholder="Enter your current password" class="profile-input">
+                <button type="button" id="toggleAccountPassword" class="password-toggle-btn">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Email</label>
+              <input type="email" id="profileEmail" placeholder="Enter new email" class="profile-input">
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Username</label>
+              <input type="text" id="profileUsernameInput" placeholder="Enter new username" class="profile-input">
+            </div>
+
+            <button class="convert-btn profile-action-btn" id="saveAccountBtn">
+              <span id="saveAccountText">Save Changes</span>
+            </button>
+          </div>
+
+          <!-- SECURITY PANEL - HIDDEN BY DEFAULT -->
+          <div id="securityPanel">
+            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
+            <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
+            
+            <div style="margin-bottom:10px;">
+              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password</label>
+              <div class="profile-password-wrapper">
+                <input type="password" id="currentPassword" placeholder="Enter current password" class="profile-input">
+                <button type="button" id="toggleCurrentPassword" class="password-toggle-btn">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div style="margin-bottom:6px;">
+              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Password</label>
+              <div class="profile-password-wrapper">
+                <input type="password" id="newPassword" placeholder="Enter new password" class="profile-input">
+                <button type="button" id="toggleNewPassword" class="password-toggle-btn">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div style="color:#bbb; font-size:0.65rem; margin-bottom:10px; background:rgba(255,255,255,0.05); padding:4px 10px; border-radius:6px;">
+              <i class="fa-solid fa-circle-info" style="color:#00bcd4;"></i> At least 5 chars, one capital letter, one number, one symbol
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Confirm Password</label>
+              <div class="profile-password-wrapper">
+                <input type="password" id="confirmPassword" placeholder="Confirm new password" class="profile-input">
+                <button type="button" id="toggleConfirmPassword" class="password-toggle-btn">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button class="convert-btn profile-action-btn" id="changePasswordBtn">Change Password</button>
+            <button class="convert-btn profile-action-btn" id="logoutBtn" style="background:#ff9800;">Log Out</button>
+            <button class="convert-btn profile-action-btn" id="deleteAccountBtn" style="background:#e53935;">Delete Account</button>
+          </div>
+
+          <div id="profileMessage" style="display:none;"></div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="profile.js?v=65"></script>
+  <script src="notifications.js?v=65"></script>
+  <script src="modal.js?v=65"></script>
+  <script src="nav.js?v=65"></script>
+
+  <script>
+    (function() {
+      const loggedInEmail = localStorage.getItem("loggedInUser");
+      
+      const profileNav = document.getElementById("profileNav");
+      if (profileNav) {
+        profileNav.style.display = "none";
+      }
+      
+      const guestNav = document.getElementById("guestNav");
+      if (loggedInEmail && guestNav) {
+        guestNav.style.display = "none";
+      }
+    })();
+  </script>
+
+  <footer>
+    <div class="copyright">© 2026 Emmanuel MUKIZA</div>
+  </footer>
+
+</body>
+</html>
