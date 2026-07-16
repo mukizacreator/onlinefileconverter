@@ -324,7 +324,9 @@ form input, form select, form textarea {
 }
 form input::placeholder, form textarea::placeholder { color: #cccccc; }
 
-/* Password toggle button fix */
+/* ============================================
+   PASSWORD TOGGLE BUTTON - FIXED
+   ============================================ */
 .password-toggle-btn {
   border: none;
   background: rgba(255, 255, 255, 0.12);
@@ -375,7 +377,9 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
   padding: 0 16px;
 }
 
-/* Auth links */
+/* ============================================
+   AUTH LINKS - FIXED
+   ============================================ */
 .auth-link {
   color: #00bcd4;
   text-decoration: none;
@@ -390,9 +394,15 @@ form input::placeholder, form textarea::placeholder { color: #cccccc; }
 
 .auth-switch-text {
   text-align: center;
-  margin-top: 16px;
+  margin-top: 18px;
   color: #aaa;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.auth-switch-text .auth-link {
+  font-weight: 700;
 }
 
 /* ============================================
@@ -482,7 +492,6 @@ section h2 {
   margin-bottom: 12px;
 }
 
-/* Profile page button fixes */
 .profile-action-btn {
   width: 100%;
   padding: 10px !important;
@@ -644,36 +653,31 @@ footer {
    ============================================
    ============================================ */
 
-/* MOBILE VIEW - Hide Desktop Nav, Show Hamburger */
 @media only screen and (max-width: 768px) {
-  /* HIDE DESKTOP NAV - COMPLETELY */
+  /* ===== NAVIGATION ===== */
   .top-nav .nav-left {
     display: none !important;
   }
-  
   .nav-left {
     display: none !important;
   }
   
-  /* SHOW HAMBURGER */
   .nav-hamburger {
     display: block !important;
     font-size: 1.4rem !important;
     padding: 5px 10px !important;
   }
   
-  /* SHOW MOBILE DASHBOARD */
   .nav-mobile-dashboard {
     display: block !important;
   }
   
   .nav-mobile-dashboard .nav-link {
     font-size: 0.8rem !important;
-    padding: 5px 12px !important;
-    gap: 6px !important;
+    padding: 5px 14px !important;
+    gap: 8px !important;
   }
   
-  /* MOBILE NAV LAYOUT */
   .top-nav {
     padding: 6px 10px !important;
     gap: 4px !important;
@@ -687,25 +691,24 @@ footer {
   }
   
   .top-nav .nav-right .nav-link {
-    padding: 5px 10px !important;
+    padding: 5px 12px !important;
     font-size: 0.72rem !important;
-    gap: 5px !important;
+    gap: 8px !important;
   }
   
   .top-nav .nav-right .nav-link i {
     font-size: 0.65rem !important;
   }
   
-  /* MOBILE DROPDOWN */
+  /* ===== DROPDOWN ===== */
   .mobile-dropdown {
     width: 100% !important;
   }
-  
   .mobile-dropdown.open {
     display: flex !important;
   }
   
-  /* CONVERTER BOX - FULL WIDTH */
+  /* ===== CONVERTER BOX ===== */
   .dashboard {
     padding: 4px 6px !important;
   }
@@ -758,7 +761,7 @@ footer {
     width: 100% !important;
   }
   
-  /* HEADER */
+  /* ===== HEADER ===== */
   header h1 {
     font-size: 1.3rem !important;
   }
@@ -766,7 +769,7 @@ footer {
     font-size: 0.75rem !important;
   }
   
-  /* PROFILE */
+  /* ===== PROFILE ===== */
   #profileNav #navProfilePhoto {
     width: 20px !important;
     height: 20px !important;
@@ -775,7 +778,7 @@ footer {
     font-size: 0.65rem !important;
   }
   
-  /* FOOTER */
+  /* ===== FOOTER ===== */
   .footer-support {
     font-size: 0.65rem !important;
   }
@@ -783,13 +786,13 @@ footer {
     font-size: 0.6rem !important;
   }
   
-  /* SUPPORT LINKS */
+  /* ===== SUPPORT LINKS ===== */
   .support-link {
     padding: 8px 12px !important;
     font-size: 0.75rem !important;
   }
   
-  /* PASSWORD TOGGLE ON MOBILE */
+  /* ===== PASSWORD TOGGLE - FIXED INLINE ===== */
   .password-toggle-btn {
     padding: 10px 14px !important;
     height: 44px !important;
@@ -808,20 +811,57 @@ footer {
   
   .password-wrapper {
     gap: 6px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
   }
   
-  /* Auth switch text on mobile */
+  /* ===== AUTH SWITCH TEXT - FIXED ===== */
   .auth-switch-text {
-    font-size: 0.8rem !important;
+    font-size: 0.85rem !important;
+    padding: 14px 0 !important;
+    margin-top: 14px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+  
+  .auth-switch-text .auth-link {
+    font-size: 0.85rem !important;
+    display: inline !important;
+  }
+  
+  /* ===== SIGNIN/SIGNUP FORM ===== */
+  .converter-box form {
+    width: 100% !important;
+  }
+  
+  .converter-box form .password-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+  
+  .converter-box form .password-wrapper input {
+    flex: 1 !important;
+    width: auto !important;
+  }
+  
+  .converter-box form .password-wrapper .password-toggle-btn {
+    flex-shrink: 0 !important;
+    width: auto !important;
   }
 }
 
-/* EXTRA SMALL */
+/* ============================================
+   EXTRA SMALL
+   ============================================ */
 @media only screen and (max-width: 400px) {
   .top-nav .nav-right .nav-link {
-    padding: 4px 7px !important;
+    padding: 4px 8px !important;
     font-size: 0.6rem !important;
-    gap: 4px !important;
+    gap: 6px !important;
   }
   
   .top-nav .nav-right .nav-link i {
@@ -830,8 +870,8 @@ footer {
   
   .nav-mobile-dashboard .nav-link {
     font-size: 0.7rem !important;
-    padding: 4px 8px !important;
-    gap: 4px !important;
+    padding: 4px 10px !important;
+    gap: 6px !important;
   }
   
   .nav-hamburger {
@@ -873,9 +913,20 @@ footer {
     height: 38px !important;
     font-size: 0.75rem !important;
   }
+  
+  .auth-switch-text {
+    font-size: 0.75rem !important;
+    padding: 10px 0 !important;
+  }
+  
+  .auth-switch-text .auth-link {
+    font-size: 0.75rem !important;
+  }
 }
 
-/* DESKTOP VIEW - Hide Mobile Elements */
+/* ============================================
+   DESKTOP VIEW
+   ============================================ */
 @media only screen and (min-width: 769px) {
   .nav-hamburger {
     display: none !important;
