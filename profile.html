@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=70">
+  <link rel="stylesheet" href="style.css?v=30">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
@@ -84,7 +84,6 @@
 
         <section style="flex:1; min-width:250px; padding:14px 20px;">
 
-          <!-- PROFILE VIEW - DEFAULT VISIBLE -->
           <div id="profileView">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Profile Information</h2>
             <div style="background:rgba(255,255,255,0.06); padding:16px 20px; border-radius:10px;">
@@ -102,8 +101,7 @@
             </p>
           </div>
 
-          <!-- ACCOUNT PANEL - HIDDEN BY DEFAULT -->
-          <div id="accountPanel">
+          <div id="accountPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
             
@@ -143,8 +141,7 @@
             </button>
           </div>
 
-          <!-- SECURITY PANEL - HIDDEN BY DEFAULT -->
-          <div id="securityPanel">
+          <div id="securityPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
             
@@ -194,10 +191,10 @@
     </div>
   </main>
 
-  <script src="profile.js?v=70"></script>
-  <script src="notifications.js?v=70"></script>
-  <script src="modal.js?v=70"></script>
-  <script src="nav.js?v=70"></script>
+  <script src="profile.js?v=30"></script>
+  <script src="notifications.js?v=30"></script>
+  <script src="modal.js?v=30"></script>
+  <script src="nav.js?v=30"></script>
 
   <script>
     (function() {
