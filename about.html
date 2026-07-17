@@ -302,7 +302,7 @@
               </div>
             </div>
           </div>
-          <button class="copy-btn" data-copy="@mukiza_me">
+          <button class="copy-btn" data-copy="instagram.com/mukiza_me/">
             <i class="fa-regular fa-copy"></i>
             <span>Copy</span>
           </button>
@@ -321,7 +321,7 @@
               </div>
             </div>
           </div>
-          <button class="copy-btn" data-copy="meMukiza">
+          <button class="copy-btn" data-copy="web.facebook.com/meMukiza">
             <i class="fa-regular fa-copy"></i>
             <span>Copy</span>
           </button>
@@ -340,7 +340,7 @@
               </div>
             </div>
           </div>
-          <button class="copy-btn" data-copy="@mukiza_me">
+          <button class="copy-btn" data-copy="x.com/mukiza_me">
             <i class="fa-regular fa-copy"></i>
             <span>Copy</span>
           </button>
@@ -359,7 +359,7 @@
               </div>
             </div>
           </div>
-          <button class="copy-btn" data-copy="@Th_estarME">
+          <button class="copy-btn" data-copy="youtube.com/@Th_estarME">
             <i class="fa-regular fa-copy"></i>
             <span>Copy</span>
           </button>
@@ -391,14 +391,17 @@
         var textToCopy = this.getAttribute('data-copy');
         if (!textToCopy) return;
         
+        console.log("📋 Copying:", textToCopy);
+        
         // Try using modern clipboard API first
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(textToCopy)
             .then(function() {
+              console.log("✅ Copied:", textToCopy);
               showCopiedFeedback(btn);
             })
-            .catch(function() {
-              // Fallback to older method
+            .catch(function(err) {
+              console.error("❌ Clipboard error:", err);
               fallbackCopy(textToCopy, btn);
             });
         } else {
@@ -414,6 +417,7 @@
       tempInput.style.position = 'fixed';
       tempInput.style.opacity = '0';
       tempInput.style.pointerEvents = 'none';
+      tempInput.style.left = '-9999px';
       tempInput.value = text;
       document.body.appendChild(tempInput);
       
@@ -422,11 +426,14 @@
         tempInput.setSelectionRange(0, 99999);
         var success = document.execCommand('copy');
         if (success) {
+          console.log("✅ Copied (fallback):", text);
           showCopiedFeedback(btn);
         } else {
+          console.error("❌ Fallback copy failed");
           toastError('Failed to copy. Please copy manually.');
         }
       } catch (err) {
+        console.error("❌ Fallback copy error:", err);
         toastError('Failed to copy. Please copy manually.');
       }
       
