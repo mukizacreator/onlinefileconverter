@@ -16,6 +16,170 @@
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="style.css?v=70">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+  <style>
+    /* Projects page specific styles */
+    .projects-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .projects-header {
+      margin-bottom: 30px;
+    }
+
+    .projects-header h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .projects-header .subtitle {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+    }
+
+    .project-section {
+      margin-bottom: 32px;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 24px 0;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      color: #00bcd4;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title i {
+      font-size: 1rem;
+    }
+
+    .project-item {
+      padding: 4px 0;
+    }
+
+    .project-item .project-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0 0 4px 0;
+    }
+
+    .project-item .project-desc {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .future-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+    }
+
+    .future-list li {
+      padding: 6px 0 6px 24px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .future-list li::before {
+      content: "•";
+      color: #ff9800;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: 4px;
+    }
+
+    .projects-footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Mobile styles */
+    @media (max-width: 768px) {
+      .projects-container {
+        padding: 16px;
+      }
+
+      .projects-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .projects-header .subtitle {
+        font-size: 0.9rem;
+      }
+
+      .section-title {
+        font-size: 1rem;
+      }
+
+      .project-item .project-name {
+        font-size: 0.95rem;
+      }
+
+      .project-item .project-desc {
+        font-size: 0.85rem;
+      }
+
+      .future-list li {
+        font-size: 0.85rem;
+        padding: 5px 0 5px 22px;
+      }
+
+      .section-divider {
+        margin: 20px 0;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .projects-container {
+        padding: 12px;
+      }
+
+      .projects-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .projects-header .subtitle {
+        font-size: 0.8rem;
+      }
+
+      .section-title {
+        font-size: 0.9rem;
+      }
+
+      .project-item .project-name {
+        font-size: 0.85rem;
+      }
+
+      .project-item .project-desc {
+        font-size: 0.8rem;
+      }
+
+      .future-list li {
+        font-size: 0.8rem;
+        padding: 4px 0 4px 20px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -53,22 +217,38 @@
     <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
-  <header>
-    <h1>Other Projects</h1>
-    <p class="subtitle">My achievements, projects and future innovations.</p>
-  </header>
-
-  <main class="dashboard">
-    <div class="converter-box" style="max-width: 600px; padding: 14px 18px; margin-bottom: 4px; gap: 10px;">
-      <div class="info-card" style="padding: 12px 16px;">
-        <h2 style="font-size: 1rem; margin-bottom: 6px;"><i class="fa-solid fa-award"></i> Featured Project</h2>
-        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Universal Online File Converter</strong></p>
-        <p style="font-size: 0.8rem; margin: 3px 0; color: #ccc;">A secure and modern file conversion platform supporting documents, images and audio conversion in one place.</p>
+  <main>
+    <div class="projects-container">
+      <!-- Header -->
+      <div class="projects-header">
+        <h1>Other Projects</h1>
+        <p class="subtitle">My achievements, projects and future innovations.</p>
       </div>
-      <div class="info-card" style="padding: 12px 16px;">
-        <h2 style="font-size: 1rem; margin-bottom: 6px;"><i class="fa-solid fa-lightbulb"></i> Future Projects</h2>
-        <p style="font-size: 0.8rem; margin: 3px 0; color: #ccc;">Future additions may include:</p>
-        <ul style="margin: 3px 0; padding-left: 16px; font-size: 0.8rem; color: #ccc; line-height: 1.5;">
+
+      <!-- Divider -->
+      <hr class="section-divider">
+
+      <!-- Featured Project -->
+      <div class="project-section">
+        <div class="section-title">
+          <i class="fa-solid fa-award"></i> Featured Project
+        </div>
+        <div class="project-item">
+          <p class="project-name">Universal Online File Converter</p>
+          <p class="project-desc">A secure and modern file conversion platform supporting documents, images and audio conversion in one place.</p>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="section-divider">
+
+      <!-- Future Projects -->
+      <div class="project-section">
+        <div class="section-title">
+          <i class="fa-solid fa-lightbulb"></i> Future Projects
+        </div>
+        <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); margin:0 0 8px 0;">Future additions may include:</p>
+        <ul class="future-list">
           <li>Web applications</li>
           <li>Software projects</li>
           <li>Achievements and awards</li>
@@ -76,6 +256,11 @@
           <li>Open-source contributions</li>
           <li>Research and innovations</li>
         </ul>
+      </div>
+
+      <!-- Footer -->
+      <div class="projects-footer">
+        © 2026 Emmanuel MUKIZA
       </div>
     </div>
   </main>
@@ -151,10 +336,6 @@
     }
   })();
 </script>
-
-  <footer>
-    <div class="copyright">© 2026 Emmanuel MUKIZA</div>
-  </footer>
 
 </body>
 </html>
