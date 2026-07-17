@@ -16,6 +16,213 @@
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="style.css?v=70">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+  
+  <style>
+    /* ============================================
+       ABOUT PAGE - MODERN STYLES
+       ============================================ */
+    
+    /* Contact list container */
+    .contact-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    /* Each contact item - row layout */
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 18px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      gap: 12px;
+    }
+    
+    .contact-item:hover {
+      background: rgba(255, 255, 255, 0.10);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+    
+    /* Left side - icon + label + value */
+    .contact-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+    
+    /* Icon circle with platform colors */
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      transition: 0.3s;
+    }
+    
+    .contact-item:hover .contact-icon {
+      transform: scale(1.05);
+    }
+    
+    /* Platform-specific icon colors */
+    .icon-email {
+      background: rgba(234, 67, 53, 0.2);
+      color: #ea4335;
+    }
+    
+    .icon-instagram {
+      background: rgba(225, 48, 108, 0.2);
+      color: #e1306c;
+    }
+    
+    .icon-facebook {
+      background: rgba(24, 119, 242, 0.2);
+      color: #1877f2;
+    }
+    
+    .icon-x {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+    
+    .icon-youtube {
+      background: rgba(255, 0, 0, 0.2);
+      color: #ff0000;
+    }
+    
+    /* Contact label and value */
+    .contact-label {
+      color: #aaa;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1px;
+    }
+    
+    .contact-value {
+      color: white;
+      font-size: 0.92rem;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    
+    .contact-value a {
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    
+    .contact-value a:hover {
+      color: #00bcd4;
+    }
+    
+    /* Copy button */
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: #aaa;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    .copy-btn:hover {
+      background: rgba(0, 188, 212, 0.2);
+      color: #00bcd4;
+    }
+    
+    .copy-btn.copied {
+      background: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+    }
+    
+    .copy-btn i {
+      font-size: 0.85rem;
+    }
+    
+    /* Mobile responsive */
+    @media only screen and (max-width: 600px) {
+      .contact-item {
+        padding: 10px 14px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      
+      .contact-info {
+        gap: 10px;
+        flex: 1 1 100%;
+      }
+      
+      .contact-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
+      }
+      
+      .contact-label {
+        font-size: 0.65rem;
+      }
+      
+      .contact-value {
+        font-size: 0.8rem;
+      }
+      
+      .copy-btn {
+        padding: 6px 12px;
+        font-size: 0.7rem;
+        margin-left: auto;
+      }
+      
+      .copy-btn span {
+        display: none;
+      }
+      
+      .copy-btn i {
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media only screen and (max-width: 400px) {
+      .contact-item {
+        padding: 8px 10px;
+      }
+      
+      .contact-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+      }
+      
+      .contact-value {
+        font-size: 0.72rem;
+      }
+      
+      .copy-btn {
+        padding: 4px 10px;
+        font-size: 0.65rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -59,18 +266,202 @@
   </header>
 
   <main class="dashboard">
-    <div class="converter-box" style="max-width:600px; margin-bottom: 15px;">
-      <a href="mailto:mukizacreator@gmail.com" class="support-link"><i class="fa-solid fa-envelope"></i> Email: mukizacreator@gmail.com</a>
-      <a href="https://www.instagram.com/mukiza_me" target="_blank" class="support-link"><i class="fa-brands fa-instagram"></i> Instagram: @mukiza_me</a>
-      <a href="https://web.facebook.com/meMukiza" target="_blank" class="support-link"><i class="fa-brands fa-facebook"></i> Facebook: meMukiza</a>
-      <a href="https://x.com/mukiza_me" target="_blank" class="support-link"><i class="fa-brands fa-x-twitter"></i> X: @mukiza_me</a>
-      <a href="#" class="support-link"><i class="fa-brands fa-youtube"></i> YouTube: www.youtube.com/@Th_estarME</a>
+    <div class="converter-box" style="max-width:620px; margin-bottom: 15px; padding: 24px 28px;">
+      
+      <div class="contact-list">
+        
+        <!-- Email -->
+        <div class="contact-item">
+          <div class="contact-info">
+            <div class="contact-icon icon-email">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-value">
+                <a href="mailto:mukizacreator@gmail.com">mukizacreator@gmail.com</a>
+              </div>
+            </div>
+          </div>
+          <button class="copy-btn" data-copy="mukizacreator@gmail.com">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copy</span>
+          </button>
+        </div>
+        
+        <!-- Instagram -->
+        <div class="contact-item">
+          <div class="contact-info">
+            <div class="contact-icon icon-instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </div>
+            <div>
+              <div class="contact-label">Instagram</div>
+              <div class="contact-value">
+                <a href="https://www.instagram.com/mukiza_me" target="_blank">@mukiza_me</a>
+              </div>
+            </div>
+          </div>
+          <button class="copy-btn" data-copy="@mukiza_me">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copy</span>
+          </button>
+        </div>
+        
+        <!-- Facebook -->
+        <div class="contact-item">
+          <div class="contact-info">
+            <div class="contact-icon icon-facebook">
+              <i class="fa-brands fa-facebook-f"></i>
+            </div>
+            <div>
+              <div class="contact-label">Facebook</div>
+              <div class="contact-value">
+                <a href="https://web.facebook.com/meMukiza" target="_blank">meMukiza</a>
+              </div>
+            </div>
+          </div>
+          <button class="copy-btn" data-copy="meMukiza">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copy</span>
+          </button>
+        </div>
+        
+        <!-- X (Twitter) -->
+        <div class="contact-item">
+          <div class="contact-info">
+            <div class="contact-icon icon-x">
+              <i class="fa-brands fa-x-twitter"></i>
+            </div>
+            <div>
+              <div class="contact-label">X</div>
+              <div class="contact-value">
+                <a href="https://x.com/mukiza_me" target="_blank">@mukiza_me</a>
+              </div>
+            </div>
+          </div>
+          <button class="copy-btn" data-copy="@mukiza_me">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copy</span>
+          </button>
+        </div>
+        
+        <!-- YouTube -->
+        <div class="contact-item">
+          <div class="contact-info">
+            <div class="contact-icon icon-youtube">
+              <i class="fa-brands fa-youtube"></i>
+            </div>
+            <div>
+              <div class="contact-label">YouTube</div>
+              <div class="contact-value">
+                <a href="#" target="_blank">@Th_estarME</a>
+              </div>
+            </div>
+          </div>
+          <button class="copy-btn" data-copy="@Th_estarME">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copy</span>
+          </button>
+        </div>
+        
+      </div>
+      
     </div>
   </main>
 
   <script src="notifications.js?v=70"></script>
   <script src="modal.js?v=70"></script>
   <script src="nav.js?v=70"></script>
+
+  <script>
+  // ============================================
+  // COPY TO CLIPBOARD FUNCTIONALITY
+  // ============================================
+  (function() {
+    'use strict';
+    
+    var copyButtons = document.querySelectorAll('.copy-btn');
+    
+    copyButtons.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var textToCopy = this.getAttribute('data-copy');
+        if (!textToCopy) return;
+        
+        // Try using modern clipboard API first
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(textToCopy)
+            .then(function() {
+              showCopiedFeedback(btn);
+            })
+            .catch(function() {
+              // Fallback to older method
+              fallbackCopy(textToCopy, btn);
+            });
+        } else {
+          // Fallback for older browsers
+          fallbackCopy(textToCopy, btn);
+        }
+      });
+    });
+    
+    function fallbackCopy(text, btn) {
+      // Create temporary input element
+      var tempInput = document.createElement('input');
+      tempInput.style.position = 'fixed';
+      tempInput.style.opacity = '0';
+      tempInput.style.pointerEvents = 'none';
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      
+      try {
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999);
+        var success = document.execCommand('copy');
+        if (success) {
+          showCopiedFeedback(btn);
+        } else {
+          toastError('Failed to copy. Please copy manually.');
+        }
+      } catch (err) {
+        toastError('Failed to copy. Please copy manually.');
+      }
+      
+      document.body.removeChild(tempInput);
+    }
+    
+    function showCopiedFeedback(btn) {
+      // Change button appearance
+      btn.classList.add('copied');
+      var icon = btn.querySelector('i');
+      var text = btn.querySelector('span');
+      
+      if (icon) {
+        icon.className = 'fa-solid fa-check';
+      }
+      if (text) {
+        text.textContent = 'Copied!';
+      }
+      
+      toastSuccess('Copied to clipboard!');
+      
+      // Reset button after 2 seconds
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        if (icon) {
+          icon.className = 'fa-regular fa-copy';
+        }
+        if (text) {
+          text.textContent = 'Copy';
+        }
+      }, 2500);
+    }
+    
+  })();
+  </script>
 
   <script>
   (function() {
