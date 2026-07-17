@@ -12,10 +12,15 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
   
+  <!-- NEW PROFILE STYLES - Fresh, Clean, Modern -->
   <style>
-    /* Mobile Modal Styles - Built in */
-    .mobile-profile-modal {
-      display: none !important;
+    /* ============================================
+       NEW PROFILE PAGE - FRESH STYLES
+       ============================================ */
+    
+    /* Mobile Modal Overlay */
+    .profile-modal-overlay {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -29,21 +34,25 @@
       align-items: center;
       padding: 20px;
     }
-    .mobile-profile-modal.open {
+    
+    .profile-modal-overlay.active {
       display: flex !important;
     }
-    .mobile-profile-modal-content {
+    
+    .profile-modal-box {
       background: rgba(25, 35, 45, 0.98);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
-      padding: 24px 28px;
+      padding: 28px 30px;
       max-width: 500px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
+      animation: modalFadeIn 0.3s ease;
     }
-    .mobile-profile-modal-close {
+    
+    .profile-modal-close {
       position: absolute;
       top: 12px;
       right: 16px;
@@ -54,31 +63,173 @@
       cursor: pointer;
       padding: 4px 8px;
       border-radius: 8px;
+      transition: 0.3s;
     }
-    .mobile-profile-modal-close:hover {
+    
+    .profile-modal-close:hover {
       color: white;
       background: rgba(255, 255, 255, 0.1);
     }
-    .mobile-profile-modal-content h2 {
+    
+    .profile-modal-title {
       color: white;
       font-size: 1.3rem;
-      margin-top: 0;
-      margin-bottom: 16px;
+      margin: 0 0 16px 0;
       padding-right: 40px;
     }
+    
+    .profile-modal-title i {
+      margin-right: 10px;
+      color: #00bcd4;
+    }
+    
+    /* Profile card styles */
+    .profile-info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .profile-info-label {
+      color: #aaa;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .profile-info-value {
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    
+    /* Password wrapper for inline toggle */
+    .pwd-wrapper {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      align-items: center;
+    }
+    
+    .pwd-wrapper input {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      font-size: 0.85rem;
+      height: 44px;
+    }
+    
+    .pwd-wrapper .pwd-toggle {
+      height: 44px;
+      min-width: 44px;
+      padding: 0 12px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .pwd-wrapper .pwd-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Profile action buttons */
+    .profile-btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 8px;
+      color: white;
+    }
+    
+    .profile-btn-primary {
+      background: #00bcd4;
+    }
+    
+    .profile-btn-primary:hover {
+      background: #008ba3;
+      transform: scale(1.02);
+    }
+    
+    .profile-btn-danger {
+      background: #e53935;
+    }
+    
+    .profile-btn-danger:hover {
+      background: #c62828;
+      transform: scale(1.02);
+    }
+    
+    .profile-btn-warning {
+      background: #ff9800;
+    }
+    
+    .profile-btn-warning:hover {
+      background: #e68900;
+      transform: scale(1.02);
+    }
+    
+    /* Animations */
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Mobile responsive */
     @media only screen and (max-width: 768px) {
-      .mobile-profile-modal {
-        padding: 16px;
-      }
-      .mobile-profile-modal-content {
+      .profile-modal-box {
         padding: 20px 22px;
         max-height: 85vh;
       }
-      .mobile-profile-modal-content h2 {
+      .profile-modal-title {
         font-size: 1.1rem;
       }
-      .mobile-profile-modal-close {
+      .profile-modal-close {
         font-size: 1.5rem;
+      }
+      .pwd-wrapper input {
+        height: 40px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+      .pwd-wrapper .pwd-toggle {
+        height: 40px;
+        min-width: 40px;
+        padding: 0 10px;
+      }
+      .profile-btn {
+        padding: 8px;
+        font-size: 0.8rem;
+      }
+    }
+    
+    @media only screen and (max-width: 400px) {
+      .profile-modal-box {
+        padding: 16px 18px;
+      }
+      .profile-modal-title {
+        font-size: 1rem;
       }
     }
   </style>
@@ -86,6 +237,9 @@
 
 <body>
 
+  <!-- ============================================
+       NAVIGATION BAR
+       ============================================ -->
   <nav class="top-nav">
     <div class="nav-left-wrapper">
       <div class="nav-hamburger" id="hamburgerBtn">
@@ -114,22 +268,31 @@
     </div>
   </nav>
 
+  <!-- Mobile Dropdown -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
+  <!-- ============================================
+       PAGE HEADER
+       ============================================ -->
   <header>
     <h1>My Profile</h1>
     <p class="subtitle">Manage your account and security settings.</p>
   </header>
 
+  <!-- ============================================
+       MAIN PROFILE CONTENT
+       ============================================ -->
   <main class="dashboard">
     <div class="converter-box" style="width:min(96%,1000px); padding:0; overflow:hidden;">
       <div style="display:flex; flex-wrap:wrap;">
 
         <!-- SIDEBAR -->
         <aside style="width:220px; background:rgba(255,255,255,0.06); padding:20px;">
+          
+          <!-- Profile Photo -->
           <div style="text-align:center; margin-bottom:20px;">
             <div id="profileImageWrapper" style="cursor:pointer; position:relative; display:inline-block;">
               <img id="profileImage" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" style="width:90px; height:90px; border-radius:50%; object-fit:cover; display:block; margin:auto; border:3px solid #00bcd4; transition: transform 0.3s;">
@@ -150,6 +313,7 @@
             <p id="profileEmailDisplay" style="color:#aaa; font-size:0.8rem; margin:0; word-break:break-all;">user@email.com</p>
           </div>
 
+          <!-- Tabs -->
           <a href="#" class="support-link" id="accountTab"><i class="fa-solid fa-user"></i> Account</a>
           <a href="#" class="support-link" id="securityTab"><i class="fa-solid fa-shield-halved"></i> Security</a>
         </aside>
@@ -162,12 +326,12 @@
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Profile Information</h2>
             <div style="background:rgba(255,255,255,0.06); padding:16px 20px; border-radius:10px;">
               <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.06);">
-                <p style="color:#aaa; margin:0; font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Username</p>
-                <p style="font-size:1.1rem; font-weight:600; margin:3px 0 0 0; word-break:break-word;" id="profileViewUsername">User</p>
+                <p class="profile-info-label">Username</p>
+                <p class="profile-info-value" id="profileViewUsername">User</p>
               </div>
               <div>
-                <p style="color:#aaa; margin:0; font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Email</p>
-                <p style="font-size:1.1rem; font-weight:600; margin:3px 0 0 0; word-break:break-all;" id="profileViewEmail">user@email.com</p>
+                <p class="profile-info-label">Email</p>
+                <p class="profile-info-value" id="profileViewEmail">user@email.com</p>
               </div>
             </div>
             <p style="color:#888; font-size:0.75rem; margin-top:10px; text-align:center;">
@@ -182,20 +346,20 @@
             
             <div style="background:rgba(255,255,255,0.06); padding:12px 16px; border-radius:8px; margin-bottom:12px;">
               <div style="margin-bottom:6px;">
-                <p style="color:#aaa; margin:0; font-size:0.65rem; text-transform:uppercase; letter-spacing:1px;">Current Username</p>
-                <p style="font-size:0.95rem; font-weight:600; margin:2px 0 0 0;" id="accountUsernameDisplay">User</p>
+                <p class="profile-info-label">Current Username</p>
+                <p class="profile-info-value" id="accountUsernameDisplay">User</p>
               </div>
               <div>
-                <p style="color:#aaa; margin:0; font-size:0.65rem; text-transform:uppercase; letter-spacing:1px;">Current Email</p>
-                <p style="font-size:0.95rem; font-weight:600; margin:2px 0 0 0; word-break:break-all;" id="accountEmailDisplay">user@email.com</p>
+                <p class="profile-info-label">Current Email</p>
+                <p class="profile-info-value" id="accountEmailDisplay">user@email.com</p>
               </div>
             </div>
             
             <div style="margin-bottom:10px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password *</label>
-              <div class="profile-password-wrapper">
-                <input type="password" id="accountCurrentPassword" placeholder="Enter your current password" class="profile-input">
-                <button type="button" id="toggleAccountPassword" class="password-toggle-btn">
+              <div class="pwd-wrapper">
+                <input type="password" id="accountCurrentPassword" placeholder="Enter your current password">
+                <button type="button" id="toggleAccountPassword" class="pwd-toggle">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
@@ -203,15 +367,15 @@
 
             <div style="margin-bottom:10px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Email</label>
-              <input type="email" id="profileEmail" placeholder="Enter new email" class="profile-input">
+              <input type="email" id="profileEmail" placeholder="Enter new email" style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem; height:44px;">
             </div>
 
             <div style="margin-bottom:12px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Username</label>
-              <input type="text" id="profileUsernameInput" placeholder="Enter new username" class="profile-input">
+              <input type="text" id="profileUsernameInput" placeholder="Enter new username" style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem; height:44px;">
             </div>
 
-            <button class="convert-btn profile-action-btn" id="saveAccountBtn">Save Changes</button>
+            <button class="profile-btn profile-btn-primary" id="saveAccountBtn">Save Changes</button>
           </div>
 
           <!-- SECURITY PANEL - HIDDEN BY DEFAULT -->
@@ -221,9 +385,9 @@
             
             <div style="margin-bottom:10px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password</label>
-              <div class="profile-password-wrapper">
-                <input type="password" id="currentPassword" placeholder="Enter current password" class="profile-input">
-                <button type="button" id="toggleCurrentPassword" class="password-toggle-btn">
+              <div class="pwd-wrapper">
+                <input type="password" id="currentPassword" placeholder="Enter current password">
+                <button type="button" id="toggleCurrentPassword" class="pwd-toggle">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
@@ -231,9 +395,9 @@
 
             <div style="margin-bottom:6px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Password</label>
-              <div class="profile-password-wrapper">
-                <input type="password" id="newPassword" placeholder="Enter new password" class="profile-input">
-                <button type="button" id="toggleNewPassword" class="password-toggle-btn">
+              <div class="pwd-wrapper">
+                <input type="password" id="newPassword" placeholder="Enter new password">
+                <button type="button" id="toggleNewPassword" class="pwd-toggle">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
@@ -245,17 +409,17 @@
 
             <div style="margin-bottom:12px;">
               <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Confirm Password</label>
-              <div class="profile-password-wrapper">
-                <input type="password" id="confirmPassword" placeholder="Confirm new password" class="profile-input">
-                <button type="button" id="toggleConfirmPassword" class="password-toggle-btn">
+              <div class="pwd-wrapper">
+                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                <button type="button" id="toggleConfirmPassword" class="pwd-toggle">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
             </div>
 
-            <button class="convert-btn profile-action-btn" id="changePasswordBtn">Change Password</button>
-            <button class="convert-btn profile-action-btn" id="logoutBtn" style="background:#ff9800;">Log Out</button>
-            <button class="convert-btn profile-action-btn" id="deleteAccountBtn" style="background:#e53935;">Delete Account</button>
+            <button class="profile-btn profile-btn-primary" id="changePasswordBtn">Change Password</button>
+            <button class="profile-btn profile-btn-warning" id="logoutBtn">Log Out</button>
+            <button class="profile-btn profile-btn-danger" id="deleteAccountBtn">Delete Account</button>
           </div>
 
           <div id="profileMessage" style="display:none;"></div>
@@ -265,23 +429,25 @@
     </div>
   </main>
 
-  <!-- MOBILE PROFILE MODAL -->
-  <div class="mobile-profile-modal" id="mobileProfileModal">
-    <div class="mobile-profile-modal-content">
-      <button class="mobile-profile-modal-close" id="mobileModalClose">&times;</button>
-      <div id="mobileModalContent"></div>
+  <!-- ============================================
+       MOBILE MODAL OVERLAY - Fresh and Clean
+       ============================================ -->
+  <div class="profile-modal-overlay" id="profileModal">
+    <div class="profile-modal-box">
+      <button class="profile-modal-close" id="profileModalClose">&times;</button>
+      <div id="profileModalContent"></div>
     </div>
   </div>
 
   <!-- ============================================
-       SCRIPTS
+       SCRIPTS - Only essential connections
        ============================================ -->
   <script src="notifications.js"></script>
   <script src="modal.js"></script>
   <script src="nav.js"></script>
 
   <!-- ============================================
-       FRESH PROFILE SYSTEM
+       FRESH PROFILE SYSTEM - CLEAN SLATE
        ============================================ -->
   <script>
   // ============================================
@@ -290,10 +456,10 @@
   (function() {
     'use strict';
     
-    console.log("🚀 FRESH PROFILE SYSTEM STARTED");
+    console.log("🚀 FRESH PROFILE v2 STARTED");
     
     // ============================================
-    // SESSION CHECK
+    // SESSION
     // ============================================
     var loggedInEmail = localStorage.getItem("loggedInUser");
     if (!loggedInEmail) {
@@ -320,7 +486,7 @@
     console.log("Current user:", currentUser);
     
     // ============================================
-    // DOM REFERENCES
+    // DOM REFS - Shortcut
     // ============================================
     var $ = function(id) { return document.getElementById(id); };
     
@@ -329,32 +495,34 @@
     var securityPanel = $('securityPanel');
     var accountTab = $('accountTab');
     var securityTab = $('securityTab');
-    var profileViewUsername = $('profileViewUsername');
-    var profileViewEmail = $('profileViewEmail');
-    var profileUsername = $('profileUsername');
-    var profileEmailDisplay = $('profileEmailDisplay');
-    var accountUsernameDisplay = $('accountUsernameDisplay');
-    var accountEmailDisplay = $('accountEmailDisplay');
     var profileImage = $('profileImage');
     var navProfilePhoto = $('navProfilePhoto');
     var navUsername = $('navUsername');
+    var profileUsername = $('profileUsername');
+    var profileEmailDisplay = $('profileEmailDisplay');
+    var profileViewUsername = $('profileViewUsername');
+    var profileViewEmail = $('profileViewEmail');
+    var accountUsernameDisplay = $('accountUsernameDisplay');
+    var accountEmailDisplay = $('accountEmailDisplay');
     var profileEmail = $('profileEmail');
     var profileUsernameInput = $('profileUsernameInput');
     var accountCurrentPassword = $('accountCurrentPassword');
-    var saveAccountBtn = $('saveAccountBtn');
-    var changePasswordBtn = $('changePasswordBtn');
-    var logoutBtn = $('logoutBtn');
-    var deleteAccountBtn = $('deleteAccountBtn');
+    var removePhotoContainer = $('removePhotoContainer');
     var uploadPhotoBtn = $('uploadPhotoBtn');
     var profilePhotoInput = $('profilePhotoInput');
     var uploadBtnText = $('uploadBtnText');
     var profileImageWrapper = $('profileImageWrapper');
-    var removePhotoContainer = $('removePhotoContainer');
     
-    // Modal
-    var mobileModal = $('mobileProfileModal');
-    var mobileModalContent = $('mobileModalContent');
-    var mobileModalClose = $('mobileModalClose');
+    // Modal elements
+    var modal = $('profileModal');
+    var modalContent = $('profileModalContent');
+    var modalClose = $('profileModalClose');
+    
+    // Buttons
+    var saveAccountBtn = $('saveAccountBtn');
+    var changePasswordBtn = $('changePasswordBtn');
+    var logoutBtn = $('logoutBtn');
+    var deleteAccountBtn = $('deleteAccountBtn');
     
     var DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     
@@ -413,15 +581,17 @@
     function showAccountPanel() {
       if (profileView) profileView.style.display = "none";
       
+      // MOBILE: Show modal
       if (isMobile()) {
         if (accountPanel) {
           var html = accountPanel.innerHTML;
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-          openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
+          openModal('<h2 class="profile-modal-title"><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
         }
         return;
       }
       
+      // DESKTOP: Show inline
       if (accountPanel) accountPanel.style.display = "block";
       if (securityPanel) securityPanel.style.display = "none";
       if (accountTab) accountTab.classList.add('active');
@@ -431,15 +601,17 @@
     function showSecurityPanel() {
       if (profileView) profileView.style.display = "none";
       
+      // MOBILE: Show modal
       if (isMobile()) {
         if (securityPanel) {
           var html = securityPanel.innerHTML;
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-          openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
+          openModal('<h2 class="profile-modal-title"><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
         }
         return;
       }
       
+      // DESKTOP: Show inline
       if (securityPanel) securityPanel.style.display = "block";
       if (accountPanel) accountPanel.style.display = "none";
       if (securityTab) securityTab.classList.add('active');
@@ -447,28 +619,32 @@
     }
     
     // ============================================
-    // MODAL SYSTEM
+    // MODAL - Clean and Simple
     // ============================================
     function openModal(html) {
-      if (!mobileModal || !mobileModalContent) return;
-      mobileModalContent.innerHTML = html;
-      mobileModal.classList.add('open');
+      if (!modal || !modalContent) return;
+      modalContent.innerHTML = html;
+      modal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      setTimeout(bindModalButtons, 250);
+      
+      // Bind buttons inside modal after content loads
+      setTimeout(function() {
+        bindModalButtons();
+      }, 200);
     }
     
     function closeModal() {
-      if (!mobileModal) return;
-      mobileModal.classList.remove('open');
+      if (!modal) return;
+      modal.classList.remove('active');
       document.body.style.overflow = '';
       showProfileView();
     }
     
-    if (mobileModalClose) {
-      mobileModalClose.addEventListener('click', closeModal);
+    if (modalClose) {
+      modalClose.addEventListener('click', closeModal);
     }
-    if (mobileModal) {
-      mobileModal.addEventListener('click', function(e) {
+    if (modal) {
+      modal.addEventListener('click', function(e) {
         if (e.target === this) closeModal();
       });
     }
@@ -480,7 +656,7 @@
     // BIND MODAL BUTTONS
     // ============================================
     function bindModalButtons() {
-      var content = $('mobileModalContent');
+      var content = $('profileModalContent');
       if (!content) return;
       
       var buttons = content.querySelectorAll('button');
@@ -490,10 +666,11 @@
         
         var id = btn.id;
         
-        // Copy values from modal to main, then trigger main button
-        var handlers = {
+        // Map modal button IDs to main button clicks
+        var map = {
           'saveAccountBtn': function() {
             var main = $('saveAccountBtn');
+            // Copy values from modal to main
             var modalPwd = $('accountCurrentPassword');
             var modalEmail = $('profileEmail');
             var modalUser = $('profileUsernameInput');
@@ -528,16 +705,16 @@
           }
         };
         
-        if (handlers[id]) {
+        if (map[id]) {
           btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            handlers[id]();
+            map[id]();
           });
         }
         
         // Password toggle in modal
-        if (btn.classList && btn.classList.contains('password-toggle-btn')) {
+        if (btn.classList && btn.classList.contains('pwd-toggle')) {
           btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -589,7 +766,7 @@
     }
     
     // ============================================
-    // PASSWORD TOGGLES - DESKTOP
+    // PASSWORD TOGGLES - Desktop
     // ============================================
     function togglePassword(inputId, buttonId) {
       var input = $(inputId);
@@ -612,7 +789,7 @@
     togglePassword('confirmPassword', 'toggleConfirmPassword');
     
     // ============================================
-    // REMOVE PHOTO BUTTON
+    // REMOVE PHOTO
     // ============================================
     function updateRemoveButton() {
       if (!removePhotoContainer) return;
@@ -776,7 +953,6 @@
         return res.json();
       })
       .then(function() {
-        // Check email availability if changed
         if (isEmailChanged) {
           return fetch("/api/get-user", {
             method: "POST",
@@ -794,7 +970,6 @@
         return true;
       })
       .then(function() {
-        // Send verification code
         toastInfo("Sending verification code...");
         return fetch("/api/send-code", {
           method: "POST",
@@ -1110,12 +1285,12 @@
     showProfileView();
     loadFromServer();
     
-    console.log("✅ FRESH PROFILE SYSTEM COMPLETE");
+    console.log("✅ FRESH PROFILE v2 COMPLETE");
     
   })();
   </script>
 
-  <!-- Auth navigation script -->
+  <!-- Auth navigation -->
   <script>
     (function() {
       var loggedInEmail = localStorage.getItem("loggedInUser");
