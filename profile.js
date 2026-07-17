@@ -1,5 +1,5 @@
 // ============================================
-// PROFILE.JS - VERSION 70 (NO CHANGE - JUST FIX)
+// PROFILE.JS - VERSION 70 (FORCED MOBILE MODE)
 // ============================================
 console.log("🚀 profile.js v70 LOADED!");
 
@@ -59,21 +59,28 @@ console.log("  securityPanel:", !!securityPanel);
 console.log("  accountTab:", !!accountTab);
 console.log("  securityTab:", !!securityTab);
 
-/* ============================================
-   MOBILE DETECTION - FIXED
-   ============================================ */
-// Use a more reliable mobile detection
+// ============================================
+// MOBILE DETECTION - WITH FORCED OVERRIDE
+// ============================================
+// You can change this to true to force mobile mode for testing
+var FORCE_MOBILE_MODE = true;  // <-- SET THIS TO true TO TEST MOBILE ON DESKTOP
+
 function isMobile() {
-  // Check both window width and user agent
+  // If forced mobile mode is enabled, return true
+  if (FORCE_MOBILE_MODE) {
+    console.log("📱 FORCE_MOBILE_MODE is ON");
+    return true;
+  }
+  
+  // Otherwise check screen width and user agent
   var isSmallScreen = window.innerWidth <= 768;
   var isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  // Return true if either condition is true
   return isSmallScreen || isMobileDevice;
 }
 
 console.log("📱 isMobile():", isMobile());
 console.log("📱 window.innerWidth:", window.innerWidth);
-console.log("📱 navigator.userAgent:", navigator.userAgent);
+console.log("📱 FORCE_MOBILE_MODE:", FORCE_MOBILE_MODE);
 
 // ============================================
 // MODAL ELEMENTS
@@ -83,6 +90,7 @@ let mobileModalContent = document.getElementById('mobileModalContent');
 
 // Create modal if it doesn't exist
 if (!mobileModal) {
+  console.log("📱 Creating modal (FORCED MOBILE MODE)");
   mobileModal = document.createElement('div');
   mobileModal.id = 'mobileProfileModal';
   mobileModal.className = 'mobile-profile-modal';
@@ -133,7 +141,10 @@ if (!mobileModal) {
 // MODAL FUNCTIONS
 // ============================================
 function openMobileModal(html) {
-  if (!mobileModal || !mobileModalContent) return;
+  if (!mobileModal || !mobileModalContent) {
+    console.error("❌ Modal elements not found!");
+    return;
+  }
   console.log("📱 Opening modal");
   mobileModalContent.innerHTML = html;
   mobileModal.style.display = 'flex';
@@ -287,7 +298,7 @@ async function loadUserData() {
 }
 
 /* ============================================
-   TAB SWITCHING FUNCTIONS - FIXED
+   TAB SWITCHING FUNCTIONS
    ============================================ */
 function showProfileView() {
   if (profileView) {
@@ -308,6 +319,9 @@ function showProfileView() {
 }
 
 function showAccountPanel() {
+  var mobile = isMobile();
+  console.log("📋 showAccountPanel - isMobile:", mobile);
+  
   // Hide profile view
   if (profileView) {
     profileView.style.display = "none";
@@ -315,7 +329,7 @@ function showAccountPanel() {
   }
   
   // MOBILE: Open modal
-  if (isMobile()) {
+  if (mobile) {
     console.log("📱 MOBILE: Opening Account modal");
     if (accountPanel) {
       var html = accountPanel.innerHTML;
@@ -335,7 +349,6 @@ function showAccountPanel() {
     securityPanel.style.display = "none";
     securityPanel.classList.remove('active-panel');
   }
-  // ACTIVE TAB - FIXED
   if (accountTab) {
     accountTab.classList.add('active');
   }
@@ -345,6 +358,9 @@ function showAccountPanel() {
 }
 
 function showSecurityPanel() {
+  var mobile = isMobile();
+  console.log("🔒 showSecurityPanel - isMobile:", mobile);
+  
   // Hide profile view
   if (profileView) {
     profileView.style.display = "none";
@@ -352,7 +368,7 @@ function showSecurityPanel() {
   }
   
   // MOBILE: Open modal
-  if (isMobile()) {
+  if (mobile) {
     console.log("📱 MOBILE: Opening Security modal");
     if (securityPanel) {
       var html = securityPanel.innerHTML;
@@ -372,7 +388,6 @@ function showSecurityPanel() {
     accountPanel.style.display = "none";
     accountPanel.classList.remove('active-panel');
   }
-  // ACTIVE TAB - FIXED
   if (securityTab) {
     securityTab.classList.add('active');
   }
@@ -582,7 +597,7 @@ if (uploadPhotoBtn && profilePhotoInput) {
 }
 
 /* ============================================
-   SAVE ACCOUNT
+   SAVE ACCOUNT - WITH VERIFICATION LOOP
    ============================================ */
 if (saveAccountBtn) {
   console.log("✅ Setting up Save Account");
@@ -656,6 +671,7 @@ if (saveAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
@@ -729,7 +745,7 @@ if (saveAccountBtn) {
 }
 
 /* ============================================
-   CHANGE PASSWORD
+   CHANGE PASSWORD - WITH VERIFICATION LOOP
    ============================================ */
 if (changePasswordBtn) {
   changePasswordBtn.addEventListener("click", async function() {
@@ -781,6 +797,7 @@ if (changePasswordBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
@@ -843,7 +860,7 @@ if (changePasswordBtn) {
 }
 
 /* ============================================
-   LOGOUT
+   LOGOUT - WITH REFRESH ON CANCEL
    ============================================ */
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async function(e) {
@@ -874,7 +891,7 @@ if (logoutBtn) {
 }
 
 /* ============================================
-   DELETE ACCOUNT
+   DELETE ACCOUNT - WITH VERIFICATION LOOP
    ============================================ */
 if (deleteAccountBtn) {
   deleteAccountBtn.addEventListener("click", async function(e) {
@@ -921,6 +938,7 @@ if (deleteAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
@@ -1044,4 +1062,4 @@ if (profileImageWrapper && profileImage) {
 loadUserData();
 console.log("✅ Profile.js v70 loaded successfully");
 console.log("📱 isMobile():", isMobile());
-console.log("📱 window.innerWidth:", window.innerWidth);
+console.log("📱 FORCE_MOBILE_MODE:", FORCE_MOBILE_MODE);
