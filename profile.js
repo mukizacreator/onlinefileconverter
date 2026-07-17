@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 77 (FINAL WORKING)
+// PROFILE.JS - VERSION 40 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v77 LOADED!");
+console.log("🚀 profile.js v40 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -52,9 +52,15 @@ const deleteAccountBtn = document.getElementById("deleteAccountBtn");
 
 const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-// ============================================
-// LOAD USER DATA
-// ============================================
+console.log("🔍 Buttons found:");
+console.log("  uploadPhotoBtn:", !!uploadPhotoBtn);
+console.log("  saveAccountBtn:", !!saveAccountBtn);
+console.log("  accountTab:", !!accountTab);
+console.log("  securityTab:", !!securityTab);
+
+/* ============================================
+   LOAD USER DATA FROM MONGODB
+   ============================================ */
 async function loadUserData() {
   try {
     const res = await fetch("/api/get-user", {
@@ -89,137 +95,15 @@ async function loadUserData() {
     if (navUsername) navUsername.textContent = data.username || 'Profile';
 
     updateDeletePhotoButton();
-    showProfileView();
-    
   } catch (error) {
     console.error("Load user error:", error);
     toastError("Failed to load user data.");
   }
 }
 
-// ============================================
-// TAB FUNCTIONS
-// ============================================
-function showProfileView() {
-  if (profileView) {
-    profileView.style.display = "block";
-    profileView.classList.remove('hidden-panel');
-  }
-  if (accountPanel) {
-    accountPanel.style.display = "none";
-    accountPanel.classList.remove('active-panel');
-  }
-  if (securityPanel) {
-    securityPanel.style.display = "none";
-    securityPanel.classList.remove('active-panel');
-  }
-  if (accountTab) accountTab.classList.remove('active');
-  if (securityTab) securityTab.classList.remove('active');
-}
-
-function showAccountPanel() {
-  // Check if mobile (screen width <= 768px)
-  var isMobile = window.innerWidth <= 768;
-  console.log("📋 showAccountPanel - isMobile:", isMobile);
-  
-  // Always hide profile view first
-  if (profileView) {
-    profileView.style.display = "none";
-    profileView.classList.add('hidden-panel');
-  }
-  
-  if (isMobile) {
-    // MOBILE: Use the verification modal system (which we know works)
-    console.log("📱 MOBILE: Opening Account in modal");
-    if (accountPanel) {
-      var html = accountPanel.innerHTML;
-      // Remove the h2 title (modal adds its own)
-      html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-      // Use the existing showModal function (from modal.js)
-      if (typeof showModal === 'function') {
-        showModal({
-          title: 'Account Information',
-          message: html,
-          confirmText: 'Close',
-          cancelText: '',
-          showCancel: false,
-          input: false
-        });
-      } else {
-        // Fallback: alert the content
-        alert("Account Information:\n\n" + html.replace(/<[^>]*>/g, ''));
-      }
-    }
-    return;
-  }
-  
-  // DESKTOP: Show inline
-  console.log("💻 DESKTOP: Showing Account panel inline");
-  if (accountPanel) {
-    accountPanel.style.display = "block";
-    accountPanel.classList.add('active-panel');
-  }
-  if (securityPanel) {
-    securityPanel.style.display = "none";
-    securityPanel.classList.remove('active-panel');
-  }
-  if (accountTab) accountTab.classList.add('active');
-  if (securityTab) securityTab.classList.remove('active');
-}
-
-function showSecurityPanel() {
-  // Check if mobile (screen width <= 768px)
-  var isMobile = window.innerWidth <= 768;
-  console.log("🔒 showSecurityPanel - isMobile:", isMobile);
-  
-  // Always hide profile view first
-  if (profileView) {
-    profileView.style.display = "none";
-    profileView.classList.add('hidden-panel');
-  }
-  
-  if (isMobile) {
-    // MOBILE: Use the verification modal system (which we know works)
-    console.log("📱 MOBILE: Opening Security in modal");
-    if (securityPanel) {
-      var html = securityPanel.innerHTML;
-      // Remove the h2 title (modal adds its own)
-      html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-      // Use the existing showModal function (from modal.js)
-      if (typeof showModal === 'function') {
-        showModal({
-          title: 'Security Settings',
-          message: html,
-          confirmText: 'Close',
-          cancelText: '',
-          showCancel: false,
-          input: false
-        });
-      } else {
-        // Fallback: alert the content
-        alert("Security Settings:\n\n" + html.replace(/<[^>]*>/g, ''));
-      }
-    }
-    return;
-  }
-  
-  // DESKTOP: Show inline
-  console.log("💻 DESKTOP: Showing Security panel inline");
-  if (securityPanel) {
-    securityPanel.style.display = "block";
-    securityPanel.classList.add('active-panel');
-  }
-  if (accountPanel) {
-    accountPanel.style.display = "none";
-    accountPanel.classList.remove('active-panel');
-  }
-  if (securityTab) securityTab.classList.add('active');
-  if (accountTab) accountTab.classList.remove('active');
-}
-
-// ============================================
-// DELETE PHOTO
-// ============================================
+/* ============================================
+   DELETE PHOTO BUTTON
+   ============================================ */
 function updateDeletePhotoButton() {
   const container = document.getElementById("removePhotoContainer");
   if (!container) return;
@@ -270,38 +154,63 @@ function updateDeletePhotoButton() {
   }
 }
 
-// ============================================
-// SETUP TABS
-// ============================================
-showProfileView();
+/* ============================================
+   ACCOUNT & SECURITY TABS
+   ============================================ */
+console.log("Setting up tabs...");
+
+if (profileView) profileView.style.display = "block";
+if (accountPanel) accountPanel.style.display = "none";
+if (securityPanel) securityPanel.style.display = "none";
 
 if (accountTab) {
-  const newAccountTab = accountTab.cloneNode(true);
-  accountTab.parentNode.replaceChild(newAccountTab, accountTab);
-  
-  newAccountTab.addEventListener("click", function(e) {
+  accountTab.classList.remove('active');
+}
+if (securityTab) {
+  securityTab.classList.remove('active');
+}
+
+if (accountTab) {
+  console.log("✅ Adding Account tab listener");
+  accountTab.addEventListener("click", function(e) {
     e.preventDefault();
-    e.stopPropagation();
     console.log("📋 Account tab CLICKED");
-    showAccountPanel();
+    
+    if (profileView) profileView.style.display = "none";
+    if (accountPanel) accountPanel.style.display = "block";
+    if (securityPanel) securityPanel.style.display = "none";
+    
+    this.classList.add('active');
+    if (securityTab) securityTab.classList.remove('active');
+    
+    console.log("Account panel display:", accountPanel.style.display);
   });
+} else {
+  console.error("❌ accountTab element not found!");
 }
 
 if (securityTab) {
-  const newSecurityTab = securityTab.cloneNode(true);
-  securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
-  
-  newSecurityTab.addEventListener("click", function(e) {
+  console.log("✅ Adding Security tab listener");
+  securityTab.addEventListener("click", function(e) {
     e.preventDefault();
-    e.stopPropagation();
     console.log("🔒 Security tab CLICKED");
-    showSecurityPanel();
+    
+    if (profileView) profileView.style.display = "none";
+    if (securityPanel) securityPanel.style.display = "block";
+    if (accountPanel) accountPanel.style.display = "none";
+    
+    this.classList.add('active');
+    if (accountTab) accountTab.classList.remove('active');
+    
+    console.log("Security panel display:", securityPanel.style.display);
   });
+} else {
+  console.error("❌ securityTab element not found!");
 }
 
-// ============================================
-// PASSWORD TOGGLES
-// ============================================
+/* ============================================
+   PASSWORD TOGGLES
+   ============================================ */
 function togglePasswordVisibility(inputId, buttonId) {
   const input = document.getElementById(inputId);
   const button = document.getElementById(buttonId);
@@ -324,25 +233,33 @@ togglePasswordVisibility("currentPassword", "toggleCurrentPassword");
 togglePasswordVisibility("newPassword", "toggleNewPassword");
 togglePasswordVisibility("confirmPassword", "toggleConfirmPassword");
 
-// ============================================
-// UPLOAD PHOTO
-// ============================================
+/* ============================================
+   UPLOAD PHOTO
+   ============================================ */
 if (uploadPhotoBtn && profilePhotoInput) {
+  console.log("✅ Setting up Upload Photo");
+  
   uploadPhotoBtn.onclick = function(e) {
     e.preventDefault();
+    console.log("📸 Upload clicked - changing text");
+    
     this.textContent = "Uploading...";
     this.disabled = true;
+    
     profilePhotoInput.value = "";
     profilePhotoInput.click();
   };
 
   profilePhotoInput.onchange = async function(e) {
     const file = this.files[0];
+    console.log("📸 File selected:", file ? file.name : "No file");
+    
     if (!file) {
       uploadPhotoBtn.textContent = "Upload Photo";
       uploadPhotoBtn.disabled = false;
       return;
     }
+    
     if (!file.type.startsWith('image/')) {
       toastError("Please select an image.");
       this.value = "";
@@ -376,6 +293,7 @@ if (uploadPhotoBtn && profilePhotoInput) {
         
         uploadPhotoBtn.textContent = "Upload Photo";
         uploadPhotoBtn.disabled = false;
+        
         toastSuccess("Profile photo updated!");
       } catch (error) {
         uploadPhotoBtn.textContent = "Upload Photo";
@@ -389,12 +307,15 @@ if (uploadPhotoBtn && profilePhotoInput) {
   };
 }
 
-// ============================================
-// SAVE ACCOUNT
-// ============================================
+/* ============================================
+   SAVE ACCOUNT - WITH VERIFICATION LOOP
+   ============================================ */
 if (saveAccountBtn) {
+  console.log("✅ Setting up Save Account");
+  
   saveAccountBtn.onclick = async function(e) {
     e.preventDefault();
+    console.log("💾 Save clicked");
     
     const currentPassword = accountCurrentPassword.value;
     const newEmail = profileEmail.value.trim().toLowerCase();
@@ -432,6 +353,7 @@ if (saveAccountBtn) {
     
     this.textContent = "Sending code...";
     this.disabled = true;
+    console.log("💾 Button changed to: Sending code...");
 
     try {
       const verifyRes = await fetch("/api/signin", {
@@ -458,16 +380,17 @@ if (saveAccountBtn) {
         throw new Error(data.error || "Failed to send code.");
       }
 
-      toastInfo("Verification code sent to your email.");
+      toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal(currentUser.email);
+        code = await showVerificationModal();
         
         if (!code) {
-          toastWarning("Update cancelled.");
+          toastWarning("Update cancelled. Refreshing page...");
           this.textContent = "Save Changes";
           this.disabled = false;
           setTimeout(() => { window.location.reload(); }, 500);
@@ -484,7 +407,7 @@ if (saveAccountBtn) {
         if (verifyData.success) {
           verified = true;
         } else {
-          toastError("Incorrect verification code.");
+          toastError("Incorrect verification code. Please try again.");
         }
       }
 
@@ -530,9 +453,9 @@ if (saveAccountBtn) {
   };
 }
 
-// ============================================
-// CHANGE PASSWORD
-// ============================================
+/* ============================================
+   CHANGE PASSWORD - WITH VERIFICATION LOOP
+   ============================================ */
 if (changePasswordBtn) {
   changePasswordBtn.addEventListener("click", async function() {
     const curPass = document.getElementById("currentPassword").value;
@@ -581,16 +504,17 @@ if (changePasswordBtn) {
         throw new Error(data.error || "Failed to send code.");
       }
 
-      toastInfo("Verification code sent to your email.");
+      toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal(currentUser.email);
+        code = await showVerificationModal();
         
         if (!code) {
-          toastWarning("Password change cancelled.");
+          toastWarning("Password change cancelled. Refreshing page...");
           this.disabled = false;
           this.textContent = "Change Password";
           setTimeout(() => { window.location.reload(); }, 500);
@@ -607,7 +531,7 @@ if (changePasswordBtn) {
         if (verifyData.success) {
           verified = true;
         } else {
-          toastError("Incorrect verification code.");
+          toastError("Incorrect verification code. Please try again.");
         }
       }
 
@@ -642,9 +566,9 @@ if (changePasswordBtn) {
   });
 }
 
-// ============================================
-// LOGOUT
-// ============================================
+/* ============================================
+   LOGOUT - WITH REFRESH ON CANCEL
+   ============================================ */
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async function(e) {
     e.preventDefault();
@@ -672,9 +596,9 @@ if (logoutBtn) {
   });
 }
 
-// ============================================
-// DELETE ACCOUNT
-// ============================================
+/* ============================================
+   DELETE ACCOUNT - WITH VERIFICATION LOOP
+   ============================================ */
 if (deleteAccountBtn) {
   deleteAccountBtn.addEventListener("click", async function(e) {
     e.preventDefault();
@@ -718,16 +642,17 @@ if (deleteAccountBtn) {
         throw new Error(data.error || "Failed to send code.");
       }
 
-      toastInfo("Verification code sent to your email.");
+      toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
+      // Verification loop - stays open on wrong code
       let code = null;
       let verified = false;
       
       while (!verified) {
-        code = await showVerificationModal(currentUser.email);
+        code = await showVerificationModal();
         
         if (!code) {
-          toastWarning("Deletion cancelled.");
+          toastWarning("Deletion cancelled. Refreshing page...");
           this.disabled = false;
           this.textContent = "Delete Account";
           setTimeout(() => { window.location.reload(); }, 500);
@@ -744,7 +669,7 @@ if (deleteAccountBtn) {
         if (verifyData.success) {
           verified = true;
         } else {
-          toastError("Incorrect verification code.");
+          toastError("Incorrect verification code. Please try again.");
         }
       }
 
@@ -794,9 +719,9 @@ if (deleteAccountBtn) {
   });
 }
 
-// ============================================
-// PROFILE PICTURE ENLARGE
-// ============================================
+/* ============================================
+   CLICKABLE PROFILE PICTURE - ENLARGE
+   ============================================ */
 const profileImageWrapper = document.getElementById("profileImageWrapper");
 
 if (profileImageWrapper && profileImage) {
@@ -805,15 +730,39 @@ if (profileImageWrapper && profileImage) {
     const imageSrc = profileImage.src;
     
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:flex;justify-content:center;align-items:center;z-index:10002;cursor:pointer;';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10002;
+      cursor: pointer;
+    `;
+    
     const img = document.createElement('img');
     img.src = imageSrc;
-    img.style.cssText = 'max-width:80%;max-height:80%;border-radius:20px;border:4px solid #00bcd4;box-shadow:0 20px 60px rgba(0,0,0,0.6);object-fit:contain;';
+    img.style.cssText = `
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 20px;
+      border: 4px solid #00bcd4;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      object-fit: contain;
+    `;
+    
     overlay.appendChild(img);
-    overlay.addEventListener('click', function() { overlay.remove(); });
+    overlay.addEventListener('click', function() {
+      overlay.remove();
+    });
     document.body.appendChild(overlay);
   });
 }
 
 loadUserData();
-console.log("✅ Profile.js v77 loaded successfully");
+console.log("✅ Profile.js v40 loaded successfully");
