@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 30 (COMPLETE)
+// PROFILE.JS - VERSION 10 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v30 LOADED!");
+console.log("🚀 profile.js v10 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -155,16 +155,14 @@ function updateDeletePhotoButton() {
 }
 
 /* ============================================
-   ACCOUNT & SECURITY TABS - FIXED
+   ACCOUNT & SECURITY TABS
    ============================================ */
 console.log("Setting up tabs...");
 
-// DEFAULT STATE: Show profile view, hide panels
 if (profileView) profileView.style.display = "block";
 if (accountPanel) accountPanel.style.display = "none";
 if (securityPanel) securityPanel.style.display = "none";
 
-// Remove active class from tabs
 if (accountTab) {
   accountTab.classList.remove('active');
 }
@@ -172,19 +170,16 @@ if (securityTab) {
   securityTab.classList.remove('active');
 }
 
-// ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
   accountTab.addEventListener("click", function(e) {
     e.preventDefault();
     console.log("📋 Account tab CLICKED");
     
-    // Show account panel, hide others
     if (profileView) profileView.style.display = "none";
     if (accountPanel) accountPanel.style.display = "block";
     if (securityPanel) securityPanel.style.display = "none";
     
-    // Update active styles
     this.classList.add('active');
     if (securityTab) securityTab.classList.remove('active');
     
@@ -194,19 +189,16 @@ if (accountTab) {
   console.error("❌ accountTab element not found!");
 }
 
-// ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
   securityTab.addEventListener("click", function(e) {
     e.preventDefault();
     console.log("🔒 Security tab CLICKED");
     
-    // Show security panel, hide others
     if (profileView) profileView.style.display = "none";
     if (securityPanel) securityPanel.style.display = "block";
     if (accountPanel) accountPanel.style.display = "none";
     
-    // Update active styles
     this.classList.add('active');
     if (accountTab) accountTab.classList.remove('active');
     
@@ -392,6 +384,7 @@ if (saveAccountBtn) {
 
       const code = await showVerificationModal();
       
+      // If user cancels/closes modal, refresh page
       if (!code) {
         toastWarning("Update cancelled. Refreshing page...");
         this.textContent = "Save Changes";
@@ -511,6 +504,7 @@ if (changePasswordBtn) {
 
       const code = await showVerificationModal();
       
+      // If user cancels/closes modal, refresh page
       if (!code) {
         toastWarning("Password change cancelled. Refreshing page...");
         this.disabled = false;
@@ -578,6 +572,7 @@ if (logoutBtn) {
       'Cancel'
     );
     
+    // If user cancels, refresh page
     if (confirm === null || confirm === false) {
       window.location.reload();
       return;
@@ -644,6 +639,7 @@ if (deleteAccountBtn) {
 
       const code = await showVerificationModal();
       
+      // If user cancels/closes modal, refresh page
       if (!code) {
         toastWarning("Deletion cancelled. Refreshing page...");
         this.disabled = false;
@@ -758,4 +754,4 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v30 loaded successfully");
+console.log("✅ Profile.js v10 loaded successfully");
