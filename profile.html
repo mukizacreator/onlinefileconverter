@@ -12,13 +12,12 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
   
-  <!-- NEW PROFILE STYLES - Fresh, Clean, Modern -->
   <style>
     /* ============================================
-       NEW PROFILE PAGE - FRESH STYLES
+       PROFILE MODAL SYSTEM - Clean & Modern
        ============================================ */
     
-    /* Mobile Modal Overlay */
+    /* Profile Modal Overlay */
     .profile-modal-overlay {
       display: none;
       position: fixed;
@@ -29,7 +28,7 @@
       background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      z-index: 99998;
+      z-index: 99999;
       justify-content: center;
       align-items: center;
       padding: 20px;
@@ -41,27 +40,27 @@
     
     .profile-modal-box {
       background: rgba(25, 35, 45, 0.98);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 20px;
-      padding: 28px 30px;
-      max-width: 500px;
+      padding: 30px 35px;
+      max-width: 480px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
-      animation: modalFadeIn 0.3s ease;
+      animation: modalSlideUp 0.3s ease;
     }
     
     .profile-modal-close {
       position: absolute;
-      top: 12px;
-      right: 16px;
+      top: 14px;
+      right: 18px;
       background: none;
       border: none;
-      color: #aaa;
+      color: #888;
       font-size: 1.8rem;
       cursor: pointer;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 8px;
       transition: 0.3s;
     }
@@ -73,89 +72,122 @@
     
     .profile-modal-title {
       color: white;
-      font-size: 1.3rem;
-      margin: 0 0 16px 0;
+      font-size: 1.4rem;
+      margin: 0 0 6px 0;
       padding-right: 40px;
     }
     
     .profile-modal-title i {
-      margin-right: 10px;
       color: #00bcd4;
+      margin-right: 10px;
     }
     
-    /* Profile card styles */
-    .profile-info-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    
-    .profile-info-label {
+    .profile-modal-subtitle {
       color: #aaa;
-      font-size: 0.7rem;
+      font-size: 0.85rem;
+      margin: 0 0 20px 0;
+    }
+    
+    /* Info display */
+    .profile-info-display {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+    
+    .profile-info-display .label {
+      color: #888;
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 1px;
+      margin: 0;
     }
     
-    .profile-info-value {
+    .profile-info-display .value {
       color: white;
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 600;
+      margin: 2px 0 10px 0;
     }
     
-    /* Password wrapper for inline toggle */
-    .pwd-wrapper {
-      display: flex;
-      gap: 6px;
+    .profile-info-display .value:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* Form fields */
+    .profile-field {
+      margin-bottom: 14px;
+    }
+    
+    .profile-field label {
+      display: block;
+      color: #ccc;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .profile-field input {
       width: 100%;
-      align-items: center;
-    }
-    
-    .pwd-wrapper input {
-      flex: 1;
       padding: 10px 14px;
       border: none;
       outline: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.10);
       color: white;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       height: 44px;
+      box-sizing: border-box;
     }
     
-    .pwd-wrapper .pwd-toggle {
+    .profile-field input::placeholder {
+      color: #777;
+    }
+    
+    .profile-field .pwd-wrapper {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    
+    .profile-field .pwd-wrapper input {
+      flex: 1;
+    }
+    
+    .profile-field .pwd-toggle {
       height: 44px;
       min-width: 44px;
       padding: 0 12px;
       border: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.10);
       color: white;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 1rem;
       transition: 0.3s;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     
-    .pwd-wrapper .pwd-toggle:hover {
+    .profile-field .pwd-toggle:hover {
       background: rgba(255, 255, 255, 0.2);
     }
     
-    /* Profile action buttons */
+    /* Buttons */
     .profile-btn {
       width: 100%;
-      padding: 10px;
+      padding: 11px;
       border: none;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       transition: 0.3s;
-      margin-bottom: 8px;
       color: white;
+      margin-top: 4px;
     }
     
     .profile-btn-primary {
@@ -164,7 +196,7 @@
     
     .profile-btn-primary:hover {
       background: #008ba3;
-      transform: scale(1.02);
+      transform: scale(1.01);
     }
     
     .profile-btn-danger {
@@ -173,7 +205,7 @@
     
     .profile-btn-danger:hover {
       background: #c62828;
-      transform: scale(1.02);
+      transform: scale(1.01);
     }
     
     .profile-btn-warning {
@@ -182,54 +214,110 @@
     
     .profile-btn-warning:hover {
       background: #e68900;
-      transform: scale(1.02);
+      transform: scale(1.01);
+    }
+    
+    .profile-btn-outline {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .profile-btn-outline:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.01);
+    }
+    
+    .profile-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    /* Divider */
+    .profile-divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin: 16px 0;
+    }
+    
+    /* Requirements text */
+    .profile-requirements {
+      color: #888;
+      font-size: 0.7rem;
+      margin: -6px 0 12px 0;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+    }
+    
+    .profile-requirements i {
+      color: #00bcd4;
+      margin-right: 4px;
     }
     
     /* Animations */
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    
     @keyframes modalSlideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
     
-    /* Mobile responsive */
+    /* Responsive */
     @media only screen and (max-width: 768px) {
       .profile-modal-box {
-        padding: 20px 22px;
+        padding: 22px 24px;
         max-height: 85vh;
       }
       .profile-modal-title {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
       }
       .profile-modal-close {
         font-size: 1.5rem;
+        top: 10px;
+        right: 14px;
       }
-      .pwd-wrapper input {
+      .profile-field input {
         height: 40px;
         padding: 8px 12px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
       }
-      .pwd-wrapper .pwd-toggle {
+      .profile-field .pwd-toggle {
         height: 40px;
         min-width: 40px;
         padding: 0 10px;
       }
       .profile-btn {
-        padding: 8px;
-        font-size: 0.8rem;
+        padding: 9px;
+        font-size: 0.85rem;
+      }
+      .profile-info-display {
+        padding: 12px 14px;
+      }
+      .profile-info-display .value {
+        font-size: 0.9rem;
       }
     }
     
     @media only screen and (max-width: 400px) {
       .profile-modal-box {
-        padding: 16px 18px;
+        padding: 18px 16px;
       }
       .profile-modal-title {
         font-size: 1rem;
+      }
+      .profile-field input {
+        height: 36px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+      }
+      .profile-field .pwd-toggle {
+        height: 36px;
+        min-width: 36px;
+        padding: 0 8px;
       }
     }
   </style>
@@ -260,7 +348,7 @@
         <a href="signup.html" class="nav-link"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
       </div>
       <div id="profileNav" style="display:none;">
-        <a href="profile.html" class="nav-link active" id="profileButton">
+        <a href="#" class="nav-link active" id="profileButton">
           <img id="navProfilePhoto" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #00bcd4; margin-right:4px;">
           <span id="navUsername">Profile</span>
         </a>
@@ -268,7 +356,6 @@
     </div>
   </nav>
 
-  <!-- Mobile Dropdown -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="dropdown-link"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
@@ -283,180 +370,199 @@
   </header>
 
   <!-- ============================================
-       MAIN PROFILE CONTENT
+       MAIN CONTENT - Profile Dashboard
        ============================================ -->
   <main class="dashboard">
-    <div class="converter-box" style="width:min(96%,1000px); padding:0; overflow:hidden;">
-      <div style="display:flex; flex-wrap:wrap;">
+    <div class="converter-box" style="max-width:600px; padding:24px 28px;">
 
-        <!-- SIDEBAR -->
-        <aside style="width:220px; background:rgba(255,255,255,0.06); padding:20px;">
-          
-          <!-- Profile Photo -->
-          <div style="text-align:center; margin-bottom:20px;">
-            <div id="profileImageWrapper" style="cursor:pointer; position:relative; display:inline-block;">
-              <img id="profileImage" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" style="width:90px; height:90px; border-radius:50%; object-fit:cover; display:block; margin:auto; border:3px solid #00bcd4; transition: transform 0.3s;">
-              <div style="position:absolute; bottom:0; right:0; background:rgba(0,0,0,0.6); border-radius:50%; padding:4px 6px; font-size:12px; color:#fff;">
-                <i class="fa-solid fa-expand"></i>
-              </div>
-            </div>
-            
-            <div style="display:flex; justify-content:center; gap:8px; margin-top:8px; flex-wrap:wrap;">
-              <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
-              <button id="uploadPhotoBtn" class="convert-btn" style="padding:5px 15px; font-size:0.75rem;">
-                <i class="fa-solid fa-camera"></i> <span id="uploadBtnText">Upload Photo</span>
-              </button>
-              <div id="removePhotoContainer" style="display:inline-block;"></div>
-            </div>
-            
-            <h3 id="profileUsername" style="margin-top:12px; margin-bottom:3px; font-size:1rem;">User</h3>
-            <p id="profileEmailDisplay" style="color:#aaa; font-size:0.8rem; margin:0; word-break:break-all;">user@email.com</p>
+      <!-- Profile Photo -->
+      <div style="text-align:center; margin-bottom:20px;">
+        <div id="profileImageWrapper" style="cursor:pointer; position:relative; display:inline-block;">
+          <img id="profileImage" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" style="width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin:auto; border:3px solid #00bcd4; transition: transform 0.3s;">
+          <div style="position:absolute; bottom:0; right:0; background:rgba(0,0,0,0.6); border-radius:50%; padding:4px 6px; font-size:11px; color:#fff;">
+            <i class="fa-solid fa-expand"></i>
           </div>
+        </div>
+        
+        <div style="display:flex; justify-content:center; gap:8px; margin-top:8px; flex-wrap:wrap;">
+          <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+          <button id="uploadPhotoBtn" class="convert-btn" style="padding:5px 15px; font-size:0.75rem;">
+            <i class="fa-solid fa-camera"></i> <span id="uploadBtnText">Upload Photo</span>
+          </button>
+          <div id="removePhotoContainer" style="display:inline-block;"></div>
+        </div>
+        
+        <h3 id="profileUsername" style="margin:10px 0 3px 0; font-size:1.1rem;">User</h3>
+        <p id="profileEmailDisplay" style="color:#aaa; font-size:0.85rem; margin:0; word-break:break-all;">user@email.com</p>
+      </div>
 
-          <!-- Tabs -->
-          <a href="#" class="support-link" id="accountTab"><i class="fa-solid fa-user"></i> Account</a>
-          <a href="#" class="support-link" id="securityTab"><i class="fa-solid fa-shield-halved"></i> Security</a>
-        </aside>
-
-        <!-- CONTENT AREA -->
-        <section style="flex:1; min-width:250px; padding:14px 20px;">
-
-          <!-- PROFILE VIEW - DEFAULT VISIBLE -->
-          <div id="profileView">
-            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Profile Information</h2>
-            <div style="background:rgba(255,255,255,0.06); padding:16px 20px; border-radius:10px;">
-              <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.06);">
-                <p class="profile-info-label">Username</p>
-                <p class="profile-info-value" id="profileViewUsername">User</p>
-              </div>
-              <div>
-                <p class="profile-info-label">Email</p>
-                <p class="profile-info-value" id="profileViewEmail">user@email.com</p>
-              </div>
+      <!-- Profile Actions - Cards -->
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:6px;">
+        
+        <!-- Account Card -->
+        <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:16px 20px; cursor:pointer; transition:0.3s; border:1px solid rgba(255,255,255,0.06);" id="accountCard">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:rgba(0,188,212,0.15); display:flex; align-items:center; justify-content:center; color:#00bcd4; font-size:1.2rem;">
+              <i class="fa-solid fa-user"></i>
             </div>
-            <p style="color:#888; font-size:0.75rem; margin-top:10px; text-align:center;">
-              <i class="fa-solid fa-arrow-left"></i> Click <strong>Account</strong> or <strong>Security</strong> from the sidebar to manage your settings.
-            </p>
+            <div style="flex:1;">
+              <div style="color:white; font-weight:600; font-size:0.95rem;">Account Information</div>
+              <div style="color:#888; font-size:0.8rem;">Update your email and username</div>
+            </div>
+            <div style="color:#555;">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
           </div>
+        </div>
 
-          <!-- ACCOUNT PANEL - HIDDEN BY DEFAULT -->
-          <div id="accountPanel" style="display:none;">
-            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
-            <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
-            
-            <div style="background:rgba(255,255,255,0.06); padding:12px 16px; border-radius:8px; margin-bottom:12px;">
-              <div style="margin-bottom:6px;">
-                <p class="profile-info-label">Current Username</p>
-                <p class="profile-info-value" id="accountUsernameDisplay">User</p>
-              </div>
-              <div>
-                <p class="profile-info-label">Current Email</p>
-                <p class="profile-info-value" id="accountEmailDisplay">user@email.com</p>
-              </div>
+        <!-- Security Card -->
+        <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:16px 20px; cursor:pointer; transition:0.3s; border:1px solid rgba(255,255,255,0.06);" id="securityCard">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,152,0,0.15); display:flex; align-items:center; justify-content:center; color:#ff9800; font-size:1.2rem;">
+              <i class="fa-solid fa-shield-halved"></i>
             </div>
-            
-            <div style="margin-bottom:10px;">
-              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password *</label>
-              <div class="pwd-wrapper">
-                <input type="password" id="accountCurrentPassword" placeholder="Enter your current password">
-                <button type="button" id="toggleAccountPassword" class="pwd-toggle">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </div>
+            <div style="flex:1;">
+              <div style="color:white; font-weight:600; font-size:0.95rem;">Security Settings</div>
+              <div style="color:#888; font-size:0.8rem;">Change your password</div>
             </div>
-
-            <div style="margin-bottom:10px;">
-              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Email</label>
-              <input type="email" id="profileEmail" placeholder="Enter new email" style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem; height:44px;">
+            <div style="color:#555;">
+              <i class="fa-solid fa-chevron-right"></i>
             </div>
-
-            <div style="margin-bottom:12px;">
-              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Username</label>
-              <input type="text" id="profileUsernameInput" placeholder="Enter new username" style="width:100%; padding:10px 14px; border:none; outline:none; border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.85rem; height:44px;">
-            </div>
-
-            <button class="profile-btn profile-btn-primary" id="saveAccountBtn">Save Changes</button>
           </div>
+        </div>
 
-          <!-- SECURITY PANEL - HIDDEN BY DEFAULT -->
-          <div id="securityPanel" style="display:none;">
-            <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
-            <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
-            
-            <div style="margin-bottom:10px;">
-              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Current Password</label>
-              <div class="pwd-wrapper">
-                <input type="password" id="currentPassword" placeholder="Enter current password">
-                <button type="button" id="toggleCurrentPassword" class="pwd-toggle">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </div>
+        <!-- Logout Card -->
+        <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:16px 20px; cursor:pointer; transition:0.3s; border:1px solid rgba(255,255,255,0.06);" id="logoutCard">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:rgba(229,57,53,0.15); display:flex; align-items:center; justify-content:center; color:#e53935; font-size:1.2rem;">
+              <i class="fa-solid fa-right-from-bracket"></i>
             </div>
-
-            <div style="margin-bottom:6px;">
-              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">New Password</label>
-              <div class="pwd-wrapper">
-                <input type="password" id="newPassword" placeholder="Enter new password">
-                <button type="button" id="toggleNewPassword" class="pwd-toggle">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </div>
+            <div style="flex:1;">
+              <div style="color:white; font-weight:600; font-size:0.95rem;">Log Out</div>
+              <div style="color:#888; font-size:0.8rem;">Sign out of your account</div>
             </div>
-            
-            <div style="color:#bbb; font-size:0.65rem; margin-bottom:10px; background:rgba(255,255,255,0.05); padding:4px 10px; border-radius:6px;">
-              <i class="fa-solid fa-circle-info" style="color:#00bcd4;"></i> At least 5 chars, one capital letter, one number, one symbol
+            <div style="color:#555;">
+              <i class="fa-solid fa-chevron-right"></i>
             </div>
-
-            <div style="margin-bottom:12px;">
-              <label style="display:block; margin-bottom:3px; font-weight:600; font-size:0.8rem;">Confirm Password</label>
-              <div class="pwd-wrapper">
-                <input type="password" id="confirmPassword" placeholder="Confirm new password">
-                <button type="button" id="toggleConfirmPassword" class="pwd-toggle">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </div>
-            </div>
-
-            <button class="profile-btn profile-btn-primary" id="changePasswordBtn">Change Password</button>
-            <button class="profile-btn profile-btn-warning" id="logoutBtn">Log Out</button>
-            <button class="profile-btn profile-btn-danger" id="deleteAccountBtn">Delete Account</button>
           </div>
-
-          <div id="profileMessage" style="display:none;"></div>
-        </section>
+        </div>
 
       </div>
+
     </div>
   </main>
 
   <!-- ============================================
-       MOBILE MODAL OVERLAY - Fresh and Clean
+       PROFILE MODALS
        ============================================ -->
-  <div class="profile-modal-overlay" id="profileModal">
+  
+  <!-- Account Modal -->
+  <div class="profile-modal-overlay" id="accountModal">
     <div class="profile-modal-box">
-      <button class="profile-modal-close" id="profileModalClose">&times;</button>
-      <div id="profileModalContent"></div>
+      <button class="profile-modal-close" id="accountModalClose">&times;</button>
+      <h2 class="profile-modal-title"><i class="fa-solid fa-user"></i> Account Information</h2>
+      <p class="profile-modal-subtitle">Update your email or username. Enter your current password to save changes.</p>
+      
+      <!-- Current Info Display -->
+      <div class="profile-info-display">
+        <p class="label">Current Username</p>
+        <p class="value" id="modalCurrentUsername">User</p>
+        <p class="label" style="margin-top:8px;">Current Email</p>
+        <p class="value" id="modalCurrentEmail">user@email.com</p>
+      </div>
+      
+      <!-- Current Password -->
+      <div class="profile-field">
+        <label>Current Password *</label>
+        <div class="pwd-wrapper">
+          <input type="password" id="modalAccountPassword" placeholder="Enter your current password">
+          <button type="button" class="pwd-toggle" id="toggleModalAccountPwd">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- New Email -->
+      <div class="profile-field">
+        <label>New Email</label>
+        <input type="email" id="modalNewEmail" placeholder="Enter new email">
+      </div>
+      
+      <!-- New Username -->
+      <div class="profile-field">
+        <label>New Username</label>
+        <input type="text" id="modalNewUsername" placeholder="Enter new username">
+      </div>
+      
+      <button class="profile-btn profile-btn-primary" id="modalSaveAccountBtn">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- Security Modal -->
+  <div class="profile-modal-overlay" id="securityModal">
+    <div class="profile-modal-box">
+      <button class="profile-modal-close" id="securityModalClose">&times;</button>
+      <h2 class="profile-modal-title"><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>
+      <p class="profile-modal-subtitle">Change your password or manage your account security.</p>
+      
+      <!-- Current Password -->
+      <div class="profile-field">
+        <label>Current Password</label>
+        <div class="pwd-wrapper">
+          <input type="password" id="modalCurrentPassword" placeholder="Enter current password">
+          <button type="button" class="pwd-toggle" id="toggleModalCurrentPwd">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- New Password -->
+      <div class="profile-field">
+        <label>New Password</label>
+        <div class="pwd-wrapper">
+          <input type="password" id="modalNewPassword" placeholder="Enter new password">
+          <button type="button" class="pwd-toggle" id="toggleModalNewPwd">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="profile-requirements">
+        <i class="fa-solid fa-circle-info"></i> At least 5 chars, one capital letter, one number, one symbol
+      </div>
+      
+      <!-- Confirm Password -->
+      <div class="profile-field">
+        <label>Confirm Password</label>
+        <div class="pwd-wrapper">
+          <input type="password" id="modalConfirmPassword" placeholder="Confirm new password">
+          <button type="button" class="pwd-toggle" id="toggleModalConfirmPwd">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      
+      <button class="profile-btn profile-btn-primary" id="modalChangePasswordBtn">Change Password</button>
+      <hr class="profile-divider">
+      <button class="profile-btn profile-btn-danger" id="modalDeleteAccountBtn">Delete Account</button>
     </div>
   </div>
 
   <!-- ============================================
-       SCRIPTS - Only essential connections
+       SCRIPTS
        ============================================ -->
   <script src="notifications.js"></script>
   <script src="modal.js"></script>
   <script src="nav.js"></script>
 
-  <!-- ============================================
-       FRESH PROFILE SYSTEM - CLEAN SLATE
-       ============================================ -->
   <script>
   // ============================================
-  // FRESH PROFILE SYSTEM - COMPLETE
+  // PROFILE SYSTEM - Modal-based
   // ============================================
   (function() {
     'use strict';
     
-    console.log("🚀 FRESH PROFILE v2 STARTED");
+    console.log("🚀 PROFILE MODAL SYSTEM STARTED");
     
     // ============================================
     // SESSION
@@ -486,62 +592,60 @@
     console.log("Current user:", currentUser);
     
     // ============================================
-    // DOM REFS - Shortcut
+    // DOM REFS
     // ============================================
     var $ = function(id) { return document.getElementById(id); };
     
-    var profileView = $('profileView');
-    var accountPanel = $('accountPanel');
-    var securityPanel = $('securityPanel');
-    var accountTab = $('accountTab');
-    var securityTab = $('securityTab');
+    // Profile display elements
     var profileImage = $('profileImage');
     var navProfilePhoto = $('navProfilePhoto');
     var navUsername = $('navUsername');
     var profileUsername = $('profileUsername');
     var profileEmailDisplay = $('profileEmailDisplay');
-    var profileViewUsername = $('profileViewUsername');
-    var profileViewEmail = $('profileViewEmail');
-    var accountUsernameDisplay = $('accountUsernameDisplay');
-    var accountEmailDisplay = $('accountEmailDisplay');
-    var profileEmail = $('profileEmail');
-    var profileUsernameInput = $('profileUsernameInput');
-    var accountCurrentPassword = $('accountCurrentPassword');
-    var removePhotoContainer = $('removePhotoContainer');
-    var uploadPhotoBtn = $('uploadPhotoBtn');
+    
+    // Account modal elements
+    var accountModal = $('accountModal');
+    var accountModalClose = $('accountModalClose');
+    var modalCurrentUsername = $('modalCurrentUsername');
+    var modalCurrentEmail = $('modalCurrentEmail');
+    var modalAccountPassword = $('modalAccountPassword');
+    var modalNewEmail = $('modalNewEmail');
+    var modalNewUsername = $('modalNewUsername');
+    var modalSaveAccountBtn = $('modalSaveAccountBtn');
+    
+    // Security modal elements
+    var securityModal = $('securityModal');
+    var securityModalClose = $('securityModalClose');
+    var modalCurrentPassword = $('modalCurrentPassword');
+    var modalNewPassword = $('modalNewPassword');
+    var modalConfirmPassword = $('modalConfirmPassword');
+    var modalChangePasswordBtn = $('modalChangePasswordBtn');
+    var modalDeleteAccountBtn = $('modalDeleteAccountBtn');
+    
+    // Cards
+    var accountCard = $('accountCard');
+    var securityCard = $('securityCard');
+    var logoutCard = $('logoutCard');
+    
+    // Photo elements
     var profilePhotoInput = $('profilePhotoInput');
+    var uploadPhotoBtn = $('uploadPhotoBtn');
     var uploadBtnText = $('uploadBtnText');
     var profileImageWrapper = $('profileImageWrapper');
-    
-    // Modal elements
-    var modal = $('profileModal');
-    var modalContent = $('profileModalContent');
-    var modalClose = $('profileModalClose');
-    
-    // Buttons
-    var saveAccountBtn = $('saveAccountBtn');
-    var changePasswordBtn = $('changePasswordBtn');
-    var logoutBtn = $('logoutBtn');
-    var deleteAccountBtn = $('deleteAccountBtn');
+    var removePhotoContainer = $('removePhotoContainer');
     
     var DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     
     // ============================================
-    // HELPERS
+    // UPDATE UI
     // ============================================
-    function isMobile() {
-      return window.innerWidth <= 768;
-    }
-    
     function updateUI(data) {
       if (profileUsername) profileUsername.textContent = data.username || 'User';
       if (profileEmailDisplay) profileEmailDisplay.textContent = data.email || 'user@email.com';
-      if (profileViewUsername) profileViewUsername.textContent = data.username || 'User';
-      if (profileViewEmail) profileViewEmail.textContent = data.email || 'user@email.com';
-      if (accountUsernameDisplay) accountUsernameDisplay.textContent = data.username || 'User';
-      if (accountEmailDisplay) accountEmailDisplay.textContent = data.email || 'user@email.com';
-      if (profileEmail) profileEmail.value = data.email || '';
-      if (profileUsernameInput) profileUsernameInput.value = data.username || '';
+      if (modalCurrentUsername) modalCurrentUsername.textContent = data.username || 'User';
+      if (modalCurrentEmail) modalCurrentEmail.textContent = data.email || 'user@email.com';
+      if (modalNewEmail) modalNewEmail.value = data.email || '';
+      if (modalNewUsername) modalNewUsername.value = data.username || '';
       if (profileImage) profileImage.src = data.photo || DEFAULT_ICON;
       if (navProfilePhoto) navProfilePhoto.src = data.photo || DEFAULT_ICON;
       if (navUsername) navUsername.textContent = data.username || 'Profile';
@@ -568,212 +672,96 @@
     }
     
     // ============================================
-    // SHOW/HIDE PANELS
+    // MODAL HELPERS
     // ============================================
-    function showProfileView() {
-      if (profileView) profileView.style.display = "block";
-      if (accountPanel) accountPanel.style.display = "none";
-      if (securityPanel) securityPanel.style.display = "none";
-      if (accountTab) accountTab.classList.remove('active');
-      if (securityTab) securityTab.classList.remove('active');
-    }
-    
-    function showAccountPanel() {
-      if (profileView) profileView.style.display = "none";
-      
-      // MOBILE: Show modal
-      if (isMobile()) {
-        if (accountPanel) {
-          var html = accountPanel.innerHTML;
-          html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-          openModal('<h2 class="profile-modal-title"><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
-        }
-        return;
-      }
-      
-      // DESKTOP: Show inline
-      if (accountPanel) accountPanel.style.display = "block";
-      if (securityPanel) securityPanel.style.display = "none";
-      if (accountTab) accountTab.classList.add('active');
-      if (securityTab) securityTab.classList.remove('active');
-    }
-    
-    function showSecurityPanel() {
-      if (profileView) profileView.style.display = "none";
-      
-      // MOBILE: Show modal
-      if (isMobile()) {
-        if (securityPanel) {
-          var html = securityPanel.innerHTML;
-          html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-          openModal('<h2 class="profile-modal-title"><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
-        }
-        return;
-      }
-      
-      // DESKTOP: Show inline
-      if (securityPanel) securityPanel.style.display = "block";
-      if (accountPanel) accountPanel.style.display = "none";
-      if (securityTab) securityTab.classList.add('active');
-      if (accountTab) accountTab.classList.remove('active');
-    }
-    
-    // ============================================
-    // MODAL - Clean and Simple
-    // ============================================
-    function openModal(html) {
-      if (!modal || !modalContent) return;
-      modalContent.innerHTML = html;
+    function openModal(modal) {
+      if (!modal) return;
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      
-      // Bind buttons inside modal after content loads
-      setTimeout(function() {
-        bindModalButtons();
-      }, 200);
     }
     
-    function closeModal() {
+    function closeModal(modal) {
       if (!modal) return;
       modal.classList.remove('active');
       document.body.style.overflow = '';
-      showProfileView();
     }
     
-    if (modalClose) {
-      modalClose.addEventListener('click', closeModal);
+    function closeAllModals() {
+      closeModal(accountModal);
+      closeModal(securityModal);
+      document.body.style.overflow = '';
     }
-    if (modal) {
-      modal.addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
+    
+    // Account modal close
+    if (accountModalClose) {
+      accountModalClose.addEventListener('click', function() {
+        closeModal(accountModal);
       });
     }
+    if (accountModal) {
+      accountModal.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(accountModal);
+      });
+    }
+    
+    // Security modal close
+    if (securityModalClose) {
+      securityModalClose.addEventListener('click', function() {
+        closeModal(securityModal);
+      });
+    }
+    if (securityModal) {
+      securityModal.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(securityModal);
+      });
+    }
+    
+    // Escape key closes all
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        closeAllModals();
+      }
     });
     
     // ============================================
-    // BIND MODAL BUTTONS
+    // CARD CLICKS
     // ============================================
-    function bindModalButtons() {
-      var content = $('profileModalContent');
-      if (!content) return;
-      
-      var buttons = content.querySelectorAll('button');
-      buttons.forEach(function(btn) {
-        if (btn.dataset.bound === 'true') return;
-        btn.dataset.bound = 'true';
-        
-        var id = btn.id;
-        
-        // Map modal button IDs to main button clicks
-        var map = {
-          'saveAccountBtn': function() {
-            var main = $('saveAccountBtn');
-            // Copy values from modal to main
-            var modalPwd = $('accountCurrentPassword');
-            var modalEmail = $('profileEmail');
-            var modalUser = $('profileUsernameInput');
-            var mainPwd = $('accountCurrentPassword');
-            var mainEmail = $('profileEmail');
-            var mainUser = $('profileUsernameInput');
-            if (modalPwd && mainPwd) mainPwd.value = modalPwd.value;
-            if (modalEmail && mainEmail) mainEmail.value = modalEmail.value;
-            if (modalUser && mainUser) mainUser.value = modalUser.value;
-            if (main) main.click();
-          },
-          'changePasswordBtn': function() {
-            var main = $('changePasswordBtn');
-            var modalCur = $('currentPassword');
-            var modalNew = $('newPassword');
-            var modalConf = $('confirmPassword');
-            var mainCur = $('currentPassword');
-            var mainNew = $('newPassword');
-            var mainConf = $('confirmPassword');
-            if (modalCur && mainCur) mainCur.value = modalCur.value;
-            if (modalNew && mainNew) mainNew.value = modalNew.value;
-            if (modalConf && mainConf) mainConf.value = modalConf.value;
-            if (main) main.click();
-          },
-          'logoutBtn': function() {
-            var main = $('logoutBtn');
-            if (main) main.click();
-          },
-          'deleteAccountBtn': function() {
-            var main = $('deleteAccountBtn');
-            if (main) main.click();
-          }
-        };
-        
-        if (map[id]) {
-          btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            map[id]();
-          });
-        }
-        
-        // Password toggle in modal
-        if (btn.classList && btn.classList.contains('pwd-toggle')) {
-          btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var wrapper = this.parentElement;
-            var input = wrapper.querySelector('input');
-            if (!input) {
-              var id = this.id.replace('toggle', '');
-              if (id) input = $(id);
-            }
-            if (!input) return;
-            var icon = this.querySelector('i');
-            if (input.type === 'password') {
-              input.type = 'text';
-              if (icon) { icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
-            } else {
-              input.type = 'password';
-              if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
-            }
-          });
-        }
+    if (accountCard) {
+      accountCard.addEventListener('click', function() {
+        // Update modal with current data
+        if (modalCurrentUsername) modalCurrentUsername.textContent = currentUser.username || 'User';
+        if (modalCurrentEmail) modalCurrentEmail.textContent = currentUser.email || 'user@email.com';
+        if (modalNewEmail) modalNewEmail.value = currentUser.email || '';
+        if (modalNewUsername) modalNewUsername.value = currentUser.username || '';
+        if (modalAccountPassword) modalAccountPassword.value = '';
+        openModal(accountModal);
+      });
+    }
+    
+    if (securityCard) {
+      securityCard.addEventListener('click', function() {
+        if (modalCurrentPassword) modalCurrentPassword.value = '';
+        if (modalNewPassword) modalNewPassword.value = '';
+        if (modalConfirmPassword) modalConfirmPassword.value = '';
+        openModal(securityModal);
+      });
+    }
+    
+    if (logoutCard) {
+      logoutCard.addEventListener('click', function() {
+        handleLogout();
       });
     }
     
     // ============================================
-    // SETUP TABS
+    // PASSWORD TOGGLES - Modals
     // ============================================
-    showProfileView();
-    
-    if (accountTab) {
-      var newAccountTab = accountTab.cloneNode(true);
-      accountTab.parentNode.replaceChild(newAccountTab, accountTab);
-      accountTab = newAccountTab;
-      accountTab.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        showAccountPanel();
-      });
-    }
-    
-    if (securityTab) {
-      var newSecurityTab = securityTab.cloneNode(true);
-      securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
-      securityTab = newSecurityTab;
-      securityTab.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        showSecurityPanel();
-      });
-    }
-    
-    // ============================================
-    // PASSWORD TOGGLES - Desktop
-    // ============================================
-    function togglePassword(inputId, buttonId) {
+    function togglePwd(inputId, btnId) {
       var input = $(inputId);
-      var button = $(buttonId);
-      if (!input || !button) return;
-      button.addEventListener('click', function() {
-        var icon = button.querySelector('i');
+      var btn = $(btnId);
+      if (!input || !btn) return;
+      btn.addEventListener('click', function() {
+        var icon = btn.querySelector('i');
         if (input.type === 'password') {
           input.type = 'text';
           if (icon) { icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
@@ -783,10 +771,11 @@
         }
       });
     }
-    togglePassword('accountCurrentPassword', 'toggleAccountPassword');
-    togglePassword('currentPassword', 'toggleCurrentPassword');
-    togglePassword('newPassword', 'toggleNewPassword');
-    togglePassword('confirmPassword', 'toggleConfirmPassword');
+    
+    togglePwd('modalAccountPassword', 'toggleModalAccountPwd');
+    togglePwd('modalCurrentPassword', 'toggleModalCurrentPwd');
+    togglePwd('modalNewPassword', 'toggleModalNewPwd');
+    togglePwd('modalConfirmPassword', 'toggleModalConfirmPwd');
     
     // ============================================
     // REMOVE PHOTO
@@ -831,6 +820,7 @@
             if (navProfilePhoto) navProfilePhoto.src = DEFAULT_ICON;
             updateRemoveButton();
             toastSuccess("Profile photo removed!");
+            closeAllModals();
           })
           .catch(function(error) {
             toastError("Failed to remove photo: " + error.message);
@@ -882,6 +872,7 @@
             if (uploadBtnText) uploadBtnText.textContent = 'Upload Photo';
             uploadPhotoBtn.disabled = false;
             toastSuccess('Profile photo updated!');
+            closeAllModals();
           })
           .catch(function(error) {
             if (uploadBtnText) uploadBtnText.textContent = 'Upload Photo';
@@ -916,9 +907,9 @@
     // SAVE ACCOUNT
     // ============================================
     function handleSaveAccount() {
-      var currentPassword = accountCurrentPassword ? accountCurrentPassword.value : '';
-      var newEmail = profileEmail ? profileEmail.value.trim().toLowerCase() : '';
-      var newUsername = profileUsernameInput ? profileUsernameInput.value.trim() : '';
+      var currentPassword = modalAccountPassword ? modalAccountPassword.value : '';
+      var newEmail = modalNewEmail ? modalNewEmail.value.trim().toLowerCase() : '';
+      var newUsername = modalNewUsername ? modalNewUsername.value.trim() : '';
       
       if (!currentPassword) {
         toastError("Please enter your current password.");
@@ -938,8 +929,8 @@
         return;
       }
       
-      // Verify current password
-      toastInfo("Verifying current password...");
+      modalSaveAccountBtn.disabled = true;
+      modalSaveAccountBtn.textContent = "Verifying...";
       
       fetch("/api/signin", {
         method: "POST",
@@ -970,7 +961,7 @@
         return true;
       })
       .then(function() {
-        toastInfo("Sending verification code...");
+        modalSaveAccountBtn.textContent = "Sending code...";
         return fetch("/api/send-code", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -986,6 +977,8 @@
       .then(function(code) {
         if (!code) {
           toastWarning("Update cancelled.");
+          modalSaveAccountBtn.disabled = false;
+          modalSaveAccountBtn.textContent = "Save Changes";
           return;
         }
         return fetch("/api/verify-code", {
@@ -1002,6 +995,8 @@
         if (!data) return;
         if (!data.success) {
           toastError("Incorrect verification code.");
+          modalSaveAccountBtn.disabled = false;
+          modalSaveAccountBtn.textContent = "Save Changes";
           return;
         }
         
@@ -1009,6 +1004,7 @@
         if (isEmailChanged) updateData.newEmail = newEmail;
         if (isUsernameChanged) updateData.newUsername = newUsername;
         
+        modalSaveAccountBtn.textContent = "Updating...";
         return fetch("/api/update-user", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1030,18 +1026,22 @@
         if (isUsernameChanged) currentUser.username = newUsername;
         
         localStorage.setItem("userData", JSON.stringify(currentUser));
-        toastSuccess("Account updated! Refreshing...");
-        closeModal();
-        setTimeout(function() { window.location.reload(); }, 1500);
+        updateUI(currentUser);
+        toastSuccess("Account updated successfully!");
+        modalSaveAccountBtn.disabled = false;
+        modalSaveAccountBtn.textContent = "Save Changes";
+        closeModal(accountModal);
       })
       .catch(function(error) {
         toastError(error.message || "Failed to update account.");
+        modalSaveAccountBtn.disabled = false;
+        modalSaveAccountBtn.textContent = "Save Changes";
         console.error("Save account error:", error);
       });
     }
     
-    if (saveAccountBtn) {
-      saveAccountBtn.addEventListener('click', function(e) {
+    if (modalSaveAccountBtn) {
+      modalSaveAccountBtn.addEventListener('click', function(e) {
         e.preventDefault();
         handleSaveAccount();
       });
@@ -1051,40 +1051,41 @@
     // CHANGE PASSWORD
     // ============================================
     function handleChangePassword() {
-      var curPass = $('currentPassword');
-      var newPass = $('newPassword');
-      var confPass = $('confirmPassword');
+      var curPass = modalCurrentPassword ? modalCurrentPassword.value : '';
+      var newPass = modalNewPassword ? modalNewPassword.value : '';
+      var confPass = modalConfirmPassword ? modalConfirmPassword.value : '';
       
-      if (!curPass || !curPass.value) {
+      if (!curPass) {
         toastError("Please enter your current password.");
         return;
       }
-      if (!newPass || !newPass.value) {
+      if (!newPass) {
         toastError("Please enter a new password.");
         return;
       }
-      if (newPass.value !== confPass.value) {
+      if (newPass !== confPass) {
         toastError("Passwords do not match.");
         return;
       }
       
       var strongPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{5,}$/;
-      if (!strongPassword.test(newPass.value)) {
+      if (!strongPassword.test(newPass)) {
         toastError("Password: 5+ chars, one capital, one number, one symbol.");
         return;
       }
       
-      if (newPass.value === curPass.value) {
+      if (newPass === curPass) {
         toastError("New password must be different.");
         return;
       }
       
-      toastInfo("Verifying current password...");
+      modalChangePasswordBtn.disabled = true;
+      modalChangePasswordBtn.textContent = "Verifying...";
       
       fetch("/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: loggedInEmail, password: curPass.value })
+        body: JSON.stringify({ email: loggedInEmail, password: curPass })
       })
       .then(function(res) {
         if (!res.ok) {
@@ -1093,7 +1094,7 @@
         return res.json();
       })
       .then(function() {
-        toastInfo("Sending verification code...");
+        modalChangePasswordBtn.textContent = "Sending code...";
         return fetch("/api/send-code", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1109,6 +1110,8 @@
       .then(function(code) {
         if (!code) {
           toastWarning("Password change cancelled.");
+          modalChangePasswordBtn.disabled = false;
+          modalChangePasswordBtn.textContent = "Change Password";
           return;
         }
         return fetch("/api/verify-code", {
@@ -1125,12 +1128,16 @@
         if (!data) return;
         if (!data.success) {
           toastError("Incorrect verification code.");
+          modalChangePasswordBtn.disabled = false;
+          modalChangePasswordBtn.textContent = "Change Password";
           return;
         }
+        
+        modalChangePasswordBtn.textContent = "Updating...";
         return fetch("/api/update-user", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, newPassword: newPass.value })
+          body: JSON.stringify({ email: currentUser.email, newPassword: newPass })
         });
       })
       .then(function(res) {
@@ -1141,50 +1148,25 @@
         if (!data) return;
         if (data.error) throw new Error(data.error);
         toastSuccess("Password changed successfully!");
-        closeModal();
-        if (curPass) curPass.value = '';
-        if (newPass) newPass.value = '';
-        if (confPass) confPass.value = '';
+        modalChangePasswordBtn.disabled = false;
+        modalChangePasswordBtn.textContent = "Change Password";
+        if (modalCurrentPassword) modalCurrentPassword.value = '';
+        if (modalNewPassword) modalNewPassword.value = '';
+        if (modalConfirmPassword) modalConfirmPassword.value = '';
+        closeModal(securityModal);
       })
       .catch(function(error) {
         toastError(error.message || "Failed to change password.");
+        modalChangePasswordBtn.disabled = false;
+        modalChangePasswordBtn.textContent = "Change Password";
         console.error("Change password error:", error);
       });
     }
     
-    if (changePasswordBtn) {
-      changePasswordBtn.addEventListener('click', function(e) {
+    if (modalChangePasswordBtn) {
+      modalChangePasswordBtn.addEventListener('click', function(e) {
         e.preventDefault();
         handleChangePassword();
-      });
-    }
-    
-    // ============================================
-    // LOGOUT
-    // ============================================
-    function handleLogout() {
-      showConfirmModal(
-        'Log Out',
-        'Are you sure you want to log out?',
-        'Yes, Log Out',
-        'Cancel'
-      ).then(function(confirmed) {
-        if (confirmed) {
-          localStorage.removeItem('loggedInUser');
-          localStorage.removeItem('userData');
-          toastSuccess('Logged out successfully!');
-          closeModal();
-          setTimeout(function() {
-            window.location.href = 'index.html';
-          }, 1000);
-        }
-      });
-    }
-    
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        handleLogout();
       });
     }
     
@@ -1208,7 +1190,8 @@
         ).then(function(confirmed2) {
           if (!confirmed2) return;
           
-          toastInfo("Sending verification code...");
+          modalDeleteAccountBtn.disabled = true;
+          modalDeleteAccountBtn.textContent = "Sending code...";
           
           fetch("/api/send-code", {
             method: "POST",
@@ -1224,6 +1207,8 @@
           .then(function(code) {
             if (!code) {
               toastWarning("Deletion cancelled.");
+              modalDeleteAccountBtn.disabled = false;
+              modalDeleteAccountBtn.textContent = "Delete Account";
               return;
             }
             return fetch("/api/verify-code", {
@@ -1240,8 +1225,12 @@
             if (!data) return;
             if (!data.success) {
               toastError("Incorrect verification code.");
+              modalDeleteAccountBtn.disabled = false;
+              modalDeleteAccountBtn.textContent = "Delete Account";
               return;
             }
+            
+            modalDeleteAccountBtn.textContent = "Deleting...";
             return fetch("/api/delete-user", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -1258,23 +1247,49 @@
             localStorage.removeItem("loggedInUser");
             localStorage.removeItem("userData");
             toastSuccess("Account deleted successfully!");
-            closeModal();
+            modalDeleteAccountBtn.disabled = false;
+            modalDeleteAccountBtn.textContent = "Delete Account";
+            closeAllModals();
             setTimeout(function() {
               window.location.href = "index.html";
             }, 2000);
           })
           .catch(function(error) {
             toastError(error.message || "Failed to delete account.");
+            modalDeleteAccountBtn.disabled = false;
+            modalDeleteAccountBtn.textContent = "Delete Account";
             console.error("Delete account error:", error);
           });
         });
       });
     }
     
-    if (deleteAccountBtn) {
-      deleteAccountBtn.addEventListener('click', function(e) {
+    if (modalDeleteAccountBtn) {
+      modalDeleteAccountBtn.addEventListener('click', function(e) {
         e.preventDefault();
         handleDeleteAccount();
+      });
+    }
+    
+    // ============================================
+    // LOGOUT
+    // ============================================
+    function handleLogout() {
+      showConfirmModal(
+        'Log Out',
+        'Are you sure you want to log out?',
+        'Yes, Log Out',
+        'Cancel'
+      ).then(function(confirmed) {
+        if (confirmed) {
+          localStorage.removeItem('loggedInUser');
+          localStorage.removeItem('userData');
+          toastSuccess('Logged out successfully!');
+          closeAllModals();
+          setTimeout(function() {
+            window.location.href = 'index.html';
+          }, 1000);
+        }
       });
     }
     
@@ -1282,10 +1297,9 @@
     // INITIALIZE
     // ============================================
     updateUI(currentUser);
-    showProfileView();
     loadFromServer();
     
-    console.log("✅ FRESH PROFILE v2 COMPLETE");
+    console.log("✅ PROFILE MODAL SYSTEM COMPLETE");
     
   })();
   </script>
