@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 70 (RESTORED + FIXED)
+// PROFILE.JS - VERSION 71 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v70 LOADED!");
+console.log("🚀 profile.js v71 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -60,23 +60,6 @@ console.log("  accountTab:", !!accountTab);
 console.log("  securityTab:", !!securityTab);
 
 // ============================================
-// MOBILE DETECTION - FIXED
-// ============================================
-// Use both window.innerWidth and matchMedia for better detection
-function isMobile() {
-  var mobile = window.innerWidth <= 768;
-  console.log("📱 Window width:", window.innerWidth, "isMobile:", mobile);
-  return mobile;
-}
-
-// Also listen for resize events to update
-window.addEventListener('resize', function() {
-  console.log("📱 Window resized to:", window.innerWidth);
-});
-
-console.log("📱 Initial isMobile:", isMobile());
-
-// ============================================
 // MODAL ELEMENTS
 // ============================================
 var mobileModal = document.getElementById('mobileProfileModal');
@@ -90,8 +73,6 @@ console.log("📱 Modal exists:", !!mobileModal);
 function openMobileModal(html) {
   if (!mobileModal || !mobileModalContent) {
     console.error("❌ Modal elements not found!");
-    // Fallback: use alert
-    alert("Modal not available. Content:\n\n" + html.replace(/<[^>]*>/g, ''));
     return;
   }
   console.log("📱 Opening modal");
@@ -269,7 +250,7 @@ async function loadUserData() {
 }
 
 /* ============================================
-   TAB SWITCHING FUNCTIONS
+   TAB SWITCHING FUNCTIONS - DIRECT CHECK
    ============================================ */
 function showProfileView() {
   if (profileView) {
@@ -294,8 +275,9 @@ function showProfileView() {
 }
 
 function showAccountPanel() {
-  var mobile = isMobile();
-  console.log("📋 showAccountPanel - isMobile:", mobile);
+  // DIRECT CHECK - use window.innerWidth directly
+  var isMobileDevice = window.innerWidth <= 768;
+  console.log("📋 showAccountPanel - window.innerWidth:", window.innerWidth, "isMobile:", isMobileDevice);
   
   // Hide profile view
   if (profileView) {
@@ -304,7 +286,7 @@ function showAccountPanel() {
   }
   
   // MOBILE: Open modal
-  if (mobile) {
+  if (isMobileDevice) {
     console.log("📱 MOBILE: Opening Account modal");
     if (accountPanel) {
       var html = accountPanel.innerHTML;
@@ -333,8 +315,9 @@ function showAccountPanel() {
 }
 
 function showSecurityPanel() {
-  var mobile = isMobile();
-  console.log("🔒 showSecurityPanel - isMobile:", mobile);
+  // DIRECT CHECK - use window.innerWidth directly
+  var isMobileDevice = window.innerWidth <= 768;
+  console.log("🔒 showSecurityPanel - window.innerWidth:", window.innerWidth, "isMobile:", isMobileDevice);
   
   // Hide profile view
   if (profileView) {
@@ -343,7 +326,7 @@ function showSecurityPanel() {
   }
   
   // MOBILE: Open modal
-  if (mobile) {
+  if (isMobileDevice) {
     console.log("📱 MOBILE: Opening Security modal");
     if (securityPanel) {
       var html = securityPanel.innerHTML;
@@ -1035,5 +1018,5 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v70 loaded successfully");
-console.log("📱 isMobile():", isMobile());
+console.log("✅ Profile.js v71 loaded successfully");
+console.log("📱 window.innerWidth:", window.innerWidth);
