@@ -1090,3 +1090,11 @@ footer {
     gap: 6px !important;
   }
 }
+
+/* ============================================
+   FIX: ACTIVE TAB COLOR
+   ============================================ */
+.support-link.active {
+  background: #00bcd4 !important;
+  color: white !important;
+}
