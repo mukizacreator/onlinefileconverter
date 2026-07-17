@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 71 (COMPLETE)
+// PROFILE.JS - VERSION 72 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v71 LOADED!");
+console.log("🚀 profile.js v72 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -60,37 +60,33 @@ console.log("  accountTab:", !!accountTab);
 console.log("  securityTab:", !!securityTab);
 
 // ============================================
-// MOBILE DETECTION - RELIABLE
+// MOBILE DETECTION
 // ============================================
 function isMobile() {
-  return window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
+  return window.innerWidth <= 768;
 }
 
 console.log("📱 Is mobile:", isMobile());
 
 // ============================================
-// CREATE MODAL FOR MOBILE
+// MODAL ELEMENTS
 // ============================================
 let mobileModal = document.getElementById('mobileProfileModal');
 let mobileModalContent = document.getElementById('mobileModalContent');
 
-// Always create modal if it doesn't exist
+// Create modal if it doesn't exist
 if (!mobileModal) {
-  console.log("📱 Creating modal");
   mobileModal = document.createElement('div');
   mobileModal.id = 'mobileProfileModal';
   mobileModal.className = 'mobile-profile-modal';
-  mobileModal.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:99998;justify-content:center;align-items:center;padding:20px;';
   
   const inner = document.createElement('div');
   inner.className = 'mobile-profile-modal-content';
-  inner.style.cssText = 'background:rgba(25,35,45,0.98);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px 28px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative;';
   
   const close = document.createElement('button');
   close.id = 'mobileModalClose';
   close.className = 'mobile-profile-modal-close';
   close.innerHTML = '&times;';
-  close.style.cssText = 'position:absolute;top:12px;right:16px;background:none;border:none;color:#aaa;font-size:1.8rem;cursor:pointer;transition:0.3s;padding:4px 8px;border-radius:8px;';
   
   const content = document.createElement('div');
   content.id = 'mobileModalContent';
@@ -102,25 +98,6 @@ if (!mobileModal) {
   
   mobileModal = document.getElementById('mobileProfileModal');
   mobileModalContent = document.getElementById('mobileModalContent');
-  
-  // Close button event
-  document.getElementById('mobileModalClose').addEventListener('click', function() {
-    closeMobileModal();
-  });
-  
-  // Close on backdrop click
-  mobileModal.addEventListener('click', function(e) {
-    if (e.target === this) {
-      closeMobileModal();
-    }
-  });
-  
-  // Close on Escape key
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      closeMobileModal();
-    }
-  });
 }
 
 // ============================================
@@ -130,7 +107,7 @@ function openMobileModal(html) {
   if (!mobileModal || !mobileModalContent) return;
   console.log("📱 Opening modal");
   mobileModalContent.innerHTML = html;
-  mobileModal.style.display = 'flex';
+  mobileModal.classList.add('open');
   document.body.style.overflow = 'hidden';
   setTimeout(bindModalButtons, 200);
 }
@@ -138,7 +115,7 @@ function openMobileModal(html) {
 function closeMobileModal() {
   if (!mobileModal) return;
   console.log("📱 Closing modal");
-  mobileModal.style.display = 'none';
+  mobileModal.classList.remove('open');
   document.body.style.overflow = '';
   if (profileView) {
     profileView.style.display = 'block';
@@ -146,27 +123,40 @@ function closeMobileModal() {
   }
 }
 
+// Close modal events
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeMobileModal();
+});
+
+// Close button
+var closeBtn = document.getElementById('mobileModalClose');
+if (closeBtn) {
+  closeBtn.addEventListener('click', closeMobileModal);
+}
+
+// Backdrop click
+if (mobileModal) {
+  mobileModal.addEventListener('click', function(e) {
+    if (e.target === this) closeMobileModal();
+  });
+}
+
 function bindModalButtons() {
   const content = document.getElementById('mobileModalContent');
   if (!content) return;
   
-  console.log("🔗 Binding modal buttons");
   const buttons = content.querySelectorAll('button');
-  console.log("  Found", buttons.length, "buttons");
-  
   buttons.forEach(function(btn) {
     if (btn.dataset.bound === 'true') return;
     btn.dataset.bound = 'true';
     
     const id = btn.id;
-    console.log("  Button ID:", id);
     
     if (id === 'saveAccountBtn') {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         console.log("💾 Save Account clicked in modal");
-        // Copy values from modal inputs to main inputs
         const modalPwd = document.getElementById('accountCurrentPassword');
         const modalEmail = document.getElementById('profileEmail');
         const modalUser = document.getElementById('profileUsernameInput');
@@ -220,7 +210,6 @@ function bindModalButtons() {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("👁️ Password toggle clicked in modal");
         const wrapper = this.parentElement;
         let input = wrapper.querySelector('input');
         if (!input) {
@@ -241,9 +230,9 @@ function bindModalButtons() {
   });
 }
 
-// ============================================
-// LOAD USER DATA
-// ============================================
+/* ============================================
+   LOAD USER DATA
+   ============================================ */
 async function loadUserData() {
   try {
     const res = await fetch("/api/get-user", {
@@ -260,6 +249,7 @@ async function loadUserData() {
 
     console.log("User data loaded:", currentUser);
 
+    // Update ALL UI elements
     if (profileUsername) profileUsername.textContent = data.username || 'User';
     if (profileEmailDisplay) profileEmailDisplay.textContent = data.email || 'user@email.com';
     if (profileViewUsername) profileViewUsername.textContent = data.username || 'User';
@@ -339,7 +329,6 @@ function showAccountPanel() {
     securityPanel.style.display = "none";
     securityPanel.classList.remove('active-panel');
   }
-  // Active tab
   if (accountTab) {
     accountTab.classList.add('active');
   }
@@ -376,7 +365,6 @@ function showSecurityPanel() {
     accountPanel.style.display = "none";
     accountPanel.classList.remove('active-panel');
   }
-  // Active tab
   if (securityTab) {
     securityTab.classList.add('active');
   }
@@ -386,7 +374,7 @@ function showSecurityPanel() {
 }
 
 /* ============================================
-   DELETE PHOTO
+   DELETE PHOTO BUTTON
    ============================================ */
 function updateDeletePhotoButton() {
   const container = document.getElementById("removePhotoContainer");
@@ -445,7 +433,6 @@ console.log("Setting up tabs...");
 
 showProfileView();
 
-// ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
   const newAccountTab = accountTab.cloneNode(true);
@@ -460,7 +447,6 @@ if (accountTab) {
   });
 }
 
-// ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
   const newSecurityTab = securityTab.cloneNode(true);
@@ -508,7 +494,6 @@ if (uploadPhotoBtn && profilePhotoInput) {
   
   uploadPhotoBtn.onclick = function(e) {
     e.preventDefault();
-    console.log("📸 Upload clicked");
     this.textContent = "Uploading...";
     this.disabled = true;
     profilePhotoInput.value = "";
@@ -1004,5 +989,5 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v71 loaded successfully");
+console.log("✅ Profile.js v72 loaded successfully");
 console.log("📱 isMobile():", isMobile());
