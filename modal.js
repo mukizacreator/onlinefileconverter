@@ -413,4 +413,4 @@ window.showVerificationModal = showVerificationModal;
 window.showConfirmModal = showConfirmModal;
 window.showAlertModal = showAlertModal;
 
-console.log("✅ Modal system v55 loaded successfully!");
+console.log("✅ Modal system v50 loaded successfully!");
