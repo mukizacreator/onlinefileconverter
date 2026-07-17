@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 10 (COMPLETE)
+// PROFILE.JS - VERSION 65 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v10 LOADED!");
+console.log("🚀 profile.js v65 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -52,9 +52,10 @@ const deleteAccountBtn = document.getElementById("deleteAccountBtn");
 
 const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-console.log("🔍 Buttons found:");
-console.log("  uploadPhotoBtn:", !!uploadPhotoBtn);
-console.log("  saveAccountBtn:", !!saveAccountBtn);
+console.log("🔍 Elements found:");
+console.log("  profileView:", !!profileView);
+console.log("  accountPanel:", !!accountPanel);
+console.log("  securityPanel:", !!securityPanel);
 console.log("  accountTab:", !!accountTab);
 console.log("  securityTab:", !!securityTab);
 
@@ -95,10 +96,71 @@ async function loadUserData() {
     if (navUsername) navUsername.textContent = data.username || 'Profile';
 
     updateDeletePhotoButton();
+    
+    // Ensure profile view is visible, panels are hidden
+    showProfileView();
+    
   } catch (error) {
     console.error("Load user error:", error);
     toastError("Failed to load user data.");
   }
+}
+
+/* ============================================
+   TAB SWITCHING FUNCTIONS - FIXED
+   ============================================ */
+function showProfileView() {
+  if (profileView) {
+    profileView.style.display = "block";
+    profileView.classList.remove('hidden-panel');
+  }
+  if (accountPanel) {
+    accountPanel.style.display = "none";
+    accountPanel.classList.remove('active-panel');
+  }
+  if (securityPanel) {
+    securityPanel.style.display = "none";
+    securityPanel.classList.remove('active-panel');
+  }
+  if (accountTab) accountTab.classList.remove('active');
+  if (securityTab) securityTab.classList.remove('active');
+  console.log("📋 Showing Profile View");
+}
+
+function showAccountPanel() {
+  if (profileView) {
+    profileView.style.display = "none";
+    profileView.classList.add('hidden-panel');
+  }
+  if (accountPanel) {
+    accountPanel.style.display = "block";
+    accountPanel.classList.add('active-panel');
+  }
+  if (securityPanel) {
+    securityPanel.style.display = "none";
+    securityPanel.classList.remove('active-panel');
+  }
+  if (accountTab) accountTab.classList.add('active');
+  if (securityTab) securityTab.classList.remove('active');
+  console.log("📋 Showing Account Panel");
+}
+
+function showSecurityPanel() {
+  if (profileView) {
+    profileView.style.display = "none";
+    profileView.classList.add('hidden-panel');
+  }
+  if (securityPanel) {
+    securityPanel.style.display = "block";
+    securityPanel.classList.add('active-panel');
+  }
+  if (accountPanel) {
+    accountPanel.style.display = "none";
+    accountPanel.classList.remove('active-panel');
+  }
+  if (securityTab) securityTab.classList.add('active');
+  if (accountTab) accountTab.classList.remove('active');
+  console.log("📋 Showing Security Panel");
 }
 
 /* ============================================
@@ -155,55 +217,51 @@ function updateDeletePhotoButton() {
 }
 
 /* ============================================
-   ACCOUNT & SECURITY TABS
+   ACCOUNT & SECURITY TABS - FIXED FOR MOBILE
    ============================================ */
 console.log("Setting up tabs...");
 
-if (profileView) profileView.style.display = "block";
-if (accountPanel) accountPanel.style.display = "none";
-if (securityPanel) securityPanel.style.display = "none";
+// Ensure default state: Profile View visible, panels hidden
+showProfileView();
 
-if (accountTab) {
-  accountTab.classList.remove('active');
-}
-if (securityTab) {
-  securityTab.classList.remove('active');
-}
-
+// ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
-  accountTab.addEventListener("click", function(e) {
+  
+  // Remove any existing listeners by cloning
+  const newAccountTab = accountTab.cloneNode(true);
+  accountTab.parentNode.replaceChild(newAccountTab, accountTab);
+  
+  newAccountTab.addEventListener("click", function(e) {
     e.preventDefault();
-    console.log("📋 Account tab CLICKED");
-    
-    if (profileView) profileView.style.display = "none";
-    if (accountPanel) accountPanel.style.display = "block";
-    if (securityPanel) securityPanel.style.display = "none";
-    
-    this.classList.add('active');
-    if (securityTab) securityTab.classList.remove('active');
-    
-    console.log("Account panel display:", accountPanel.style.display);
+    e.stopPropagation();
+    console.log("📋 Account tab CLICKED - showing account panel");
+    showAccountPanel();
   });
+  
+  // Update reference
+  window.accountTabRef = newAccountTab;
 } else {
   console.error("❌ accountTab element not found!");
 }
 
+// ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
-  securityTab.addEventListener("click", function(e) {
+  
+  // Remove any existing listeners by cloning
+  const newSecurityTab = securityTab.cloneNode(true);
+  securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
+  
+  newSecurityTab.addEventListener("click", function(e) {
     e.preventDefault();
-    console.log("🔒 Security tab CLICKED");
-    
-    if (profileView) profileView.style.display = "none";
-    if (securityPanel) securityPanel.style.display = "block";
-    if (accountPanel) accountPanel.style.display = "none";
-    
-    this.classList.add('active');
-    if (accountTab) accountTab.classList.remove('active');
-    
-    console.log("Security panel display:", securityPanel.style.display);
+    e.stopPropagation();
+    console.log("🔒 Security tab CLICKED - showing security panel");
+    showSecurityPanel();
   });
+  
+  // Update reference
+  window.securityTabRef = newSecurityTab;
 } else {
   console.error("❌ securityTab element not found!");
 }
@@ -308,7 +366,7 @@ if (uploadPhotoBtn && profilePhotoInput) {
 }
 
 /* ============================================
-   SAVE ACCOUNT - WITH REFRESH ON CANCEL
+   SAVE ACCOUNT - WITH VERIFICATION LOOP
    ============================================ */
 if (saveAccountBtn) {
   console.log("✅ Setting up Save Account");
@@ -382,29 +440,33 @@ if (saveAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      const code = await showVerificationModal();
+      // Verification loop - stays open on wrong code
+      let code = null;
+      let verified = false;
       
-      // If user cancels/closes modal, refresh page
-      if (!code) {
-        toastWarning("Update cancelled. Refreshing page...");
-        this.textContent = "Save Changes";
-        this.disabled = false;
-        setTimeout(() => { window.location.reload(); }, 500);
-        return;
-      }
+      while (!verified) {
+        code = await showVerificationModal(currentUser.email);
+        
+        if (!code) {
+          toastWarning("Update cancelled. Refreshing page...");
+          this.textContent = "Save Changes";
+          this.disabled = false;
+          setTimeout(() => { window.location.reload(); }, 500);
+          return;
+        }
 
-      const verifyCodeRes = await fetch("/api/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-      });
+        const verifyCodeRes = await fetch("/api/verify-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+        });
 
-      const verifyData = await verifyCodeRes.json();
-      if (!verifyData.success) {
-        toastError("Incorrect verification code.");
-        this.textContent = "Save Changes";
-        this.disabled = false;
-        return;
+        const verifyData = await verifyCodeRes.json();
+        if (verifyData.success) {
+          verified = true;
+        } else {
+          toastError("Incorrect verification code. Please try again.");
+        }
       }
 
       const updateData = { email: currentUser.email };
@@ -450,7 +512,7 @@ if (saveAccountBtn) {
 }
 
 /* ============================================
-   CHANGE PASSWORD - WITH REFRESH ON CANCEL
+   CHANGE PASSWORD - WITH VERIFICATION LOOP
    ============================================ */
 if (changePasswordBtn) {
   changePasswordBtn.addEventListener("click", async function() {
@@ -502,29 +564,33 @@ if (changePasswordBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      const code = await showVerificationModal();
+      // Verification loop - stays open on wrong code
+      let code = null;
+      let verified = false;
       
-      // If user cancels/closes modal, refresh page
-      if (!code) {
-        toastWarning("Password change cancelled. Refreshing page...");
-        this.disabled = false;
-        this.textContent = "Change Password";
-        setTimeout(() => { window.location.reload(); }, 500);
-        return;
-      }
+      while (!verified) {
+        code = await showVerificationModal(currentUser.email);
+        
+        if (!code) {
+          toastWarning("Password change cancelled. Refreshing page...");
+          this.disabled = false;
+          this.textContent = "Change Password";
+          setTimeout(() => { window.location.reload(); }, 500);
+          return;
+        }
 
-      const verifyCodeRes = await fetch("/api/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-      });
+        const verifyCodeRes = await fetch("/api/verify-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+        });
 
-      const verifyData = await verifyCodeRes.json();
-      if (!verifyData.success) {
-        toastError("Incorrect verification code.");
-        this.disabled = false;
-        this.textContent = "Change Password";
-        return;
+        const verifyData = await verifyCodeRes.json();
+        if (verifyData.success) {
+          verified = true;
+        } else {
+          toastError("Incorrect verification code. Please try again.");
+        }
       }
 
       const updateRes = await fetch("/api/update-user", {
@@ -572,7 +638,6 @@ if (logoutBtn) {
       'Cancel'
     );
     
-    // If user cancels, refresh page
     if (confirm === null || confirm === false) {
       window.location.reload();
       return;
@@ -590,7 +655,7 @@ if (logoutBtn) {
 }
 
 /* ============================================
-   DELETE ACCOUNT - WITH REFRESH ON CANCEL
+   DELETE ACCOUNT - WITH VERIFICATION LOOP
    ============================================ */
 if (deleteAccountBtn) {
   deleteAccountBtn.addEventListener("click", async function(e) {
@@ -637,29 +702,33 @@ if (deleteAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      const code = await showVerificationModal();
+      // Verification loop - stays open on wrong code
+      let code = null;
+      let verified = false;
       
-      // If user cancels/closes modal, refresh page
-      if (!code) {
-        toastWarning("Deletion cancelled. Refreshing page...");
-        this.disabled = false;
-        this.textContent = "Delete Account";
-        setTimeout(() => { window.location.reload(); }, 500);
-        return;
-      }
+      while (!verified) {
+        code = await showVerificationModal(currentUser.email);
+        
+        if (!code) {
+          toastWarning("Deletion cancelled. Refreshing page...");
+          this.disabled = false;
+          this.textContent = "Delete Account";
+          setTimeout(() => { window.location.reload(); }, 500);
+          return;
+        }
 
-      const verifyCodeRes = await fetch("/api/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-      });
+        const verifyCodeRes = await fetch("/api/verify-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+        });
 
-      const verifyData = await verifyCodeRes.json();
-      if (!verifyData.success) {
-        toastError("Incorrect verification code.");
-        this.disabled = false;
-        this.textContent = "Delete Account";
-        return;
+        const verifyData = await verifyCodeRes.json();
+        if (verifyData.success) {
+          verified = true;
+        } else {
+          toastError("Incorrect verification code. Please try again.");
+        }
       }
 
       const finalConfirm = await showConfirmModal(
@@ -754,4 +823,4 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v10 loaded successfully");
+console.log("✅ Profile.js v70 loaded successfully");
