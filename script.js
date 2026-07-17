@@ -133,3 +133,4 @@ if (file.size > maxFreeSize && !loggedInUser) {
     convertBtn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> Convert`;
   });
 }
+
