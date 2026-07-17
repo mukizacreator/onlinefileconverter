@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 40 (COMPLETE)
+// PROFILE.JS - VERSION 30 (COMPLETE)
 // ============================================
-console.log("🚀 profile.js v40 LOADED!");
+console.log("🚀 profile.js v30 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -155,14 +155,16 @@ function updateDeletePhotoButton() {
 }
 
 /* ============================================
-   ACCOUNT & SECURITY TABS
+   ACCOUNT & SECURITY TABS - FIXED
    ============================================ */
 console.log("Setting up tabs...");
 
+// DEFAULT STATE: Show profile view, hide panels
 if (profileView) profileView.style.display = "block";
 if (accountPanel) accountPanel.style.display = "none";
 if (securityPanel) securityPanel.style.display = "none";
 
+// Remove active class from tabs
 if (accountTab) {
   accountTab.classList.remove('active');
 }
@@ -170,16 +172,19 @@ if (securityTab) {
   securityTab.classList.remove('active');
 }
 
+// ===== ACCOUNT TAB =====
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
   accountTab.addEventListener("click", function(e) {
     e.preventDefault();
     console.log("📋 Account tab CLICKED");
     
+    // Show account panel, hide others
     if (profileView) profileView.style.display = "none";
     if (accountPanel) accountPanel.style.display = "block";
     if (securityPanel) securityPanel.style.display = "none";
     
+    // Update active styles
     this.classList.add('active');
     if (securityTab) securityTab.classList.remove('active');
     
@@ -189,16 +194,19 @@ if (accountTab) {
   console.error("❌ accountTab element not found!");
 }
 
+// ===== SECURITY TAB =====
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
   securityTab.addEventListener("click", function(e) {
     e.preventDefault();
     console.log("🔒 Security tab CLICKED");
     
+    // Show security panel, hide others
     if (profileView) profileView.style.display = "none";
     if (securityPanel) securityPanel.style.display = "block";
     if (accountPanel) accountPanel.style.display = "none";
     
+    // Update active styles
     this.classList.add('active');
     if (accountTab) accountTab.classList.remove('active');
     
@@ -308,7 +316,7 @@ if (uploadPhotoBtn && profilePhotoInput) {
 }
 
 /* ============================================
-   SAVE ACCOUNT - WITH VERIFICATION LOOP
+   SAVE ACCOUNT - WITH REFRESH ON CANCEL
    ============================================ */
 if (saveAccountBtn) {
   console.log("✅ Setting up Save Account");
@@ -382,33 +390,28 @@ if (saveAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // Verification loop - stays open on wrong code
-      let code = null;
-      let verified = false;
+      const code = await showVerificationModal();
       
-      while (!verified) {
-        code = await showVerificationModal();
-        
-        if (!code) {
-          toastWarning("Update cancelled. Refreshing page...");
-          this.textContent = "Save Changes";
-          this.disabled = false;
-          setTimeout(() => { window.location.reload(); }, 500);
-          return;
-        }
+      if (!code) {
+        toastWarning("Update cancelled. Refreshing page...");
+        this.textContent = "Save Changes";
+        this.disabled = false;
+        setTimeout(() => { window.location.reload(); }, 500);
+        return;
+      }
 
-        const verifyCodeRes = await fetch("/api/verify-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-        });
+      const verifyCodeRes = await fetch("/api/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+      });
 
-        const verifyData = await verifyCodeRes.json();
-        if (verifyData.success) {
-          verified = true;
-        } else {
-          toastError("Incorrect verification code. Please try again.");
-        }
+      const verifyData = await verifyCodeRes.json();
+      if (!verifyData.success) {
+        toastError("Incorrect verification code.");
+        this.textContent = "Save Changes";
+        this.disabled = false;
+        return;
       }
 
       const updateData = { email: currentUser.email };
@@ -454,7 +457,7 @@ if (saveAccountBtn) {
 }
 
 /* ============================================
-   CHANGE PASSWORD - WITH VERIFICATION LOOP
+   CHANGE PASSWORD - WITH REFRESH ON CANCEL
    ============================================ */
 if (changePasswordBtn) {
   changePasswordBtn.addEventListener("click", async function() {
@@ -506,33 +509,28 @@ if (changePasswordBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // Verification loop - stays open on wrong code
-      let code = null;
-      let verified = false;
+      const code = await showVerificationModal();
       
-      while (!verified) {
-        code = await showVerificationModal();
-        
-        if (!code) {
-          toastWarning("Password change cancelled. Refreshing page...");
-          this.disabled = false;
-          this.textContent = "Change Password";
-          setTimeout(() => { window.location.reload(); }, 500);
-          return;
-        }
+      if (!code) {
+        toastWarning("Password change cancelled. Refreshing page...");
+        this.disabled = false;
+        this.textContent = "Change Password";
+        setTimeout(() => { window.location.reload(); }, 500);
+        return;
+      }
 
-        const verifyCodeRes = await fetch("/api/verify-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-        });
+      const verifyCodeRes = await fetch("/api/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+      });
 
-        const verifyData = await verifyCodeRes.json();
-        if (verifyData.success) {
-          verified = true;
-        } else {
-          toastError("Incorrect verification code. Please try again.");
-        }
+      const verifyData = await verifyCodeRes.json();
+      if (!verifyData.success) {
+        toastError("Incorrect verification code.");
+        this.disabled = false;
+        this.textContent = "Change Password";
+        return;
       }
 
       const updateRes = await fetch("/api/update-user", {
@@ -597,7 +595,7 @@ if (logoutBtn) {
 }
 
 /* ============================================
-   DELETE ACCOUNT - WITH VERIFICATION LOOP
+   DELETE ACCOUNT - WITH REFRESH ON CANCEL
    ============================================ */
 if (deleteAccountBtn) {
   deleteAccountBtn.addEventListener("click", async function(e) {
@@ -644,33 +642,28 @@ if (deleteAccountBtn) {
 
       toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
 
-      // Verification loop - stays open on wrong code
-      let code = null;
-      let verified = false;
+      const code = await showVerificationModal();
       
-      while (!verified) {
-        code = await showVerificationModal();
-        
-        if (!code) {
-          toastWarning("Deletion cancelled. Refreshing page...");
-          this.disabled = false;
-          this.textContent = "Delete Account";
-          setTimeout(() => { window.location.reload(); }, 500);
-          return;
-        }
+      if (!code) {
+        toastWarning("Deletion cancelled. Refreshing page...");
+        this.disabled = false;
+        this.textContent = "Delete Account";
+        setTimeout(() => { window.location.reload(); }, 500);
+        return;
+      }
 
-        const verifyCodeRes = await fetch("/api/verify-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-        });
+      const verifyCodeRes = await fetch("/api/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+      });
 
-        const verifyData = await verifyCodeRes.json();
-        if (verifyData.success) {
-          verified = true;
-        } else {
-          toastError("Incorrect verification code. Please try again.");
-        }
+      const verifyData = await verifyCodeRes.json();
+      if (!verifyData.success) {
+        toastError("Incorrect verification code.");
+        this.disabled = false;
+        this.textContent = "Delete Account";
+        return;
       }
 
       const finalConfirm = await showConfirmModal(
@@ -765,4 +758,4 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v40 loaded successfully");
+console.log("✅ Profile.js v30 loaded successfully");
