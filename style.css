@@ -1127,10 +1127,10 @@ footer {
 }
 
 /* ============================================
-   MOBILE PROFILE MODAL - ADD THIS
+   MOBILE PROFILE MODAL - ADD THIS AT THE END
    ============================================ */
 .mobile-profile-modal {
-  display: none;
+  display: none !important;
   position: fixed;
   top: 0;
   left: 0;
@@ -1143,6 +1143,10 @@ footer {
   justify-content: center;
   align-items: center;
   padding: 20px;
+}
+
+.mobile-profile-modal.open {
+  display: flex !important;
 }
 
 .mobile-profile-modal-content {
