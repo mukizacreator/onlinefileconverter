@@ -154,6 +154,7 @@
 
         <section style="flex:1; min-width:250px; padding:14px 20px;">
 
+          <!-- PROFILE VIEW - DEFAULT VISIBLE -->
           <div id="profileView">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Profile Information</h2>
             <div style="background:rgba(255,255,255,0.06); padding:16px 20px; border-radius:10px;">
@@ -171,6 +172,7 @@
             </p>
           </div>
 
+          <!-- ACCOUNT PANEL - HIDDEN BY DEFAULT -->
           <div id="accountPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Account Information</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Update your email or username. Enter your current password to save changes.</p>
@@ -209,6 +211,7 @@
             <button class="convert-btn profile-action-btn" id="saveAccountBtn">Save Changes</button>
           </div>
 
+          <!-- SECURITY PANEL - HIDDEN BY DEFAULT -->
           <div id="securityPanel" style="display:none;">
             <h2 style="font-size:1.1rem; margin-top:0; margin-bottom:10px;">Security Settings</h2>
             <p style="color:#aaa; font-size:0.8rem; margin-bottom:12px;">Change your password or manage your account security.</p>
@@ -273,12 +276,12 @@
 
   <script>
   // ============================================
-  // COMPLETE PROFILE SYSTEM
+  // COMPLETE PROFILE SYSTEM - FINAL
   // ============================================
   (function() {
     'use strict';
     
-    console.log("🚀 PROFILE SYSTEM STARTED");
+    console.log("🚀 PROFILE SYSTEM FINAL STARTED");
     
     // ============================================
     // GET USER
@@ -409,25 +412,6 @@
       mobileModalContent.innerHTML = html;
       mobileModal.classList.add('open');
       document.body.style.overflow = 'hidden';
-      
-      // Bind buttons in modal
-      setTimeout(function() {
-        var btns = document.querySelectorAll('#mobileModalContent button');
-        btns.forEach(function(btn) {
-          var id = btn.id;
-          var mainBtn = document.getElementById(id);
-          if (mainBtn && id) {
-            var newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-            newBtn.addEventListener('click', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log("🔘 Modal button clicked:", id);
-              mainBtn.click();
-            });
-          }
-        });
-      }, 200);
     }
     
     function closeModal() {
@@ -435,10 +419,21 @@
       console.log("📱 Closing modal");
       mobileModal.classList.remove('open');
       document.body.style.overflow = '';
+      // ENSURE ONLY PROFILE VIEW IS VISIBLE AFTER CLOSING MODAL
       if (profileView) {
         profileView.style.display = 'block';
         profileView.classList.remove('hidden-panel');
       }
+      if (accountPanel) {
+        accountPanel.style.display = 'none';
+        accountPanel.classList.remove('active-panel');
+      }
+      if (securityPanel) {
+        securityPanel.style.display = 'none';
+        securityPanel.classList.remove('active-panel');
+      }
+      if (accountTab) accountTab.classList.remove('active');
+      if (securityTab) securityTab.classList.remove('active');
     }
     
     if (mobileModalClose) {
@@ -457,18 +452,31 @@
     // TAB FUNCTIONS
     // ============================================
     function showProfileView() {
-      if (profileView) profileView.style.display = "block";
-      if (accountPanel) accountPanel.style.display = "none";
-      if (securityPanel) securityPanel.style.display = "none";
+      if (profileView) {
+        profileView.style.display = "block";
+        profileView.classList.remove('hidden-panel');
+      }
+      if (accountPanel) {
+        accountPanel.style.display = "none";
+        accountPanel.classList.remove('active-panel');
+      }
+      if (securityPanel) {
+        securityPanel.style.display = "none";
+        securityPanel.classList.remove('active-panel');
+      }
       if (accountTab) accountTab.classList.remove('active');
       if (securityTab) securityTab.classList.remove('active');
+      console.log("📋 Showing Profile View");
     }
     
     function showAccountPanel() {
       var mobile = window.innerWidth <= 768;
       console.log("📋 Account clicked - mobile:", mobile);
       
-      if (profileView) profileView.style.display = "none";
+      if (profileView) {
+        profileView.style.display = "none";
+        profileView.classList.add('hidden-panel');
+      }
       
       if (mobile) {
         console.log("📱 MOBILE: Opening Account modal");
@@ -476,13 +484,24 @@
           var html = accountPanel.innerHTML;
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
           openModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
+          
+          // Bind modal buttons after content loads
+          setTimeout(function() {
+            bindModalButtons();
+          }, 300);
         }
         return;
       }
       
       console.log("💻 DESKTOP: Showing Account inline");
-      if (accountPanel) accountPanel.style.display = "block";
-      if (securityPanel) securityPanel.style.display = "none";
+      if (accountPanel) {
+        accountPanel.style.display = "block";
+        accountPanel.classList.add('active-panel');
+      }
+      if (securityPanel) {
+        securityPanel.style.display = "none";
+        securityPanel.classList.remove('active-panel');
+      }
       if (accountTab) accountTab.classList.add('active');
       if (securityTab) securityTab.classList.remove('active');
     }
@@ -491,7 +510,10 @@
       var mobile = window.innerWidth <= 768;
       console.log("🔒 Security clicked - mobile:", mobile);
       
-      if (profileView) profileView.style.display = "none";
+      if (profileView) {
+        profileView.style.display = "none";
+        profileView.classList.add('hidden-panel');
+      }
       
       if (mobile) {
         console.log("📱 MOBILE: Opening Security modal");
@@ -499,15 +521,135 @@
           var html = securityPanel.innerHTML;
           html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
           openModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
+          
+          // Bind modal buttons after content loads
+          setTimeout(function() {
+            bindModalButtons();
+          }, 300);
         }
         return;
       }
       
       console.log("💻 DESKTOP: Showing Security inline");
-      if (securityPanel) securityPanel.style.display = "block";
-      if (accountPanel) accountPanel.style.display = "none";
+      if (securityPanel) {
+        securityPanel.style.display = "block";
+        securityPanel.classList.add('active-panel');
+      }
+      if (accountPanel) {
+        accountPanel.style.display = "none";
+        accountPanel.classList.remove('active-panel');
+      }
       if (securityTab) securityTab.classList.add('active');
       if (accountTab) accountTab.classList.remove('active');
+    }
+    
+    // ============================================
+    // BIND MODAL BUTTONS - FIXED
+    // ============================================
+    function bindModalButtons() {
+      var content = document.getElementById('mobileModalContent');
+      if (!content) return;
+      
+      console.log("🔗 Binding modal buttons");
+      
+      // Find all buttons in modal
+      var buttons = content.querySelectorAll('button');
+      buttons.forEach(function(btn) {
+        // Skip if already bound
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        
+        var id = btn.id;
+        console.log("  Binding button:", id);
+        
+        // SAVE ACCOUNT
+        if (id === 'saveAccountBtn') {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("💾 Save Account clicked in modal");
+            // Copy values from modal to main inputs
+            var modalPwd = document.getElementById('accountCurrentPassword');
+            var modalEmail = document.getElementById('profileEmail');
+            var modalUser = document.getElementById('profileUsernameInput');
+            var mainPwd = document.getElementById('accountCurrentPassword');
+            var mainEmail = document.getElementById('profileEmail');
+            var mainUser = document.getElementById('profileUsernameInput');
+            if (modalPwd && mainPwd) mainPwd.value = modalPwd.value;
+            if (modalEmail && mainEmail) mainEmail.value = modalEmail.value;
+            if (modalUser && mainUser) mainUser.value = modalUser.value;
+            // Trigger main button
+            var mainBtn = document.getElementById('saveAccountBtn');
+            if (mainBtn) mainBtn.click();
+          });
+        }
+        // CHANGE PASSWORD
+        else if (id === 'changePasswordBtn') {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("🔑 Change Password clicked in modal");
+            // Copy values from modal to main inputs
+            var modalCur = document.getElementById('currentPassword');
+            var modalNew = document.getElementById('newPassword');
+            var modalConf = document.getElementById('confirmPassword');
+            var mainCur = document.getElementById('currentPassword');
+            var mainNew = document.getElementById('newPassword');
+            var mainConf = document.getElementById('confirmPassword');
+            if (modalCur && mainCur) mainCur.value = modalCur.value;
+            if (modalNew && mainNew) mainNew.value = modalNew.value;
+            if (modalConf && mainConf) mainConf.value = modalConf.value;
+            // Trigger main button
+            var mainBtn = document.getElementById('changePasswordBtn');
+            if (mainBtn) mainBtn.click();
+          });
+        }
+        // LOGOUT
+        else if (id === 'logoutBtn') {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("🚪 Logout clicked in modal");
+            var mainBtn = document.getElementById('logoutBtn');
+            if (mainBtn) mainBtn.click();
+          });
+        }
+        // DELETE ACCOUNT
+        else if (id === 'deleteAccountBtn') {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("🗑️ Delete Account clicked in modal");
+            var mainBtn = document.getElementById('deleteAccountBtn');
+            if (mainBtn) mainBtn.click();
+          });
+        }
+        // PASSWORD TOGGLE
+        else if (btn.classList && btn.classList.contains('password-toggle-btn')) {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("👁️ Password toggle clicked in modal");
+            var wrapper = this.parentElement;
+            var input = wrapper.querySelector('input');
+            if (!input) {
+              var id = this.id.replace('toggle', '');
+              if (id) input = document.getElementById(id);
+            }
+            if (!input) return;
+            var icon = this.querySelector('i');
+            if (input.type === 'password') {
+              input.type = 'text';
+              if (icon) { icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
+            } else {
+              input.type = 'password';
+              if (icon) { icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
+            }
+          });
+        }
+      });
+      
+      console.log("✅ Modal buttons bound");
     }
     
     // ============================================
@@ -540,7 +682,7 @@
     }
     
     // ============================================
-    // PASSWORD TOGGLES
+    // PASSWORD TOGGLES - DESKTOP
     // ============================================
     function togglePassword(inputId, buttonId) {
       var input = document.getElementById(inputId);
@@ -801,43 +943,66 @@
     }
     
     // ============================================
-    // HANDLE CHANGE PASSWORD
+    // HANDLE CHANGE PASSWORD - COMPLETE
     // ============================================
     function handleChangePassword() {
       var curPass = document.getElementById('currentPassword');
       var newPass = document.getElementById('newPassword');
       var confPass = document.getElementById('confirmPassword');
       
+      // VALIDATION 1: Current password must be entered
       if (!curPass || !curPass.value) {
         toastError("Please enter your current password.");
         return;
       }
+      
+      // VALIDATION 2: New password must be entered
       if (!newPass || !newPass.value) {
         toastError("Please enter a new password.");
         return;
       }
+      
+      // VALIDATION 3: Confirm password must match
       if (newPass.value !== confPass.value) {
         toastError("Passwords do not match.");
         return;
       }
       
+      // VALIDATION 4: New password must meet strength requirements
       var strongPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{5,}$/;
       if (!strongPassword.test(newPass.value)) {
         toastError("Password: 5+ chars, one capital, one number, one symbol.");
         return;
       }
       
+      // VALIDATION 5: New password must be different from current
       if (newPass.value === curPass.value) {
-        toastError("New password must be different.");
+        toastError("New password must be different from current password.");
         return;
       }
       
-      toastInfo("Sending verification code...");
+      // STEP 1: Verify current password with server
+      toastInfo("Verifying current password...");
       
-      fetch("/api/send-code", {
+      fetch("/api/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: currentUser.email })
+        body: JSON.stringify({ email: loggedInEmail, password: curPass.value })
+      })
+      .then(function(res) {
+        if (!res.ok) {
+          throw new Error("Incorrect current password.");
+        }
+        return res.json();
+      })
+      .then(function(data) {
+        // STEP 2: Send verification code
+        toastInfo("Sending verification code...");
+        return fetch("/api/send-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: currentUser.email })
+        });
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
@@ -866,6 +1031,7 @@
           toastError("Incorrect verification code.");
           return;
         }
+        // STEP 3: Update password
         return fetch("/api/update-user", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1042,7 +1208,7 @@
     showProfileView();
     loadFromServer();
     
-    console.log("✅ PROFILE SYSTEM COMPLETE");
+    console.log("✅ PROFILE SYSTEM FINAL COMPLETE");
     
   })();
   </script>
