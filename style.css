@@ -543,31 +543,9 @@ section h2 {
   border-radius: 8px;
 }
 
-/* Profile page tab content - DEFAULT STATE */
-#profileView {
-  display: block !important;
-}
-
-#accountPanel {
-  display: none !important;
-}
-
-#securityPanel {
-  display: none !important;
-}
-
-/* When active - show the panel */
-#accountPanel.active-panel {
-  display: block !important;
-}
-
-#securityPanel.active-panel {
-  display: block !important;
-}
-
-/* When hidden - hide profile view */
-#profileView.hidden-panel {
-  display: none !important;
+/* Profile page tab content */
+#profileView, #accountPanel, #securityPanel {
+  width: 100% !important;
 }
 
 /* ============================================
@@ -745,7 +723,7 @@ footer {
   }
   
   /* ==========================================
-     CONVERTER BOX - FIXED
+     CONVERTER BOX
      ========================================== */
   .dashboard {
     padding: 4px 6px !important;
@@ -784,8 +762,7 @@ footer {
     max-width: 100% !important;
     text-align: center !important;
     width: 100% !important;
-    padding: 8px 0 !important;
-    margin: 2px 0 !important;
+    padding: 6px 0 !important;
   }
   
   .format-select {
@@ -850,9 +827,9 @@ footer {
     min-width: 0 !important;
   }
   
-  /* Profile panels on mobile */
   #profileView, #accountPanel, #securityPanel {
     width: 100% !important;
+    display: block !important;
   }
   
   .profile-password-wrapper {
@@ -890,18 +867,6 @@ footer {
     padding: 8px !important;
     font-size: 0.8rem !important;
     width: 100% !important;
-  }
-  
-  /* Mobile tab links - ensure they're clickable */
-  .support-link {
-    cursor: pointer !important;
-    -webkit-tap-highlight-color: transparent !important;
-    touch-action: manipulation !important;
-  }
-  
-  .support-link:active {
-    background: rgba(0, 188, 212, 0.3) !important;
-    transform: scale(0.98) !important;
   }
   
   /* ==========================================
@@ -1039,7 +1004,7 @@ footer {
   
   #fileName {
     font-size: 0.7rem !important;
-    padding: 6px 0 !important;
+    padding: 4px 0 !important;
   }
   
   .format-select {
@@ -1123,82 +1088,5 @@ footer {
   /* Desktop nav link spacing - keep as original */
   .nav-link {
     gap: 6px !important;
-  }
-}
-
-/* ============================================
-   MOBILE PROFILE MODAL - ADD THIS AT THE END
-   ============================================ */
-.mobile-profile-modal {
-  display: none !important;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 99998;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.mobile-profile-modal.open {
-  display: flex !important;
-}
-
-.mobile-profile-modal-content {
-  background: rgba(25, 35, 45, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 24px 28px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-}
-
-.mobile-profile-modal-close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 1.8rem;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
-.mobile-profile-modal-close:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.mobile-profile-modal-content h2 {
-  color: white;
-  font-size: 1.3rem;
-  margin-top: 0;
-  margin-bottom: 16px;
-  padding-right: 40px;
-}
-
-@media only screen and (max-width: 768px) {
-  .mobile-profile-modal {
-    padding: 16px;
-  }
-  .mobile-profile-modal-content {
-    padding: 20px 22px;
-    max-height: 85vh;
-  }
-  .mobile-profile-modal-content h2 {
-    font-size: 1.1rem;
-  }
-  .mobile-profile-modal-close {
-    font-size: 1.5rem;
   }
 }
