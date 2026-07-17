@@ -1,7 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 70 (NO CHANGE - JUST FIX)
+// PROFILE.JS - VERSION 71 (COMPLETE FIX)
 // ============================================
-console.log("🚀 profile.js v70 LOADED!");
+console.log("🚀 profile.js v71 LOADED!");
 
 const loggedInEmail = localStorage.getItem("loggedInUser");
 if (!loggedInEmail) {
@@ -59,21 +59,15 @@ console.log("  securityPanel:", !!securityPanel);
 console.log("  accountTab:", !!accountTab);
 console.log("  securityTab:", !!securityTab);
 
-/* ============================================
-   MOBILE DETECTION - FIXED
-   ============================================ */
-// Use a more reliable mobile detection
+// ============================================
+// MOBILE DETECTION
+// ============================================
 function isMobile() {
-  // Check both window width and user agent
-  var isSmallScreen = window.innerWidth <= 768;
-  var isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  // Return true if either condition is true
-  return isSmallScreen || isMobileDevice;
+  return window.innerWidth <= 768;
 }
 
 console.log("📱 isMobile():", isMobile());
 console.log("📱 window.innerWidth:", window.innerWidth);
-console.log("📱 navigator.userAgent:", navigator.userAgent);
 
 // ============================================
 // MODAL ELEMENTS
@@ -83,6 +77,7 @@ let mobileModalContent = document.getElementById('mobileModalContent');
 
 // Create modal if it doesn't exist
 if (!mobileModal) {
+  console.log("📱 Creating modal");
   mobileModal = document.createElement('div');
   mobileModal.id = 'mobileProfileModal';
   mobileModal.className = 'mobile-profile-modal';
@@ -287,7 +282,7 @@ async function loadUserData() {
 }
 
 /* ============================================
-   TAB SWITCHING FUNCTIONS - FIXED
+   TAB SWITCHING FUNCTIONS - COMPLETE FIX
    ============================================ */
 function showProfileView() {
   if (profileView) {
@@ -302,12 +297,19 @@ function showProfileView() {
     securityPanel.style.display = "none";
     securityPanel.classList.remove('active-panel');
   }
-  if (accountTab) accountTab.classList.remove('active');
-  if (securityTab) securityTab.classList.remove('active');
+  if (accountTab) {
+    accountTab.classList.remove('active');
+  }
+  if (securityTab) {
+    securityTab.classList.remove('active');
+  }
   console.log("📋 Showing Profile View");
 }
 
 function showAccountPanel() {
+  var mobile = window.innerWidth <= 768;
+  console.log("📋 showAccountPanel - window.innerWidth:", window.innerWidth, "isMobile:", mobile);
+  
   // Hide profile view
   if (profileView) {
     profileView.style.display = "none";
@@ -315,12 +317,13 @@ function showAccountPanel() {
   }
   
   // MOBILE: Open modal
-  if (isMobile()) {
+  if (mobile) {
     console.log("📱 MOBILE: Opening Account modal");
     if (accountPanel) {
       var html = accountPanel.innerHTML;
+      // Remove h2 title from panel (modal adds its own)
       html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-      openMobileModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
+      openMobileModal('<h2 style="color:white;font-size:1.2rem;margin-bottom:16px;padding-right:40px;"><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
     }
     return;
   }
@@ -335,7 +338,7 @@ function showAccountPanel() {
     securityPanel.style.display = "none";
     securityPanel.classList.remove('active-panel');
   }
-  // ACTIVE TAB - FIXED
+  // ACTIVE TAB
   if (accountTab) {
     accountTab.classList.add('active');
   }
@@ -345,6 +348,9 @@ function showAccountPanel() {
 }
 
 function showSecurityPanel() {
+  var mobile = window.innerWidth <= 768;
+  console.log("🔒 showSecurityPanel - window.innerWidth:", window.innerWidth, "isMobile:", mobile);
+  
   // Hide profile view
   if (profileView) {
     profileView.style.display = "none";
@@ -352,12 +358,12 @@ function showSecurityPanel() {
   }
   
   // MOBILE: Open modal
-  if (isMobile()) {
+  if (mobile) {
     console.log("📱 MOBILE: Opening Security modal");
     if (securityPanel) {
       var html = securityPanel.innerHTML;
       html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-      openMobileModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
+      openMobileModal('<h2 style="color:white;font-size:1.2rem;margin-bottom:16px;padding-right:40px;"><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
     }
     return;
   }
@@ -372,7 +378,7 @@ function showSecurityPanel() {
     accountPanel.style.display = "none";
     accountPanel.classList.remove('active-panel');
   }
-  // ACTIVE TAB - FIXED
+  // ACTIVE TAB
   if (securityTab) {
     securityTab.classList.add('active');
   }
@@ -446,7 +452,6 @@ showProfileView();
 if (accountTab) {
   console.log("✅ Adding Account tab listener");
   
-  // Remove any existing listeners by cloning
   const newAccountTab = accountTab.cloneNode(true);
   accountTab.parentNode.replaceChild(newAccountTab, accountTab);
   
@@ -466,7 +471,6 @@ if (accountTab) {
 if (securityTab) {
   console.log("✅ Adding Security tab listener");
   
-  // Remove any existing listeners by cloning
   const newSecurityTab = securityTab.cloneNode(true);
   securityTab.parentNode.replaceChild(newSecurityTab, securityTab);
   
@@ -1042,6 +1046,6 @@ if (profileImageWrapper && profileImage) {
 }
 
 loadUserData();
-console.log("✅ Profile.js v70 loaded successfully");
+console.log("✅ Profile.js v71 loaded successfully");
 console.log("📱 isMobile():", isMobile());
 console.log("📱 window.innerWidth:", window.innerWidth);
