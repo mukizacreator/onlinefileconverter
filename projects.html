@@ -25,12 +25,12 @@
       overflow: hidden;
     }
 
-    /* Projects page specific styles */
+    /* Projects page specific styles - DESKTOP UNTOUCHED */
     .projects-container {
-      height: calc(100vh - 60px); /* Subtract nav height */
+      height: calc(100vh - 60px);
       max-width: 800px;
       margin: 0 auto;
-      padding: 20px 20px 0px 20px; /* Removed bottom padding */
+      padding: 20px 20px 10px 20px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -113,21 +113,25 @@
     }
 
     .projects-footer {
-      margin-top: 16px; /* Small space before copyright */
-      padding-top: 10px;
+      margin-top: auto;
+      padding-top: 12px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
       font-size: 0.8rem;
       color: rgba(255, 255, 255, 0.4);
-      margin-bottom: 0; /* No bottom margin */
     }
 
-    /* Mobile styles - ONLY changing container height to remove bottom space */
+    /* MOBILE ONLY CHANGES - Reduce container height to remove bottom space */
     @media (max-width: 768px) {
       .projects-container {
-        height: calc(100vh - 56px);
-        padding: 16px 16px 0px 16px; /* Removed bottom padding */
+        height: calc(100vh - 60px); /* Tighter height for mobile */
+        padding: 16px 16px 0px 16px;
         max-width: 100%;
+        justify-content: center;
+      }
+
+      .projects-header {
+        margin-bottom: 12px;
       }
 
       .projects-header h1 {
@@ -170,14 +174,18 @@
         font-size: 0.75rem;
         padding-top: 8px;
         margin-top: 12px;
-        margin-bottom: 0;
       }
     }
 
     @media (max-width: 400px) {
       .projects-container {
-        height: calc(100vh - 52px);
-        padding: 12px 12px 0px 12px; /* Removed bottom padding */
+        height: calc(100vh - 56px); /* Even tighter for small phones */
+        padding: 12px 12px 0px 12px;
+        justify-content: center;
+      }
+
+      .projects-header {
+        margin-bottom: 10px;
       }
 
       .projects-header h1 {
@@ -224,7 +232,6 @@
         font-size: 0.65rem;
         padding-top: 6px;
         margin-top: 10px;
-        margin-bottom: 0;
       }
     }
   </style>
