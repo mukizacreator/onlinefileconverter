@@ -339,7 +339,7 @@ function showModal(options) {
             if (this._resolve) {
                 this._resolve(value);
             }
-            // Don't close modal here
+            // Don't close modal here - the caller will decide
             return;
         }
         
@@ -353,7 +353,7 @@ function showModal(options) {
     btnContainer.appendChild(confirmBtn);
     modal.appendChild(btnContainer);
 
-    // Close on outside click - only if not stayOpenOnError
+    // Close on outside click - ONLY if not stayOpenOnError
     overlay.onclick = (e) => {
         if (e.target === overlay && !stayOpenOnError) {
             overlay.remove();
@@ -361,6 +361,20 @@ function showModal(options) {
             if (overlay._resolve) overlay._resolve(null);
         }
     };
+
+    // Prevent closing on outside click for verification modals
+    // But allow closing if user clicks outside and it's not a verification modal
+    if (stayOpenOnError) {
+        // For verification modals, clicking outside does nothing
+        overlay.style.pointerEvents = 'auto';
+        // But we want the modal to be clickable, so we prevent overlay click from closing
+        overlay.onclick = function(e) {
+            if (e.target === this) {
+                // Do nothing - modal stays open
+                return;
+            }
+        };
+    }
 
     modal.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -437,4 +451,4 @@ window.showVerificationModal = showVerificationModal;
 window.showConfirmModal = showConfirmModal;
 window.showAlertModal = showAlertModal;
 
-console.log("✅ Modal system v52 loaded successfully!");
+console.log("✅ Modal system v53 loaded successfully!");
