@@ -17,20 +17,32 @@
   <link rel="stylesheet" href="style.css?v=70">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
   <style>
+    /* Reset body and html for full viewport height */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
     /* Projects page specific styles */
     .projects-container {
+      height: calc(100vh - 60px); /* Subtract nav height */
       max-width: 800px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 20px 20px 10px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .projects-header {
-      margin-bottom: 30px;
+      margin-bottom: 16px;
     }
 
     .projects-header h1 {
       font-size: 2rem;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       color: #fff;
     }
 
@@ -40,20 +52,16 @@
       margin: 0;
     }
 
-    .project-section {
-      margin-bottom: 32px;
-    }
-
     .section-divider {
       border: none;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      margin: 24px 0;
+      margin: 12px 0;
     }
 
     .section-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: #00bcd4;
-      margin-bottom: 12px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -64,35 +72,35 @@
     }
 
     .project-item {
-      padding: 4px 0;
+      padding: 2px 0;
     }
 
     .project-item .project-name {
       font-size: 1rem;
       font-weight: 600;
       color: #fff;
-      margin: 0 0 4px 0;
+      margin: 0 0 2px 0;
     }
 
     .project-item .project-desc {
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.7);
       margin: 0;
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     .future-list {
       list-style: none;
       padding: 0;
-      margin: 8px 0 0 0;
+      margin: 4px 0 0 0;
     }
 
     .future-list li {
-      padding: 6px 0 6px 24px;
+      padding: 3px 0 3px 24px;
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.8);
       position: relative;
-      line-height: 1.4;
+      line-height: 1.3;
     }
 
     .future-list li::before {
@@ -101,82 +109,117 @@
       font-size: 1.2rem;
       position: absolute;
       left: 4px;
-      top: 4px;
+      top: 2px;
     }
 
     .projects-footer {
-      margin-top: 40px;
-      padding-top: 20px;
+      margin-top: auto;
+      padding-top: 12px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: rgba(255, 255, 255, 0.4);
     }
 
     /* Mobile styles */
     @media (max-width: 768px) {
       .projects-container {
-        padding: 16px;
+        height: calc(100vh - 56px);
+        padding: 16px 16px 8px 16px;
+        max-width: 100%;
       }
 
       .projects-header h1 {
         font-size: 1.5rem;
+        margin-bottom: 2px;
       }
 
       .projects-header .subtitle {
-        font-size: 0.9rem;
-      }
-
-      .section-title {
-        font-size: 1rem;
-      }
-
-      .project-item .project-name {
-        font-size: 0.95rem;
-      }
-
-      .project-item .project-desc {
         font-size: 0.85rem;
-      }
-
-      .future-list li {
-        font-size: 0.85rem;
-        padding: 5px 0 5px 22px;
       }
 
       .section-divider {
-        margin: 20px 0;
+        margin: 8px 0;
+      }
+
+      .section-title {
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+      }
+
+      .project-item .project-name {
+        font-size: 0.9rem;
+        margin-bottom: 1px;
+      }
+
+      .project-item .project-desc {
+        font-size: 0.8rem;
+      }
+
+      .future-list li {
+        font-size: 0.8rem;
+        padding: 2px 0 2px 22px;
+      }
+
+      .future-list li::before {
+        top: 1px;
+      }
+
+      .projects-footer {
+        font-size: 0.75rem;
+        padding-top: 8px;
       }
     }
 
     @media (max-width: 400px) {
       .projects-container {
-        padding: 12px;
+        height: calc(100vh - 52px);
+        padding: 12px 12px 6px 12px;
       }
 
       .projects-header h1 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
 
       .projects-header .subtitle {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+      }
+
+      .section-divider {
+        margin: 6px 0;
       }
 
       .section-title {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        margin-bottom: 3px;
+      }
+
+      .section-title i {
+        font-size: 0.8rem;
       }
 
       .project-item .project-name {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
       }
 
       .project-item .project-desc {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
       }
 
       .future-list li {
-        font-size: 0.8rem;
-        padding: 4px 0 4px 20px;
+        font-size: 0.75rem;
+        padding: 2px 0 2px 18px;
+      }
+
+      .future-list li::before {
+        font-size: 1rem;
+        left: 2px;
+        top: 0px;
+      }
+
+      .projects-footer {
+        font-size: 0.65rem;
+        padding-top: 6px;
       }
     }
   </style>
@@ -247,7 +290,7 @@
         <div class="section-title">
           <i class="fa-solid fa-lightbulb"></i> Future Projects
         </div>
-        <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); margin:0 0 8px 0;">Future additions may include:</p>
+        <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); margin:0 0 4px 0;">Future additions may include:</p>
         <ul class="future-list">
           <li>Web applications</li>
           <li>Software projects</li>
