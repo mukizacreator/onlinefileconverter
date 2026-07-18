@@ -17,67 +17,71 @@
   <link rel="stylesheet" href="style.css?v=70">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
   <style>
-    /* Reset body and html for full viewport height */
-    html, body {
-      height: 100%;
+    /* Reset */
+    * {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      box-sizing: border-box;
     }
 
-    /* Main wrapper - full height with flex column */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      color: #fff;
+    }
+
+    /* Page Layout */
     .page-wrapper {
       height: calc(100vh - 60px);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 0 20px;
+      align-items: center;
+      padding: 20px;
     }
 
-    /* Content wrapper container - auto height based on content */
-    .content-wrapper {
-      max-width: 800px;
+    /* Content Container */
+    .content-container {
+      max-width: 700px;
       width: 100%;
-      margin: 0 auto;
-      padding: 20px 20px 10px 20px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 30px 35px;
+      backdrop-filter: blur(10px);
     }
 
-    /* Projects page specific styles */
-    .projects-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .projects-header {
-      margin-bottom: 16px;
-    }
-
-    .projects-header h1 {
+    /* Header */
+    .page-header h1 {
       font-size: 2rem;
-      margin-bottom: 4px;
+      font-weight: 700;
       color: #fff;
+      margin-bottom: 4px;
     }
 
-    .projects-header .subtitle {
+    .page-header p {
       font-size: 1rem;
-      color: rgba(255, 255, 255, 0.7);
-      margin: 0;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 0;
     }
 
-    .section-divider {
+    /* Divider */
+    .divider {
       border: none;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      margin: 12px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin: 16px 0;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 4px;
     }
 
     .section-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
+      font-weight: 600;
       color: #00bcd4;
       margin-bottom: 6px;
       display: flex;
@@ -86,39 +90,41 @@
     }
 
     .section-title i {
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
-    .project-item {
-      padding: 2px 0;
-    }
-
-    .project-item .project-name {
+    .project-name {
       font-size: 1rem;
       font-weight: 600;
       color: #fff;
-      margin: 0 0 2px 0;
+      margin-bottom: 2px;
     }
 
-    .project-item .project-desc {
+    .project-desc {
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
       margin: 0;
-      line-height: 1.4;
+    }
+
+    .future-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 4px;
     }
 
     .future-list {
       list-style: none;
       padding: 0;
-      margin: 4px 0 0 0;
+      margin: 0;
     }
 
     .future-list li {
-      padding: 3px 0 3px 24px;
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.8);
+      padding: 3px 0 3px 22px;
       position: relative;
-      line-height: 1.3;
+      line-height: 1.5;
     }
 
     .future-list li::before {
@@ -126,182 +132,147 @@
       color: #ff9800;
       font-size: 1.2rem;
       position: absolute;
-      left: 4px;
-      top: 2px;
+      left: 2px;
+      top: 1px;
     }
 
-    /* Footer - at the very bottom of screen */
+    /* Footer - at bottom of screen */
     .page-footer {
       text-align: center;
-      padding: 10px 0;
       font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.4);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.3);
+      padding: 12px 0 4px 0;
+      max-width: 700px;
       width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 12px;
     }
 
-    /* Mobile styles - FIXED */
+    /* ===== MOBILE ===== */
     @media (max-width: 768px) {
       .page-wrapper {
         height: calc(100vh - 56px);
-        padding: 0 12px;
         justify-content: flex-start;
-        padding-top: 12px;
+        padding: 12px 14px 0 14px;
       }
 
-      .content-wrapper {
-        padding: 16px 16px 12px 16px;
-        border-radius: 10px;
-        margin-bottom: 0;
+      .content-container {
+        padding: 18px 18px 14px 18px;
+        border-radius: 12px;
+        margin-top: 4px;
       }
 
-      /* Header spacing */
-      .projects-header {
-        margin-bottom: 14px;
+      .page-header h1 {
+        font-size: 1.4rem;
       }
 
-      .projects-header h1 {
-        font-size: 1.5rem;
-        margin-bottom: 4px;
-      }
-
-      .projects-header .subtitle {
+      .page-header p {
         font-size: 0.85rem;
-        line-height: 1.5;
-        margin-top: 2px;
       }
 
-      /* Section dividers */
-      .section-divider {
-        margin: 10px 0;
+      .divider {
+        margin: 12px 0;
       }
 
-      /* Section titles */
       .section-title {
-        font-size: 0.95rem;
-        margin-bottom: 6px;
-      }
-
-      /* Project items - more spacing */
-      .project-item {
-        padding: 3px 0;
-      }
-
-      .project-item .project-name {
         font-size: 0.9rem;
+        margin-bottom: 5px;
+      }
+
+      .project-name {
+        font-size: 0.88rem;
         margin-bottom: 3px;
       }
 
-      .project-item .project-desc {
+      .project-desc {
         font-size: 0.82rem;
         line-height: 1.6;
-        padding-right: 4px;
       }
 
-      /* Future list - more spacing */
-      .future-list {
-        margin: 4px 0 0 0;
+      .future-label {
+        font-size: 0.82rem;
+        margin-bottom: 3px;
       }
 
       .future-list li {
         font-size: 0.82rem;
-        padding: 4px 0 4px 24px;
+        padding: 4px 0 4px 22px;
         line-height: 1.6;
       }
 
       .future-list li::before {
-        top: 3px;
         font-size: 1rem;
+        top: 2px;
       }
 
-      /* Remove empty space below container */
       .page-footer {
-        font-size: 0.75rem;
-        padding: 10px 0;
+        font-size: 0.7rem;
+        padding: 8px 0 4px 0;
+        margin-top: 8px;
         max-width: 100%;
-        margin-top: 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
       }
     }
 
     @media (max-width: 400px) {
       .page-wrapper {
         height: calc(100vh - 52px);
-        padding: 0 8px;
-        padding-top: 10px;
+        padding: 8px 10px 0 10px;
       }
 
-      .content-wrapper {
-        padding: 12px 12px 10px 12px;
-        border-radius: 8px;
-        margin-bottom: 0;
+      .content-container {
+        padding: 14px 14px 12px 14px;
+        border-radius: 10px;
+        margin-top: 2px;
       }
 
-      .projects-header {
-        margin-bottom: 12px;
-      }
-
-      .projects-header h1 {
+      .page-header h1 {
         font-size: 1.2rem;
-        margin-bottom: 3px;
       }
 
-      .projects-header .subtitle {
+      .page-header p {
         font-size: 0.75rem;
-        line-height: 1.5;
       }
 
-      .section-divider {
-        margin: 8px 0;
+      .divider {
+        margin: 10px 0;
       }
 
       .section-title {
-        font-size: 0.85rem;
-        margin-bottom: 5px;
-        gap: 5px;
+        font-size: 0.82rem;
+        margin-bottom: 4px;
       }
 
-      .section-title i {
-        font-size: 0.75rem;
-      }
-
-      .project-item {
-        padding: 3px 0;
-      }
-
-      .project-item .project-name {
+      .project-name {
         font-size: 0.8rem;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
       }
 
-      .project-item .project-desc {
-        font-size: 0.72rem;
+      .project-desc {
+        font-size: 0.75rem;
         line-height: 1.6;
       }
 
-      .future-list {
-        margin: 3px 0 0 0;
+      .future-label {
+        font-size: 0.75rem;
+        margin-bottom: 2px;
       }
 
       .future-list li {
         font-size: 0.75rem;
-        padding: 3.5px 0 3.5px 20px;
+        padding: 3px 0 3px 20px;
         line-height: 1.6;
       }
 
       .future-list li::before {
         font-size: 0.9rem;
-        left: 2px;
-        top: 2px;
+        top: 1px;
       }
 
       .page-footer {
-        font-size: 0.65rem;
-        padding: 8px 0;
+        font-size: 0.6rem;
+        padding: 6px 0 4px 0;
+        margin-top: 6px;
         max-width: 100%;
-        margin-top: 0;
       }
     }
   </style>
@@ -309,6 +280,7 @@
 
 <body>
 
+  <!-- ===== NAVIGATION ===== -->
   <nav class="top-nav">
     <div class="nav-left-wrapper">
       <div class="nav-hamburger" id="hamburgerBtn">
@@ -337,134 +309,138 @@
     </div>
   </nav>
 
+  <!-- ===== MOBILE DROPDOWN ===== -->
   <div class="mobile-dropdown" id="mobileDropdown">
     <a href="projects.html" class="dropdown-link active"><i class="fa-solid fa-diagram-project"></i> Other Projects</a>
     <a href="about.html" class="dropdown-link"><i class="fa-solid fa-circle-info"></i> About & Support</a>
   </div>
 
+  <!-- ===== MAIN CONTENT ===== -->
   <main>
     <div class="page-wrapper">
-      <div class="content-wrapper">
-        <div class="projects-container">
-          <!-- Header -->
-          <div class="projects-header">
-            <h1>Other Projects</h1>
-            <p class="subtitle">My achievements, projects and future innovations.</p>
-          </div>
 
-          <!-- Divider -->
-          <hr class="section-divider">
+      <!-- Content Container -->
+      <div class="content-container">
 
-          <!-- Featured Project -->
-          <div class="project-section">
-            <div class="section-title">
-              <i class="fa-solid fa-award"></i> Featured Project
-            </div>
-            <div class="project-item">
-              <p class="project-name">Universal Online File Converter</p>
-              <p class="project-desc">A secure and modern file conversion platform supporting documents, images and audio conversion in one place.</p>
-            </div>
-          </div>
-
-          <!-- Divider -->
-          <hr class="section-divider">
-
-          <!-- Future Projects -->
-          <div class="project-section">
-            <div class="section-title">
-              <i class="fa-solid fa-lightbulb"></i> Future Projects
-            </div>
-            <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); margin:0 0 5px 0;">Future additions may include:</p>
-            <ul class="future-list">
-              <li>Web applications</li>
-              <li>Software projects</li>
-              <li>Achievements and awards</li>
-              <li>Certificates</li>
-              <li>Open-source contributions</li>
-              <li>Research and innovations</li>
-            </ul>
-          </div>
+        <!-- Header -->
+        <div class="page-header">
+          <h1>Other Projects</h1>
+          <p>My achievements, projects and future innovations.</p>
         </div>
+
+        <!-- Divider -->
+        <hr class="divider">
+
+        <!-- Featured Project -->
+        <div class="section">
+          <div class="section-title">
+            <i class="fa-solid fa-award"></i> Featured Project
+          </div>
+          <div class="project-name">Universal Online File Converter</div>
+          <p class="project-desc">A secure and modern file conversion platform supporting documents, images and audio conversion in one place.</p>
+        </div>
+
+        <!-- Divider -->
+        <hr class="divider">
+
+        <!-- Future Projects -->
+        <div class="section">
+          <div class="section-title">
+            <i class="fa-solid fa-lightbulb"></i> Future Projects
+          </div>
+          <p class="future-label">Future additions may include:</p>
+          <ul class="future-list">
+            <li>Web applications</li>
+            <li>Software projects</li>
+            <li>Achievements and awards</li>
+            <li>Certificates</li>
+            <li>Open-source contributions</li>
+            <li>Research and innovations</li>
+          </ul>
+        </div>
+
       </div>
 
-      <!-- Footer - at the very bottom -->
+      <!-- Footer -->
       <div class="page-footer">
         © 2026 Emmanuel MUKIZA
       </div>
+
     </div>
   </main>
 
+  <!-- ===== SCRIPTS ===== -->
   <script src="notifications.js?v=70"></script>
   <script src="modal.js?v=70"></script>
   <script src="nav.js?v=70"></script>
 
   <script>
-  (function() {
-    try {
-      const loggedInEmail = localStorage.getItem("loggedInUser");
-      let userData = null;
+    (function() {
       try {
-        userData = JSON.parse(localStorage.getItem("userData"));
-      } catch(e) {}
-      
-      const guestNav = document.getElementById("guestNav");
-      const profileNav = document.getElementById("profileNav");
-      const navUsername = document.getElementById("navUsername");
-      const navProfilePhoto = document.getElementById("navProfilePhoto");
-      
-      const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+        const loggedInEmail = localStorage.getItem("loggedInUser");
+        let userData = null;
+        try {
+          userData = JSON.parse(localStorage.getItem("userData"));
+        } catch (e) {}
 
-      if (loggedInEmail && userData) {
-        if (guestNav) guestNav.style.display = "none";
-        if (profileNav) {
-          profileNav.style.display = "flex";
-          profileNav.style.alignItems = "center";
-        }
-        if (navUsername) navUsername.textContent = userData.username || 'Profile';
-        if (navProfilePhoto) {
-          navProfilePhoto.src = userData.photo || DEFAULT_ICON;
-        }
-      } else if (loggedInEmail) {
-        fetch("/api/get-user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: loggedInEmail })
-        })
-        .then(res => res.json())
-        .then(data => {
-          localStorage.setItem("userData", JSON.stringify(data));
-          if (navUsername) navUsername.textContent = data.username || 'Profile';
-          if (navProfilePhoto) navProfilePhoto.src = data.photo || DEFAULT_ICON;
+        const guestNav = document.getElementById("guestNav");
+        const profileNav = document.getElementById("profileNav");
+        const navUsername = document.getElementById("navUsername");
+        const navProfilePhoto = document.getElementById("navProfilePhoto");
+
+        const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        if (loggedInEmail && userData) {
           if (guestNav) guestNav.style.display = "none";
           if (profileNav) {
             profileNav.style.display = "flex";
             profileNav.style.alignItems = "center";
           }
-        })
-        .catch(err => console.error("Failed to load user data:", err));
-      } else {
+          if (navUsername) navUsername.textContent = userData.username || 'Profile';
+          if (navProfilePhoto) {
+            navProfilePhoto.src = userData.photo || DEFAULT_ICON;
+          }
+        } else if (loggedInEmail) {
+          fetch("/api/get-user", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: loggedInEmail })
+            })
+            .then(res => res.json())
+            .then(data => {
+              localStorage.setItem("userData", JSON.stringify(data));
+              if (navUsername) navUsername.textContent = data.username || 'Profile';
+              if (navProfilePhoto) navProfilePhoto.src = data.photo || DEFAULT_ICON;
+              if (guestNav) guestNav.style.display = "none";
+              if (profileNav) {
+                profileNav.style.display = "flex";
+                profileNav.style.alignItems = "center";
+              }
+            })
+            .catch(err => console.error("Failed to load user data:", err));
+        } else {
+          if (guestNav) {
+            guestNav.style.display = "flex";
+            guestNav.style.alignItems = "center";
+            guestNav.style.gap = "8px";
+          }
+          if (profileNav) {
+            profileNav.style.display = "none";
+          }
+        }
+      } catch (error) {
+        console.error("Navigation error:", error);
+        const guestNav = document.getElementById("guestNav");
         if (guestNav) {
           guestNav.style.display = "flex";
           guestNav.style.alignItems = "center";
           guestNav.style.gap = "8px";
         }
-        if (profileNav) {
-          profileNav.style.display = "none";
-        }
+        const profileNav = document.getElementById("profileNav");
+        if (profileNav) profileNav.style.display = "none";
       }
-    } catch (error) {
-      console.error("Navigation error:", error);
-      const guestNav = document.getElementById("guestNav");
-      if (guestNav) {
-        guestNav.style.display = "flex";
-        guestNav.style.alignItems = "center";
-        guestNav.style.gap = "8px";
-      }
-      const profileNav = document.getElementById("profileNav");
-      if (profileNav) profileNav.style.display = "none";
-    }
-  })();
-</script>
+    })();
+  </script>
 
 </body>
 </html>
