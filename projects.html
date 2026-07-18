@@ -25,15 +25,33 @@
       overflow: hidden;
     }
 
-    /* Projects page specific styles - DESKTOP UNTOUCHED */
-    .projects-container {
+    /* Main wrapper - centers content vertically */
+    .page-wrapper {
       height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    /* Content wrapper container - auto height based on content */
+    .content-wrapper {
       max-width: 800px;
+      width: 100%;
       margin: 0 auto;
       padding: 20px 20px 10px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Projects page specific styles */
+    .projects-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
 
     .projects-header {
@@ -113,7 +131,7 @@
     }
 
     .projects-footer {
-      margin-top: auto;
+      margin-top: 16px;
       padding-top: 12px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
@@ -121,18 +139,20 @@
       color: rgba(255, 255, 255, 0.4);
     }
 
-    /* MOBILE ONLY - Remove ALL space */
+    /* Mobile styles - container adjusts size */
     @media (max-width: 768px) {
-      .projects-container {
+      .page-wrapper {
         height: calc(100vh - 56px);
-        padding: 0px 16px 0px 16px;
-        max-width: 100%;
-        justify-content: flex-start; /* Changed from center to flex-start */
+        padding: 0 12px;
+      }
+
+      .content-wrapper {
+        padding: 14px 14px 8px 14px;
+        border-radius: 10px;
       }
 
       .projects-header {
         margin-bottom: 10px;
-        margin-top: 10px; /* Small top margin only */
       }
 
       .projects-header h1 {
@@ -185,21 +205,23 @@
       .projects-footer {
         font-size: 0.75rem;
         padding-top: 6px;
-        margin-top: 8px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        margin-top: 10px;
       }
     }
 
     @media (max-width: 400px) {
-      .projects-container {
+      .page-wrapper {
         height: calc(100vh - 52px);
-        padding: 0px 12px 0px 12px;
-        justify-content: flex-start; /* Changed from center to flex-start */
+        padding: 0 8px;
+      }
+
+      .content-wrapper {
+        padding: 10px 10px 6px 10px;
+        border-radius: 8px;
       }
 
       .projects-header {
         margin-bottom: 8px;
-        margin-top: 8px; /* Small top margin only */
       }
 
       .projects-header h1 {
@@ -258,7 +280,7 @@
       .projects-footer {
         font-size: 0.65rem;
         padding-top: 4px;
-        margin-top: 6px;
+        margin-top: 8px;
       }
     }
   </style>
@@ -300,49 +322,53 @@
   </div>
 
   <main>
-    <div class="projects-container">
-      <!-- Header -->
-      <div class="projects-header">
-        <h1>Other Projects</h1>
-        <p class="subtitle">My achievements, projects and future innovations.</p>
-      </div>
+    <div class="page-wrapper">
+      <div class="content-wrapper">
+        <div class="projects-container">
+          <!-- Header -->
+          <div class="projects-header">
+            <h1>Other Projects</h1>
+            <p class="subtitle">My achievements, projects and future innovations.</p>
+          </div>
 
-      <!-- Divider -->
-      <hr class="section-divider">
+          <!-- Divider -->
+          <hr class="section-divider">
 
-      <!-- Featured Project -->
-      <div class="project-section">
-        <div class="section-title">
-          <i class="fa-solid fa-award"></i> Featured Project
+          <!-- Featured Project -->
+          <div class="project-section">
+            <div class="section-title">
+              <i class="fa-solid fa-award"></i> Featured Project
+            </div>
+            <div class="project-item">
+              <p class="project-name">Universal Online File Converter</p>
+              <p class="project-desc">A secure and modern file conversion platform supporting documents, images and audio conversion in one place.</p>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <hr class="section-divider">
+
+          <!-- Future Projects -->
+          <div class="project-section">
+            <div class="section-title">
+              <i class="fa-solid fa-lightbulb"></i> Future Projects
+            </div>
+            <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); margin:0 0 3px 0;">Future additions may include:</p>
+            <ul class="future-list">
+              <li>Web applications</li>
+              <li>Software projects</li>
+              <li>Achievements and awards</li>
+              <li>Certificates</li>
+              <li>Open-source contributions</li>
+              <li>Research and innovations</li>
+            </ul>
+          </div>
+
+          <!-- Footer -->
+          <div class="projects-footer">
+            © 2026 Emmanuel MUKIZA
+          </div>
         </div>
-        <div class="project-item">
-          <p class="project-name">Universal Online File Converter</p>
-          <p class="project-desc">A secure and modern file conversion platform supporting documents, images and audio conversion in one place.</p>
-        </div>
-      </div>
-
-      <!-- Divider -->
-      <hr class="section-divider">
-
-      <!-- Future Projects -->
-      <div class="project-section">
-        <div class="section-title">
-          <i class="fa-solid fa-lightbulb"></i> Future Projects
-        </div>
-        <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); margin:0 0 3px 0;">Future additions may include:</p>
-        <ul class="future-list">
-          <li>Web applications</li>
-          <li>Software projects</li>
-          <li>Achievements and awards</li>
-          <li>Certificates</li>
-          <li>Open-source contributions</li>
-          <li>Research and innovations</li>
-        </ul>
-      </div>
-
-      <!-- Footer -->
-      <div class="projects-footer">
-        © 2026 Emmanuel MUKIZA
       </div>
     </div>
   </main>
