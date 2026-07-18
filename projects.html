@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="style.css?v=70">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
   <style>
-    /* Reset body and html for full viewport height */
+    /* Reset body and html for full viewport */
     html, body {
       height: 100%;
       margin: 0;
@@ -25,15 +25,20 @@
       overflow: hidden;
     }
 
-    /* Projects page specific styles */
+    /* Main container - full viewport with flex to center content */
+    main {
+      height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Projects container - auto height based on content */
     .projects-container {
-      height: calc(100vh - 60px); /* Subtract nav height */
       max-width: 800px;
+      width: 100%;
       margin: 0 auto;
       padding: 20px 20px 10px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
 
     .projects-header {
@@ -113,7 +118,7 @@
     }
 
     .projects-footer {
-      margin-top: auto;
+      margin-top: 16px;
       padding-top: 12px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
@@ -121,12 +126,19 @@
       color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Mobile styles - ONLY reduced container height */
+    /* Mobile styles */
     @media (max-width: 768px) {
+      main {
+        height: calc(100vh - 56px);
+      }
+
       .projects-container {
-        height: calc(100vh - 70px); /* Reduced height for mobile */
         padding: 16px 16px 8px 16px;
         max-width: 100%;
+      }
+
+      .projects-header {
+        margin-bottom: 12px;
       }
 
       .projects-header h1 {
@@ -168,13 +180,21 @@
       .projects-footer {
         font-size: 0.75rem;
         padding-top: 8px;
+        margin-top: 12px;
       }
     }
 
     @media (max-width: 400px) {
+      main {
+        height: calc(100vh - 52px);
+      }
+
       .projects-container {
-        height: calc(100vh - 65px); /* Further reduced for very small screens */
         padding: 12px 12px 6px 12px;
+      }
+
+      .projects-header {
+        margin-bottom: 10px;
       }
 
       .projects-header h1 {
@@ -220,6 +240,7 @@
       .projects-footer {
         font-size: 0.65rem;
         padding-top: 6px;
+        margin-top: 10px;
       }
     }
   </style>
