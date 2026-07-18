@@ -170,6 +170,14 @@ function showModal(options) {
 
         modal.appendChild(wrapper);
         inputEl.focus();
+        
+        // Clear error when user types
+        inputEl.addEventListener('input', function() {
+            if (errorMsgEl) {
+                errorMsgEl.style.display = 'none';
+                this.style.borderColor = 'rgba(255,255,255,0.15)';
+            }
+        });
     }
 
     const btnContainer = document.createElement('div');
@@ -307,24 +315,38 @@ function showModal(options) {
     confirmBtn._errorMsg = errorMsgEl;
     confirmBtn._input = inputEl;
     confirmBtn._stayOpen = stayOpenOnError;
+    confirmBtn._overlay = overlay;
+    confirmBtn._onConfirm = onConfirm;
+    confirmBtn._onCancel = onCancel;
+    confirmBtn._resolve = null;
 
-    confirmBtn.onclick = () => {
-        if (confirmBtn._stayOpen && confirmBtn._input) {
-            const value = confirmBtn._input.value.trim();
+    confirmBtn.onclick = function() {
+        // If stayOpenOnError is true and we have an input, validate
+        if (this._stayOpen && this._input) {
+            const value = this._input.value.trim();
             if (!value || value.length < 4) {
-                if (confirmBtn._errorMsg) {
-                    confirmBtn._errorMsg.textContent = 'Please enter a valid code.';
-                    confirmBtn._errorMsg.style.display = 'block';
-                    confirmBtn._input.style.borderColor = '#ff6b6b';
+                if (this._errorMsg) {
+                    this._errorMsg.textContent = 'Please enter a valid code.';
+                    this._errorMsg.style.display = 'block';
+                    this._input.style.borderColor = '#ff6b6b';
                 }
-                return;
+                return; // Don't close modal
             }
+            
+            // If we have a resolve function, call it with the value
+            if (this._resolve) {
+                this._resolve(value);
+            }
+            // Don't close modal here - let the caller decide when to close
+            // The modal will be closed by the caller when verification succeeds
+            return;
         }
         
-        const value = inputEl ? inputEl.value.trim() : true;
-        overlay.remove();
-        if (onConfirm) onConfirm(value);
-        if (overlay._resolve) overlay._resolve(value);
+        // For non-stayOpen modals, get value and close
+        const value = this._input ? this._input.value.trim() : true;
+        if (this._overlay) this._overlay.remove();
+        if (this._onConfirm) this._onConfirm(value);
+        if (this._resolve) this._resolve(value);
     };
 
     btnContainer.appendChild(confirmBtn);
@@ -354,6 +376,8 @@ function showModal(options) {
 
     return new Promise((resolve) => {
         overlay._resolve = resolve;
+        // Also store resolve on confirmBtn for stayOpen modals
+        confirmBtn._resolve = resolve;
     });
 }
 
@@ -380,7 +404,7 @@ function showVerificationModal(email = null) {
         confirmText: 'Verify',
         cancelText: 'Cancel',
         showCancel: true,
-        stayOpenOnError: true,
+        stayOpenOnError: true,  // THIS IS THE KEY - keeps modal open
         showResend: true,
         email: email
     });
@@ -413,4 +437,4 @@ window.showVerificationModal = showVerificationModal;
 window.showConfirmModal = showConfirmModal;
 window.showAlertModal = showAlertModal;
 
-console.log("✅ Modal system v50 loaded successfully!");
+console.log("✅ Modal system v51 loaded successfully!");
