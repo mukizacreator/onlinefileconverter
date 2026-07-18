@@ -1,9 +1,7 @@
 // ============================================
-// PROFILE.JS - VERSION 73 (COMPLETE)
+// PROFILE.JS - VERSION 74 (FIXED)
 // ============================================
-console.log("🚀 profile.js v73 LOADED!");
-
-// Remove the redirect logic from here - it should be in profile.html
+console.log("🚀 profile.js v74 LOADED!");
 
 let currentUser = null;
 const userData = localStorage.getItem("userData");
@@ -208,10 +206,14 @@ function bindModalButtons() {
 /* ============================================
    LOAD USER DATA FROM MONGODB
    ============================================ */
+// FIXED: Removed redirect - only load data if user is logged in
 async function loadUserData() {
   const loggedInEmail = localStorage.getItem("loggedInUser");
+  
+  // If no user is logged in, just return silently (no redirect)
+  // This allows index.html to work for guest users
   if (!loggedInEmail) {
-    window.location.href = "signin.html";
+    console.log("👤 No user logged in - skipping profile data load");
     return;
   }
   
@@ -252,7 +254,10 @@ async function loadUserData() {
     
   } catch (error) {
     console.error("Load user error:", error);
-    toastError("Failed to load user data.");
+    // Don't redirect here either - just show error toast if on profile page
+    if (window.location.pathname.includes('profile.html')) {
+      toastError("Failed to load user data.");
+    }
   }
 }
 
@@ -384,6 +389,9 @@ function updateDeletePhotoButton() {
       e.preventDefault();
       e.stopPropagation();
       
+      const loggedInEmail = localStorage.getItem("loggedInUser");
+      if (!loggedInEmail) return;
+      
       try {
         const res = await fetch("/api/update-user", {
           method: "POST",
@@ -510,6 +518,14 @@ if (uploadPhotoBtn && profilePhotoInput) {
     const file = this.files[0];
     console.log("📸 File selected:", file ? file.name : "No file");
     
+    const loggedInEmail = localStorage.getItem("loggedInUser");
+    if (!loggedInEmail) {
+      toastError("You must be logged in to upload a photo.");
+      uploadPhotoBtn.textContent = "Upload Photo";
+      uploadPhotoBtn.disabled = false;
+      return;
+    }
+    
     if (!file) {
       uploadPhotoBtn.textContent = "Upload Photo";
       uploadPhotoBtn.disabled = false;
@@ -572,6 +588,12 @@ if (saveAccountBtn) {
   saveAccountBtn.onclick = async function(e) {
     e.preventDefault();
     console.log("💾 Save clicked");
+    
+    const loggedInEmail = localStorage.getItem("loggedInUser");
+    if (!loggedInEmail) {
+      toastError("You must be logged in.");
+      return;
+    }
     
     const currentPassword = accountCurrentPassword.value;
     const newEmail = profileEmail.value.trim().toLowerCase();
@@ -716,6 +738,12 @@ if (saveAccountBtn) {
    ============================================ */
 if (changePasswordBtn) {
   changePasswordBtn.addEventListener("click", async function() {
+    const loggedInEmail = localStorage.getItem("loggedInUser");
+    if (!loggedInEmail) {
+      toastError("You must be logged in.");
+      return;
+    }
+    
     const curPass = document.getElementById("currentPassword").value;
     const newPass = document.getElementById("newPassword").value;
     const confPass = document.getElementById("confirmPassword").value;
@@ -863,6 +891,12 @@ if (logoutBtn) {
 if (deleteAccountBtn) {
   deleteAccountBtn.addEventListener("click", async function(e) {
     e.preventDefault();
+    
+    const loggedInEmail = localStorage.getItem("loggedInUser");
+    if (!loggedInEmail) {
+      toastError("You must be logged in.");
+      return;
+    }
     
     const confirm1 = await showConfirmModal(
       '⚠️ Delete Account',
@@ -1026,7 +1060,23 @@ if (profileImageWrapper && profileImage) {
   });
 }
 
-loadUserData();
-console.log("✅ Profile.js v73 loaded successfully");
+// Load user data only if on profile page or if user is logged in
+// Check if we're on the profile page
+const isProfilePage = window.location.pathname.includes('profile.html');
+if (isProfilePage) {
+  // On profile page - require login, will redirect if not logged in
+  const loggedInEmail = localStorage.getItem("loggedInUser");
+  if (!loggedInEmail) {
+    window.location.href = "signin.html";
+    return;
+  }
+  loadUserData();
+} else {
+  // On other pages (like index.html) - load data silently if logged in
+  loadUserData();
+}
+
+console.log("✅ Profile.js v74 loaded successfully");
 console.log("📱 isMobile():", isMobile());
 console.log("📱 mobileModal exists:", !!document.getElementById('mobileProfileModal'));
+console.log("📄 Current page:", window.location.pathname);
