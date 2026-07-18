@@ -904,7 +904,7 @@
     }
     
     // ============================================
-    // SAVE ACCOUNT
+    // SAVE ACCOUNT - WITH VERIFICATION LOOP (FIXED)
     // ============================================
     function handleSaveAccount() {
       var currentPassword = modalAccountPassword ? modalAccountPassword.value : '';
@@ -929,115 +929,116 @@
         return;
       }
       
-      modalSaveAccountBtn.disabled = true;
-      modalSaveAccountBtn.textContent = "Verifying...";
-      
-      fetch("/api/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: loggedInEmail, password: currentPassword })
-      })
-      .then(function(res) {
-        if (!res.ok) {
-          throw new Error("Incorrect current password.");
-        }
-        return res.json();
-      })
-      .then(function() {
-        if (isEmailChanged) {
-          return fetch("/api/get-user", {
+      // Use async/await with while loop for verification
+      (async function() {
+        try {
+          modalSaveAccountBtn.disabled = true;
+          modalSaveAccountBtn.textContent = "Verifying...";
+          
+          // Verify current password
+          const verifyRes = await fetch("/api/signin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: newEmail })
-          })
-          .then(function(res) { return res.json(); })
-          .then(function(checkData) {
+            body: JSON.stringify({ email: loggedInEmail, password: currentPassword })
+          });
+          
+          if (!verifyRes.ok) {
+            throw new Error("Incorrect current password.");
+          }
+          
+          // Check email availability if changed
+          if (isEmailChanged) {
+            const checkRes = await fetch("/api/get-user", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: newEmail })
+            });
+            const checkData = await checkRes.json();
             if (!checkData.error) {
               throw new Error("Email already used by another account.");
             }
-            return true;
+          }
+          
+          // Send verification code
+          modalSaveAccountBtn.textContent = "Sending code...";
+          const sendRes = await fetch("/api/send-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: currentUser.email })
           });
-        }
-        return true;
-      })
-      .then(function() {
-        modalSaveAccountBtn.textContent = "Sending code...";
-        return fetch("/api/send-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email })
-        });
-      })
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.error) throw new Error(data.error);
-        toastInfo("Verification code sent to your email.");
-        return showVerificationModal(currentUser.email);
-      })
-      .then(function(code) {
-        if (!code) {
-          toastWarning("Update cancelled.");
+          
+          if (!sendRes.ok) {
+            const data = await sendRes.json();
+            throw new Error(data.error || "Failed to send code.");
+          }
+          
+          toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
+          
+          // Verification loop - stays open on wrong code
+          let verified = false;
+          
+          while (!verified) {
+            const code = await showVerificationModal(currentUser.email);
+            
+            if (!code) {
+              toastWarning("Update cancelled.");
+              modalSaveAccountBtn.disabled = false;
+              modalSaveAccountBtn.textContent = "Save Changes";
+              return;
+            }
+            
+            const verifyCodeRes = await fetch("/api/verify-code", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+            });
+            
+            const verifyData = await verifyCodeRes.json();
+            if (verifyData.success) {
+              verified = true;
+            } else {
+              toastError("Incorrect verification code. Please try again.");
+              // Modal stays open - loop continues
+            }
+          }
+          
+          // Update account
+          modalSaveAccountBtn.textContent = "Updating...";
+          const updateData = { email: currentUser.email };
+          if (isEmailChanged) updateData.newEmail = newEmail;
+          if (isUsernameChanged) updateData.newUsername = newUsername;
+          
+          const updateRes = await fetch("/api/update-user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updateData)
+          });
+          
+          const updateResult = await updateRes.json();
+          if (!updateRes.ok) {
+            throw new Error(updateResult.error || "Failed to update account.");
+          }
+          
+          if (isEmailChanged) {
+            currentUser.email = newEmail;
+            localStorage.setItem("loggedInUser", newEmail);
+          }
+          if (isUsernameChanged) currentUser.username = newUsername;
+          
+          localStorage.setItem("userData", JSON.stringify(currentUser));
+          updateUI(currentUser);
+          toastSuccess("Account updated successfully!");
           modalSaveAccountBtn.disabled = false;
           modalSaveAccountBtn.textContent = "Save Changes";
-          return;
-        }
-        return fetch("/api/verify-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-        });
-      })
-      .then(function(res) {
-        if (!res) return;
-        return res.json();
-      })
-      .then(function(data) {
-        if (!data) return;
-        if (!data.success) {
-          toastError("Incorrect verification code.");
+          closeModal(accountModal);
+          
+        } catch (error) {
+          toastError(error.message || "Failed to update account.");
           modalSaveAccountBtn.disabled = false;
           modalSaveAccountBtn.textContent = "Save Changes";
-          return;
+          console.error("Save account error:", error);
         }
-        
-        var updateData = { email: currentUser.email };
-        if (isEmailChanged) updateData.newEmail = newEmail;
-        if (isUsernameChanged) updateData.newUsername = newUsername;
-        
-        modalSaveAccountBtn.textContent = "Updating...";
-        return fetch("/api/update-user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updateData)
-        });
-      })
-      .then(function(res) {
-        if (!res) return;
-        return res.json();
-      })
-      .then(function(data) {
-        if (!data) return;
-        if (data.error) throw new Error(data.error);
-        
-        if (isEmailChanged) {
-          currentUser.email = newEmail;
-          localStorage.setItem("loggedInUser", newEmail);
-        }
-        if (isUsernameChanged) currentUser.username = newUsername;
-        
-        localStorage.setItem("userData", JSON.stringify(currentUser));
-        updateUI(currentUser);
-        toastSuccess("Account updated successfully!");
-        modalSaveAccountBtn.disabled = false;
-        modalSaveAccountBtn.textContent = "Save Changes";
-        closeModal(accountModal);
-      })
-      .catch(function(error) {
-        toastError(error.message || "Failed to update account.");
-        modalSaveAccountBtn.disabled = false;
-        modalSaveAccountBtn.textContent = "Save Changes";
-        console.error("Save account error:", error);
-      });
+      })();
     }
     
     if (modalSaveAccountBtn) {
@@ -1048,7 +1049,7 @@
     }
     
     // ============================================
-    // CHANGE PASSWORD
+    // CHANGE PASSWORD - WITH VERIFICATION LOOP (FIXED)
     // ============================================
     function handleChangePassword() {
       var curPass = modalCurrentPassword ? modalCurrentPassword.value : '';
@@ -1079,88 +1080,93 @@
         return;
       }
       
-      modalChangePasswordBtn.disabled = true;
-      modalChangePasswordBtn.textContent = "Verifying...";
-      
-      fetch("/api/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: loggedInEmail, password: curPass })
-      })
-      .then(function(res) {
-        if (!res.ok) {
-          throw new Error("Incorrect current password.");
-        }
-        return res.json();
-      })
-      .then(function() {
-        modalChangePasswordBtn.textContent = "Sending code...";
-        return fetch("/api/send-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email })
-        });
-      })
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.error) throw new Error(data.error);
-        toastInfo("Verification code sent to your email.");
-        return showVerificationModal(currentUser.email);
-      })
-      .then(function(code) {
-        if (!code) {
-          toastWarning("Password change cancelled.");
+      (async function() {
+        try {
+          modalChangePasswordBtn.disabled = true;
+          modalChangePasswordBtn.textContent = "Verifying...";
+          
+          // Verify current password
+          const verifyRes = await fetch("/api/signin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: loggedInEmail, password: curPass })
+          });
+          
+          if (!verifyRes.ok) {
+            throw new Error("Incorrect current password.");
+          }
+          
+          // Send verification code
+          modalChangePasswordBtn.textContent = "Sending code...";
+          const sendRes = await fetch("/api/send-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: currentUser.email })
+          });
+          
+          if (!sendRes.ok) {
+            const data = await sendRes.json();
+            throw new Error(data.error || "Failed to send code.");
+          }
+          
+          toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
+          
+          // Verification loop - stays open on wrong code
+          let verified = false;
+          
+          while (!verified) {
+            const code = await showVerificationModal(currentUser.email);
+            
+            if (!code) {
+              toastWarning("Password change cancelled.");
+              modalChangePasswordBtn.disabled = false;
+              modalChangePasswordBtn.textContent = "Change Password";
+              return;
+            }
+            
+            const verifyCodeRes = await fetch("/api/verify-code", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+            });
+            
+            const verifyData = await verifyCodeRes.json();
+            if (verifyData.success) {
+              verified = true;
+            } else {
+              toastError("Incorrect verification code. Please try again.");
+              // Modal stays open - loop continues
+            }
+          }
+          
+          // Update password
+          modalChangePasswordBtn.textContent = "Updating...";
+          const updateRes = await fetch("/api/update-user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: currentUser.email, newPassword: newPass })
+          });
+          
+          if (!updateRes.ok) {
+            const data = await updateRes.json();
+            throw new Error(data.error || "Failed to update password.");
+          }
+          
+          toastSuccess("Password changed successfully!");
           modalChangePasswordBtn.disabled = false;
           modalChangePasswordBtn.textContent = "Change Password";
-          return;
-        }
-        return fetch("/api/verify-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-        });
-      })
-      .then(function(res) {
-        if (!res) return;
-        return res.json();
-      })
-      .then(function(data) {
-        if (!data) return;
-        if (!data.success) {
-          toastError("Incorrect verification code.");
+          if (modalCurrentPassword) modalCurrentPassword.value = '';
+          if (modalNewPassword) modalNewPassword.value = '';
+          if (modalConfirmPassword) modalConfirmPassword.value = '';
+          closeModal(securityModal);
+          
+        } catch (error) {
+          toastError(error.message || "Failed to change password.");
           modalChangePasswordBtn.disabled = false;
           modalChangePasswordBtn.textContent = "Change Password";
-          return;
+          console.error("Change password error:", error);
         }
-        
-        modalChangePasswordBtn.textContent = "Updating...";
-        return fetch("/api/update-user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email, newPassword: newPass })
-        });
-      })
-      .then(function(res) {
-        if (!res) return;
-        return res.json();
-      })
-      .then(function(data) {
-        if (!data) return;
-        if (data.error) throw new Error(data.error);
-        toastSuccess("Password changed successfully!");
-        modalChangePasswordBtn.disabled = false;
-        modalChangePasswordBtn.textContent = "Change Password";
-        if (modalCurrentPassword) modalCurrentPassword.value = '';
-        if (modalNewPassword) modalNewPassword.value = '';
-        if (modalConfirmPassword) modalConfirmPassword.value = '';
-        closeModal(securityModal);
-      })
-      .catch(function(error) {
-        toastError(error.message || "Failed to change password.");
-        modalChangePasswordBtn.disabled = false;
-        modalChangePasswordBtn.textContent = "Change Password";
-        console.error("Change password error:", error);
-      });
+      })();
     }
     
     if (modalChangePasswordBtn) {
@@ -1171,7 +1177,7 @@
     }
     
     // ============================================
-    // DELETE ACCOUNT
+    // DELETE ACCOUNT - WITH VERIFICATION LOOP (FIXED)
     // ============================================
     function handleDeleteAccount() {
       showConfirmModal(
@@ -1190,76 +1196,96 @@
         ).then(function(confirmed2) {
           if (!confirmed2) return;
           
-          modalDeleteAccountBtn.disabled = true;
-          modalDeleteAccountBtn.textContent = "Sending code...";
-          
-          fetch("/api/send-code", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: currentUser.email })
-          })
-          .then(function(res) { return res.json(); })
-          .then(function(data) {
-            if (data.error) throw new Error(data.error);
-            toastInfo("Verification code sent to your email.");
-            return showVerificationModal(currentUser.email);
-          })
-          .then(function(code) {
-            if (!code) {
-              toastWarning("Deletion cancelled.");
+          (async function() {
+            try {
+              modalDeleteAccountBtn.disabled = true;
+              modalDeleteAccountBtn.textContent = "Sending code...";
+              
+              const sendRes = await fetch("/api/send-code", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: currentUser.email })
+              });
+              
+              if (!sendRes.ok) {
+                const data = await sendRes.json();
+                throw new Error(data.error || "Failed to send code.");
+              }
+              
+              toastInfo("Verification code sent to your email. Please check your inbox (and SPAM folder if not found).");
+              
+              // Verification loop - stays open on wrong code
+              let verified = false;
+              
+              while (!verified) {
+                const code = await showVerificationModal(currentUser.email);
+                
+                if (!code) {
+                  toastWarning("Deletion cancelled.");
+                  modalDeleteAccountBtn.disabled = false;
+                  modalDeleteAccountBtn.textContent = "Delete Account";
+                  return;
+                }
+                
+                const verifyCodeRes = await fetch("/api/verify-code", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email: currentUser.email, code: code.trim() })
+                });
+                
+                const verifyData = await verifyCodeRes.json();
+                if (verifyData.success) {
+                  verified = true;
+                } else {
+                  toastError("Incorrect verification code. Please try again.");
+                  // Modal stays open - loop continues
+                }
+              }
+              
+              // Final confirmation
+              const finalConfirm = await showConfirmModal(
+                '⚠️ Final Confirmation',
+                'Delete your account permanently?',
+                'Yes, Delete',
+                'Cancel'
+              );
+              
+              if (!finalConfirm) {
+                modalDeleteAccountBtn.disabled = false;
+                modalDeleteAccountBtn.textContent = "Delete Account";
+                toastWarning("Deletion cancelled.");
+                return;
+              }
+              
+              modalDeleteAccountBtn.textContent = "Deleting...";
+              const deleteRes = await fetch("/api/delete-user", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: currentUser.email })
+              });
+              
+              if (!deleteRes.ok) {
+                const data = await deleteRes.json();
+                throw new Error(data.error || "Failed to delete account.");
+              }
+              
+              localStorage.removeItem("loggedInUser");
+              localStorage.removeItem("userData");
+              toastSuccess("Account deleted successfully!");
               modalDeleteAccountBtn.disabled = false;
               modalDeleteAccountBtn.textContent = "Delete Account";
-              return;
-            }
-            return fetch("/api/verify-code", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: currentUser.email, code: code.trim() })
-            });
-          })
-          .then(function(res) {
-            if (!res) return;
-            return res.json();
-          })
-          .then(function(data) {
-            if (!data) return;
-            if (!data.success) {
-              toastError("Incorrect verification code.");
+              closeAllModals();
+              setTimeout(function() {
+                window.location.href = "index.html";
+              }, 2000);
+              
+            } catch (error) {
+              toastError(error.message || "Failed to delete account.");
               modalDeleteAccountBtn.disabled = false;
               modalDeleteAccountBtn.textContent = "Delete Account";
-              return;
+              console.error("Delete account error:", error);
             }
-            
-            modalDeleteAccountBtn.textContent = "Deleting...";
-            return fetch("/api/delete-user", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: currentUser.email })
-            });
-          })
-          .then(function(res) {
-            if (!res) return;
-            return res.json();
-          })
-          .then(function(data) {
-            if (!data) return;
-            if (data.error) throw new Error(data.error);
-            localStorage.removeItem("loggedInUser");
-            localStorage.removeItem("userData");
-            toastSuccess("Account deleted successfully!");
-            modalDeleteAccountBtn.disabled = false;
-            modalDeleteAccountBtn.textContent = "Delete Account";
-            closeAllModals();
-            setTimeout(function() {
-              window.location.href = "index.html";
-            }, 2000);
-          })
-          .catch(function(error) {
-            toastError(error.message || "Failed to delete account.");
-            modalDeleteAccountBtn.disabled = false;
-            modalDeleteAccountBtn.textContent = "Delete Account";
-            console.error("Delete account error:", error);
-          });
+          })();
         });
       });
     }
