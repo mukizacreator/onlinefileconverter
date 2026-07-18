@@ -121,11 +121,11 @@
       color: rgba(255, 255, 255, 0.4);
     }
 
-    /* MOBILE ONLY CHANGES - Proper centering and tight fit */
+    /* MOBILE ONLY - Remove top and bottom space */
     @media (max-width: 768px) {
       .projects-container {
         height: calc(100vh - 56px);
-        padding: 20px 16px 0px 16px;
+        padding: 0px 16px 0px 16px; /* Removed top and bottom padding */
         max-width: 100%;
         justify-content: center;
       }
@@ -192,7 +192,7 @@
     @media (max-width: 400px) {
       .projects-container {
         height: calc(100vh - 52px);
-        padding: 16px 12px 0px 12px;
+        padding: 0px 12px 0px 12px; /* Removed top and bottom padding */
         justify-content: center;
       }
 
