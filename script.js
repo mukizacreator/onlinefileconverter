@@ -3,20 +3,12 @@
 // ============================================
 console.log("🚀 profile.js v73 LOADED!");
 
-const loggedInEmail = localStorage.getItem("loggedInUser");
-if (!loggedInEmail) {
-  window.location.href = "signin.html";
-}
+// Remove the redirect logic from here - it should be in profile.html
 
 let currentUser = null;
 const userData = localStorage.getItem("userData");
 if (userData) {
   currentUser = JSON.parse(userData);
-}
-
-if (!currentUser) {
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "signin.html";
 }
 
 console.log("Current user:", currentUser);
@@ -217,6 +209,12 @@ function bindModalButtons() {
    LOAD USER DATA FROM MONGODB
    ============================================ */
 async function loadUserData() {
+  const loggedInEmail = localStorage.getItem("loggedInUser");
+  if (!loggedInEmail) {
+    window.location.href = "signin.html";
+    return;
+  }
+  
   try {
     const res = await fetch("/api/get-user", {
       method: "POST",
