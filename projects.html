@@ -121,10 +121,10 @@
       color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Mobile styles */
+    /* Mobile styles - ONLY reduced container height */
     @media (max-width: 768px) {
       .projects-container {
-        height: calc(100vh - 56px);
+        height: calc(100vh - 70px); /* Reduced height for mobile */
         padding: 16px 16px 8px 16px;
         max-width: 100%;
       }
@@ -173,7 +173,7 @@
 
     @media (max-width: 400px) {
       .projects-container {
-        height: calc(100vh - 52px);
+        height: calc(100vh - 65px); /* Further reduced for very small screens */
         padding: 12px 12px 6px 12px;
       }
 
