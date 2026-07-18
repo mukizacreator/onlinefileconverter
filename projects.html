@@ -30,7 +30,7 @@
       height: calc(100vh - 60px); /* Subtract nav height */
       max-width: 800px;
       margin: 0 auto;
-      padding: 20px 20px 10px 20px;
+      padding: 20px 20px 0px 20px; /* Removed bottom padding */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -113,19 +113,20 @@
     }
 
     .projects-footer {
-      margin-top: auto;
-      padding-top: 12px;
+      margin-top: 16px; /* Small space before copyright */
+      padding-top: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
       font-size: 0.8rem;
       color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 0; /* No bottom margin */
     }
 
-    /* Mobile styles - ONLY changing container height */
+    /* Mobile styles - ONLY changing container height to remove bottom space */
     @media (max-width: 768px) {
       .projects-container {
-        height: calc(100vh - 80px); /* Reduced from 56px to 80px to make container smaller */
-        padding: 16px 16px 8px 16px;
+        height: calc(100vh - 56px);
+        padding: 16px 16px 0px 16px; /* Removed bottom padding */
         max-width: 100%;
       }
 
@@ -168,13 +169,15 @@
       .projects-footer {
         font-size: 0.75rem;
         padding-top: 8px;
+        margin-top: 12px;
+        margin-bottom: 0;
       }
     }
 
     @media (max-width: 400px) {
       .projects-container {
-        height: calc(100vh - 75px); /* Even smaller for very small screens */
-        padding: 12px 12px 6px 12px;
+        height: calc(100vh - 52px);
+        padding: 12px 12px 0px 12px; /* Removed bottom padding */
       }
 
       .projects-header h1 {
@@ -220,6 +223,8 @@
       .projects-footer {
         font-size: 0.65rem;
         padding-top: 6px;
+        margin-top: 10px;
+        margin-bottom: 0;
       }
     }
   </style>
