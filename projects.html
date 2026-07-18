@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="style.css?v=70">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
   <style>
-    /* Reset body and html for full viewport */
+    /* Reset body and html for full viewport height */
     html, body {
       height: 100%;
       margin: 0;
@@ -25,20 +25,15 @@
       overflow: hidden;
     }
 
-    /* Main container - full viewport with flex to center content */
-    main {
-      height: calc(100vh - 60px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Projects container - auto height based on content */
+    /* Projects page specific styles */
     .projects-container {
+      height: calc(100vh - 60px); /* Subtract nav height */
       max-width: 800px;
-      width: 100%;
       margin: 0 auto;
-      padding: 20px 20px 4px 20px; /* Reduced bottom padding from 10px to 4px */
+      padding: 20px 20px 10px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .projects-header {
@@ -118,27 +113,20 @@
     }
 
     .projects-footer {
-      margin-top: 14px; /* Reduced from 16px */
-      padding-top: 10px; /* Reduced from 12px */
+      margin-top: auto;
+      padding-top: 12px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
       font-size: 0.8rem;
       color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Mobile styles */
+    /* Mobile styles - ONLY changing container height */
     @media (max-width: 768px) {
-      main {
-        height: calc(100vh - 56px);
-      }
-
       .projects-container {
-        padding: 16px 16px 3px 16px; /* Reduced bottom padding */
+        height: calc(100vh - 80px); /* Reduced from 56px to 80px to make container smaller */
+        padding: 16px 16px 8px 16px;
         max-width: 100%;
-      }
-
-      .projects-header {
-        margin-bottom: 12px;
       }
 
       .projects-header h1 {
@@ -179,22 +167,14 @@
 
       .projects-footer {
         font-size: 0.75rem;
-        padding-top: 6px; /* Reduced from 8px */
-        margin-top: 10px; /* Reduced from 12px */
+        padding-top: 8px;
       }
     }
 
     @media (max-width: 400px) {
-      main {
-        height: calc(100vh - 52px);
-      }
-
       .projects-container {
-        padding: 12px 12px 2px 12px; /* Reduced bottom padding */
-      }
-
-      .projects-header {
-        margin-bottom: 10px;
+        height: calc(100vh - 75px); /* Even smaller for very small screens */
+        padding: 12px 12px 6px 12px;
       }
 
       .projects-header h1 {
@@ -239,8 +219,7 @@
 
       .projects-footer {
         font-size: 0.65rem;
-        padding-top: 4px; /* Reduced from 6px */
-        margin-top: 8px; /* Reduced from 10px */
+        padding-top: 6px;
       }
     }
   </style>
