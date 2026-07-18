@@ -1,17 +1,117 @@
 // ============================================
-// PROFILE.JS - VERSION 74 (FIXED)
+// PROFILE.JS - VERSION 75 (FIXED)
 // ============================================
-console.log("🚀 profile.js v74 LOADED!");
+console.log("🚀 profile.js v75 LOADED!");
+
+// ============================================
+// CHECK IF WE'RE ON PROFILE PAGE
+// ============================================
+const isProfilePage = window.location.pathname.includes('profile.html') || 
+                      window.location.pathname.endsWith('/profile') ||
+                      window.location.pathname === '/';
+
+// If not on profile page, do nothing (but still load for other pages)
+if (!isProfilePage) {
+  console.log("📄 Not on profile page - skipping profile initialization");
+  // Still need to run navigation update for index.html
+  // This handles the nav bar for all pages
+  (function updateNav() {
+    try {
+      const loggedInEmail = localStorage.getItem("loggedInUser");
+      let userData = null;
+      try {
+        userData = JSON.parse(localStorage.getItem("userData"));
+      } catch(e) {}
+      
+      const guestNav = document.getElementById("guestNav");
+      const profileNav = document.getElementById("profileNav");
+      const navUsername = document.getElementById("navUsername");
+      const navProfilePhoto = document.getElementById("navProfilePhoto");
+      
+      const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+      if (loggedInEmail && userData) {
+        if (guestNav) guestNav.style.display = "none";
+        if (profileNav) {
+          profileNav.style.display = "flex";
+          profileNav.style.alignItems = "center";
+        }
+        if (navUsername) navUsername.textContent = userData.username || 'Profile';
+        if (navProfilePhoto) {
+          navProfilePhoto.src = userData.photo || DEFAULT_ICON;
+        }
+      } else if (loggedInEmail) {
+        fetch("/api/get-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: loggedInEmail })
+        })
+        .then(res => res.json())
+        .then(data => {
+          localStorage.setItem("userData", JSON.stringify(data));
+          if (navUsername) navUsername.textContent = data.username || 'Profile';
+          if (navProfilePhoto) navProfilePhoto.src = data.photo || DEFAULT_ICON;
+          if (guestNav) guestNav.style.display = "none";
+          if (profileNav) {
+            profileNav.style.display = "flex";
+            profileNav.style.alignItems = "center";
+          }
+        })
+        .catch(err => console.error("Failed to load user data:", err));
+      } else {
+        if (guestNav) {
+          guestNav.style.display = "flex";
+          guestNav.style.alignItems = "center";
+          guestNav.style.gap = "8px";
+        }
+        if (profileNav) {
+          profileNav.style.display = "none";
+        }
+      }
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  })();
+  
+  // Exit script - don't run profile code
+  return;
+}
+
+console.log("📄 On profile page - initializing profile system");
+
+// ============================================
+// PROFILE PAGE - AUTHENTICATION CHECK
+// ============================================
+const loggedInEmail = localStorage.getItem("loggedInUser");
+if (!loggedInEmail) {
+  console.log("🔒 No user logged in - redirecting to signin");
+  window.location.href = "signin.html";
+  // Exit immediately
+  throw new Error("Redirecting to signin");
+}
 
 let currentUser = null;
 const userData = localStorage.getItem("userData");
 if (userData) {
-  currentUser = JSON.parse(userData);
+  try {
+    currentUser = JSON.parse(userData);
+  } catch(e) {
+    console.error("Error parsing userData:", e);
+  }
 }
 
-console.log("Current user:", currentUser);
+if (!currentUser) {
+  console.log("🔒 No user data found - redirecting to signin");
+  localStorage.removeItem("loggedInUser");
+  window.location.href = "signin.html";
+  throw new Error("Redirecting to signin");
+}
 
-/* DOM ELEMENTS */
+console.log("✅ Current user loaded:", currentUser);
+
+// ============================================
+// DOM ELEMENTS
+// ============================================
 const profileImage = document.getElementById("profileImage");
 const profilePhotoInput = document.getElementById("profilePhotoInput");
 const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
@@ -42,12 +142,14 @@ const deleteAccountBtn = document.getElementById("deleteAccountBtn");
 
 const DEFAULT_ICON = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-console.log("🔍 Elements found:");
+console.log("🔍 DOM Elements found:");
 console.log("  profileView:", !!profileView);
 console.log("  accountPanel:", !!accountPanel);
 console.log("  securityPanel:", !!securityPanel);
 console.log("  accountTab:", !!accountTab);
 console.log("  securityTab:", !!securityTab);
+console.log("  profileImage:", !!profileImage);
+console.log("  profileUsername:", !!profileUsername);
 
 // ============================================
 // MOBILE DETECTION
@@ -206,18 +308,16 @@ function bindModalButtons() {
 /* ============================================
    LOAD USER DATA FROM MONGODB
    ============================================ */
-// FIXED: Removed redirect - only load data if user is logged in
 async function loadUserData() {
   const loggedInEmail = localStorage.getItem("loggedInUser");
   
-  // If no user is logged in, just return silently (no redirect)
-  // This allows index.html to work for guest users
   if (!loggedInEmail) {
     console.log("👤 No user logged in - skipping profile data load");
     return;
   }
   
   try {
+    console.log("📡 Fetching user data for:", loggedInEmail);
     const res = await fetch("/api/get-user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -230,7 +330,7 @@ async function loadUserData() {
     currentUser = data;
     localStorage.setItem("userData", JSON.stringify(data));
 
-    console.log("User data loaded:", currentUser);
+    console.log("✅ User data loaded:", currentUser);
 
     if (profileUsername) profileUsername.textContent = data.username || 'User';
     if (profileEmailDisplay) profileEmailDisplay.textContent = data.email || 'user@email.com';
@@ -253,11 +353,8 @@ async function loadUserData() {
     showProfileView();
     
   } catch (error) {
-    console.error("Load user error:", error);
-    // Don't redirect here either - just show error toast if on profile page
-    if (window.location.pathname.includes('profile.html')) {
-      toastError("Failed to load user data.");
-    }
+    console.error("❌ Load user error:", error);
+    toastError("Failed to load user data.");
   }
 }
 
@@ -290,6 +387,11 @@ function showAccountPanel() {
   console.log("📋 showAccountPanel - isMobile:", isMobile());
   console.log("📋 accountPanel exists:", !!accountPanel);
   
+  if (!accountPanel) {
+    console.error("❌ accountPanel not found!");
+    return;
+  }
+  
   // Hide profile view
   if (profileView) {
     profileView.style.display = "none";
@@ -298,23 +400,17 @@ function showAccountPanel() {
   
   // MOBILE: Open modal
   if (isMobile()) {
-    if (accountPanel) {
-      var html = accountPanel.innerHTML;
-      console.log("📋 Account HTML length:", html.length);
-      html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-      openMobileModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
-    } else {
-      console.error("❌ accountPanel not found!");
-    }
+    var html = accountPanel.innerHTML;
+    console.log("📋 Account HTML length:", html.length);
+    html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
+    openMobileModal('<h2><i class="fa-solid fa-user"></i> Account Information</h2>' + html);
     return;
   }
   
   // DESKTOP: Show inline
   console.log("💻 DESKTOP: Showing Account panel inline");
-  if (accountPanel) {
-    accountPanel.style.display = "block";
-    accountPanel.classList.add('active-panel');
-  }
+  accountPanel.style.display = "block";
+  accountPanel.classList.add('active-panel');
   if (securityPanel) {
     securityPanel.style.display = "none";
     securityPanel.classList.remove('active-panel');
@@ -331,6 +427,11 @@ function showSecurityPanel() {
   console.log("🔒 showSecurityPanel - isMobile:", isMobile());
   console.log("🔒 securityPanel exists:", !!securityPanel);
   
+  if (!securityPanel) {
+    console.error("❌ securityPanel not found!");
+    return;
+  }
+  
   // Hide profile view
   if (profileView) {
     profileView.style.display = "none";
@@ -339,23 +440,17 @@ function showSecurityPanel() {
   
   // MOBILE: Open modal
   if (isMobile()) {
-    if (securityPanel) {
-      var html = securityPanel.innerHTML;
-      console.log("🔒 Security HTML length:", html.length);
-      html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
-      openMobileModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
-    } else {
-      console.error("❌ securityPanel not found!");
-    }
+    var html = securityPanel.innerHTML;
+    console.log("🔒 Security HTML length:", html.length);
+    html = html.replace(/<h2[^>]*>.*?<\/h2>/, '');
+    openMobileModal('<h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>' + html);
     return;
   }
   
   // DESKTOP: Show inline
   console.log("💻 DESKTOP: Showing Security panel inline");
-  if (securityPanel) {
-    securityPanel.style.display = "block";
-    securityPanel.classList.add('active-panel');
-  }
+  securityPanel.style.display = "block";
+  securityPanel.classList.add('active-panel');
   if (accountPanel) {
     accountPanel.style.display = "none";
     accountPanel.classList.remove('active-panel');
@@ -449,7 +544,7 @@ if (accountTab) {
   
   window.accountTabRef = newAccountTab;
 } else {
-  console.error("❌ accountTab element not found!");
+  console.warn("⚠️ accountTab element not found!");
 }
 
 // ===== SECURITY TAB =====
@@ -469,7 +564,7 @@ if (securityTab) {
   
   window.securityTabRef = newSecurityTab;
 } else {
-  console.error("❌ securityTab element not found!");
+  console.warn("⚠️ securityTab element not found!");
 }
 
 /* ============================================
@@ -1060,23 +1155,13 @@ if (profileImageWrapper && profileImage) {
   });
 }
 
-// Load user data only if on profile page or if user is logged in
-// Check if we're on the profile page
-const isProfilePage = window.location.pathname.includes('profile.html');
-if (isProfilePage) {
-  // On profile page - require login, will redirect if not logged in
-  const loggedInEmail = localStorage.getItem("loggedInUser");
-  if (!loggedInEmail) {
-    window.location.href = "signin.html";
-    return;
-  }
-  loadUserData();
-} else {
-  // On other pages (like index.html) - load data silently if logged in
-  loadUserData();
-}
+// ============================================
+// INITIALIZE PROFILE PAGE
+// ============================================
+console.log("✅ Initializing profile page...");
+loadUserData();
 
-console.log("✅ Profile.js v74 loaded successfully");
+console.log("✅ Profile.js v75 loaded successfully");
 console.log("📱 isMobile():", isMobile());
 console.log("📱 mobileModal exists:", !!document.getElementById('mobileProfileModal'));
 console.log("📄 Current page:", window.location.pathname);
