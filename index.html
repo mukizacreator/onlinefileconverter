@@ -297,10 +297,20 @@
           progressBar.textContent = '100%';
           progressText.textContent = 'Conversion complete! ✅';
           
+          // Build the download filename using original file name from server
+          let downloadFileName = '';
+          if (data.originalName && data.extension) {
+            downloadFileName = data.originalName + '.' + data.extension;
+          } else {
+            // Fallback: use the original file name from the uploaded file
+            const originalName = file.name.replace(/\.[^/.]+$/, "");
+            downloadFileName = originalName + '.' + format;
+          }
+          
           // Small delay before showing download button
           setTimeout(() => {
             resultDiv.innerHTML = `
-              <a href="${data.url}" class="download-btn" download>
+              <a href="${data.url}" class="download-btn" download="${downloadFileName}">
                 <i class="fa-solid fa-download"></i> Download Converted File
               </a>
             `;
