@@ -504,10 +504,17 @@ app.post("/api/convert", (req, res) => {
           const filesInTemp = fs.readdirSync("./temp");
           console.log("📂 Files in temp:", filesInTemp);
           
+          // Get original filename without extension
+          const originalBaseName = file.originalFilename.replace(/\.[^/.]+$/, "");
+          
           // Check if output file exists with expected name
           if (fs.existsSync(outputPath)) {
             console.log("✅ Output file exists with correct name");
-            return res.json({ url: `/download/${outputFilename}` });
+            return res.json({ 
+              url: `/download/${outputFilename}`,
+              originalName: originalBaseName,
+              extension: format
+            });
           }
           
           // Find any file with target extension (LibreOffice may use different name)
@@ -521,7 +528,11 @@ app.post("/api/convert", (req, res) => {
             const sourcePath = path.join("./temp", convertedFile);
             fs.renameSync(sourcePath, outputPath);
             console.log(`✅ File renamed from ${convertedFile} to ${outputFilename}`);
-            return res.json({ url: `/download/${outputFilename}` });
+            return res.json({ 
+              url: `/download/${outputFilename}`,
+              originalName: originalBaseName,
+              extension: format
+            });
           }
           
           // Special case: Try to find any DOCX file (for DOC to DOCX conversion)
@@ -531,7 +542,11 @@ app.post("/api/convert", (req, res) => {
               const sourcePath = path.join("./temp", anyDocx);
               fs.renameSync(sourcePath, outputPath);
               console.log(`✅ Found and renamed DOCX: ${anyDocx} -> ${outputFilename}`);
-              return res.json({ url: `/download/${outputFilename}` });
+              return res.json({ 
+                url: `/download/${outputFilename}`,
+                originalName: originalBaseName,
+                extension: format
+              });
             }
           }
           
