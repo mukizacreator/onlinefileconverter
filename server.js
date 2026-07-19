@@ -510,8 +510,9 @@ app.post("/api/convert", (req, res) => {
           // Check if output file exists with expected name
           if (fs.existsSync(outputPath)) {
             console.log("✅ Output file exists with correct name");
+            const encodedName = encodeURIComponent(originalBaseName);
             return res.json({ 
-              url: `/download/${outputFilename}`,
+              url: `/download/${outputFilename}?name=${encodedName}&ext=${format}`,
               originalName: originalBaseName,
               extension: format
             });
@@ -528,8 +529,9 @@ app.post("/api/convert", (req, res) => {
             const sourcePath = path.join("./temp", convertedFile);
             fs.renameSync(sourcePath, outputPath);
             console.log(`✅ File renamed from ${convertedFile} to ${outputFilename}`);
+            const encodedName = encodeURIComponent(originalBaseName);
             return res.json({ 
-              url: `/download/${outputFilename}`,
+              url: `/download/${outputFilename}?name=${encodedName}&ext=${format}`,
               originalName: originalBaseName,
               extension: format
             });
@@ -542,8 +544,9 @@ app.post("/api/convert", (req, res) => {
               const sourcePath = path.join("./temp", anyDocx);
               fs.renameSync(sourcePath, outputPath);
               console.log(`✅ Found and renamed DOCX: ${anyDocx} -> ${outputFilename}`);
+              const encodedName = encodeURIComponent(originalBaseName);
               return res.json({ 
-                url: `/download/${outputFilename}`,
+                url: `/download/${outputFilename}?name=${encodedName}&ext=${format}`,
                 originalName: originalBaseName,
                 extension: format
               });
@@ -566,12 +569,25 @@ app.post("/api/convert", (req, res) => {
    API: FILE DOWNLOAD
    ============================================ */
 // Endpoint: GET /download/:filename
-// Purpose: Download converted file
+// Purpose: Download converted file with original filename
 app.get("/download/:filename", (req, res) => {
   const filePath = path.join("./temp", req.params.filename);
   if (fs.existsSync(filePath)) {
-    // Send file as download
-    res.download(filePath, (err) => {
+    // Get the original filename from query parameter
+    const originalName = req.query.name;
+    const extension = req.query.ext || path.extname(req.params.filename).replace(".", "");
+    
+    let downloadName = req.params.filename;
+    if (originalName) {
+      // Decode the URL-encoded name
+      const decodedName = decodeURIComponent(originalName);
+      downloadName = decodedName + '.' + extension;
+    }
+    
+    console.log(`📥 Downloading: ${req.params.filename} as ${downloadName}`);
+    
+    // Send file with custom filename using Content-Disposition
+    res.download(filePath, downloadName, (err) => {
       if (err) {
         console.error(`Download error for ${req.params.filename}:`, err.message);
       }
